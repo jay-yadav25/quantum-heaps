@@ -1,0 +1,6 @@
+{
+    "ALL": "",
+    "REGRESSION": "@regression",
+    "SMOKE": "@smoke",
+    "CUSTOM": "@districtSoftDelete"
+}

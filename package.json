@@ -1,0 +1,33 @@
+{
+  "name": "cengage-dho-automation",
+  "version": "1.0.0",
+  "scripts": {
+    "playwright:test": "npx cross-env ENVIRONMENT=$ENVIRONMENT TAGS=\"$TAGS\" playwright test",
+    "test": "npx bddgen && npm run playwright:test -- $npm_config_argv",
+    "test-ui": "npx bddgen && npx playwright test --ui",
+    "watch:bdd": "nodemon -w ./features -w ./steps -e feature,js,ts --exec \"npx bddgen\"",
+    "watch:pw": "playwright test --ui",
+    "watch": "run-p watch:*",
+    "allure:generate": "npx allure generate ./allure-results --clean",
+    "allure:open": "allure open allure-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.44.1",
+    "@types/node": "^20.9.4",
+    "allure-commandline": "^2.29.0",
+    "allure-playwright": "2.15.1",
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.0.1",
+    "npm-run-all": "^4.1.5",
+    "playwright-bdd": "^6.5.1",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "fs-extra": "^11.3.0",
+    "xlsx": "^0.18.5"
+  }
+}
