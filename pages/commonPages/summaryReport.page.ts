@@ -12,26 +12,21 @@ export class SummaryReport {
     public async verifyFinalScore(path: string[], testData: any) {
         const attempts: string[][] = [];
         let currentAttempt: string[] = [];
-
         for (let i = 0; i < path.length; i++) {
             const step = path[i];
 
-            if (step.startsWith('RESTART') || step === 'FAILED' || step === 'COMPLETE') {
-                // End of current attempt
+            if (step.startsWith('SUBMIT') || step.startsWith('RESTART') || step === 'FAILED' || step === 'COMPLETE') {
                 if (currentAttempt.length > 0) {
                     attempts.push([...currentAttempt]);
                     currentAttempt = [];
                 }
-
-                // If FAILED, break the loop as specified
-                if (step === 'FAILED') {
+                if (step === 'FAILED' || step.startsWith('SUBMIT')) {
                     break;
                 }
             } else {
                 currentAttempt.push(step);
             }
         }
-
         // Add the last attempt if it's not empty and not ended with FAILED/COMPLETE
         if (currentAttempt.length > 0) {
             attempts.push(currentAttempt);
@@ -45,15 +40,12 @@ export class SummaryReport {
         let attemptNumber = 1;
 
         for (const attempt of attempts) {
-            // Track all challenges by level, including distractors
             const levelData: Record<string, { correct: number, totalChallenges: number }> = {};
             let highestLevel = 0;
 
             for (const step of attempt) {
-                // Extract the level number from the step
                 const levelMatch = step.match(/C(\d+)/);
                 if (!levelMatch) continue;
-
                 const levelNum = parseInt(levelMatch[1], 10);
                 if (levelNum > highestLevel) {
                     highestLevel = levelNum;
@@ -61,14 +53,10 @@ export class SummaryReport {
             }
 
             for (const step of attempt) {
-                // Extract the level number from the step
                 const levelMatch = step.match(/C(\d+)/);
                 if (!levelMatch) continue;
-
-                const level = levelMatch[1]; // Just the number part (e.g., "2" from "C2")
+                const level = levelMatch[1];
                 const isCorrect = step.includes('_CORRECT');
-
-                // Initialize the level data if needed
                 if (!levelData[level]) {
                     levelData[level] = { correct: 0, totalChallenges: 0 };
                 }
@@ -78,38 +66,22 @@ export class SummaryReport {
                     levelData[level].correct++;
                 }
             }
-
-            // Create an array to hold scores for all levels from 1 to highest
             const levelScores: { level: string, score: number }[] = [];
-
             for (let i = 1; i <= highestLevel; i++) {
                 const levelKey = i.toString();
                 const { correct = 0, totalChallenges = 0 } = levelData[levelKey] || { correct: 0, totalChallenges: 0 };
                 const score = totalChallenges > 0 ? (correct / totalChallenges) * 100 : 0;
                 levelScores.push({ level: levelKey, score });
-                //console.log(`Level ${levelKey}: ${correct}/${totalChallenges} correct = ${this.formatScore(score)}%`);
             }
-
-            // Extract scores for calculations (now guaranteed to have all levels from 1 to highest)
             const scores = levelScores.map(item => item.score);
-
-            // Calculate attempt score (average starting from the first non-zero score)
             let firstValidIndex = scores.findIndex(score => score > 0);
-
-            // If no valid scores found, the average is 0
             const attemptScore = (firstValidIndex >= 0)
                 ? scores.slice(firstValidIndex).reduce((sum, score) => sum + score, 0) /
                 scores.slice(firstValidIndex).length
                 : 0;
-
-            // Format scores for display
             const scoresForDisplay = scores.map(s => this.formatScore(s));
-            // console.log(`Attempt ${attemptNumber} scores: [${scoresForDisplay.join(', ')}]`);
-            // console.log(`Attempt ${attemptNumber} average: ${this.formatScore(attemptScore)}%`);
             const attemptScores1 = `[${scoresForDisplay.join(', ')}]`;
             const attemptAverageScore = `${this.formatScore(attemptScore)}%`;
-
-            // Store attempt data
             allAttemptsData.push({
                 attempt,
                 attemptScores: attemptScores1,
@@ -122,31 +94,23 @@ export class SummaryReport {
             attemptScores.push(attemptScore);
             attemptNumber++;
         }
-        // Now call veryfySelectedOptionAndReportResponse for each attempt one by one
         for (const attemptData of allAttemptsData) {
             await this.veryfySelectedOptionAndReportResponse(
                 attemptData.attempt,
                 attemptData.rawScores,
                 attemptData.attemptAverageScore,
                 testData,
-                attemptData.attemptNumber, // Use the stored attempt number from the data
-                attempts // Pass all attempts to the method
+                attemptData.attemptNumber,
+                attempts
             );
         }
 
-        // Final score is the highest attempt score
         const finalScore = Math.max(...attemptScores, 0);
-
         console.log(`\n----- FINAL RESULT -----`);
         console.log(`All attempt scores: [${attemptScores.map(s => this.formatScore(s)).join(', ')}]`);
         console.log(`Final Score (highest attempt): ${this.formatScore(finalScore)}%`);
-
-
-        // Use the formatting function for the final score
         const formattedFinalScore = this.formatScore(finalScore);
-
         await expect(this.finalScore).toHaveText(`${formattedFinalScore} %`);
-
         return {
             finalScore,
             attemptScores,
@@ -160,7 +124,7 @@ export class SummaryReport {
         attemptAverageScore: string,
         testData: any,
         attemptNumber: number,
-        allAttempts?: string[][] // Add parameter to receive all attempts
+        allAttempts?: string[][]
     ) {
         console.log(`Processing Attempt ${attemptNumber}:`);
         console.log(`Steps in this attempt: ${attempt.join(', ')}`);
@@ -175,7 +139,7 @@ export class SummaryReport {
         const attepmtAverageScoreLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
             `/parent::div //div[contains(@class, 'score-value')]`;
         const actualAverageScore = await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtAverageScoreLocator).innerText();
-        console.log(`Attempt ${attemptNumber} Actual average Score: ${attemptAverageScore}`);
+        console.log(`Attempt ${attemptNumber} Actual average Score: ${actualAverageScore}`);
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtAverageScoreLocator)).toHaveText(attemptAverageScore);
 
         let responseNumber = 0;
@@ -202,7 +166,6 @@ export class SummaryReport {
                 console.log(`Actual score for challengeLevel ${challengeLevel}: ${actualScore}`);
                 await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator)).toHaveText(`${expectedScore}%`);
             }
-
             // Response number is the index + 1
             const mainLevel = level.split('.')[0];
 
@@ -215,7 +178,7 @@ export class SummaryReport {
                 responseNumber++;
             }
 
-            console.log(`Step: ${step}, Response Number: ${responseNumber}`);
+            console.log(`\nStep: ${step}, Response Number: ${responseNumber}`);
 
             let selectedOption = null;
 
@@ -289,138 +252,17 @@ export class SummaryReport {
         }
     }
 
-    /**
-     * Gets patient response and mood based on current attempt, step, and previous actions
-     * @param {number} attemptNumber - Current attempt number (1-based)
-     * @param {number} stepIndex - Current step index within the attempt (0-based)
-     * @param {Array} currentAttempt - Array of steps in the current attempt
-     * @param {Array} allAttempts - Array of all previous attempts
-     * @param {Object} testData - Test data containing response templates
-     * @returns {Object} Object containing patientResponse and patientMood
-     */
-    private getPatientResponseAndMood(
-        attemptNumber: number,
-        stepIndex: number,
-        currentAttempt: string[],
-        allAttempts: string[][] = [], // Make allAttempts optional with default empty array
-        testData: any
-    ): { patientResponse: string | null, patientMood: string | null } {
-        let patientResponse = null;
-        let patientMood = null;
-
-        // CASE 1: First step of first attempt
-        if (stepIndex === 0 && attemptNumber === 1) {
-            // First step of first attempt uses default chat
-            patientResponse = testData["default_chat"]["Emily"];
-            patientMood = testData["default_chat"]["Emily_reply_mood"];
-        }
-        // CASE 2: First step of subsequent attempts
-        else if (stepIndex === 0 && attemptNumber > 1) {
-            // Starting from the most recent attempt, search backwards through all attempts
-            // until we find a CORRECT action, or use the most recent non-CORRECT if no CORRECT is found
-            let foundCorrectAction = false;
-            let responseData = null;
-
-            // Search backwards through previous attempts
-            for (let attemptIndex = attemptNumber - 2; attemptIndex >= 0; attemptIndex--) {
-                const previousAttempt = allAttempts[attemptIndex];
-
-                if (previousAttempt && previousAttempt.length > 0) {
-                    const lastStepOfAttempt = previousAttempt[previousAttempt.length - 1];
-                    const [prevLevel, prevRawAction] = lastStepOfAttempt.split("_");
-
-                    if (prevRawAction === "CORRECT") {
-                        // Found a CORRECT action, use its level for the response
-                        responseData = {
-                            response: testData[prevLevel]?.["ideal_reply"],
-                            mood: testData[prevLevel]?.["ideal_reply_mood"]
-                        };
-                        foundCorrectAction = true;
-                        break;
-                    } else if (attemptIndex === attemptNumber - 2 && !foundCorrectAction) {
-                        // Store the most recent non-CORRECT action as fallback
-                        responseData = this.getResponseDataForAction(prevRawAction, prevLevel, testData);
-                    }
-                }
-            }
-
-            // If no CORRECT action was found in any previous attempt, use the most recent action's response
-            if (!foundCorrectAction && responseData) {
-                patientResponse = responseData.response;
-                patientMood = responseData.mood;
-            } else if (foundCorrectAction && responseData) {
-                patientResponse = responseData.response;
-                patientMood = responseData.mood;
-            } else {
-                // Fallback if no previous attempt data (shouldn't happen)
-                patientResponse = testData["default_chat"]["Emily"];
-                patientMood = testData["default_chat"]["Emily_reply_mood"];
-            }
-        }
-        // CASE 3: Not the first step - use previous step in current attempt
-        else {
-            const prevStep = currentAttempt[stepIndex - 1];
-            const [prevLevel, prevRawAction] = prevStep.split("_");
-
-            // Get response based on previous step's action
-            const responseData = this.getResponseDataForAction(prevRawAction, prevLevel, testData);
-            patientResponse = responseData.response;
-            patientMood = responseData.mood;
-        }
-
-        return { patientResponse, patientMood };
-    }
-
-    /**
-     * Helper function to get the appropriate response and mood based on action type
-     * @param {string} actionType - The action type (CORRECT, INCORRECT, DISTRACTOR)
-     * @param {string} level - The challenge level
-     * @param {Object} testData - Test data containing response templates
-     * @returns {Object} Object containing response and mood
-     */
-    private getResponseDataForAction(actionType: string, level: string, testData: any): { response: string | null, mood: string | null } {
-        let response = null;
-        let mood = null;
-
-        switch (actionType) {
-            case "CORRECT":
-                response = testData[level]?.["ideal_reply"];
-                mood = testData[level]?.["ideal_reply_mood"];
-                break;
-            case "INCORRECT":
-                response = testData[level]?.["incorrect_reply"];
-                mood = testData[level]?.["incorrect_reply_mood"];
-                break;
-            case "DISTRACTOR":
-                response = testData[level]?.["distractor_reply"];
-                mood = testData[level]?.["distractor_reply_mood"];
-                break;
-            default:
-                // Fallback for unknown action types
-                response = testData["default_chat"]["Emily"];
-                mood = testData["default_chat"]["Emily_reply_mood"];
-        }
-
-        return { response, mood };
-    }
-
-    /**
-     * Verifies patient response and mood in the UI
-     * @param {number} attemptNumber - Current attempt number
-     * @param {number} challengeLevel - Challenge level number
-     * @param {number} responseNumber - Response number in the UI
-     * @param {string} patientResponse - Expected patient response
-     * @param {string} patientMood - Expected patient mood
-     * @returns {Promise<void>}
-     */
     private async verifyPatientResponseAndMood(
         attemptNumber: number,
         challengeLevel: number,
         responseNumber: number,
-        patientResponse: string,
-        patientMood: string
-    ): Promise<void> {
-        // Build locators for response and mood elements
+        expectedResponse: string,
+        expectedMood: string
+    ) {
+        console.log(`\n Verifying patient response for Attempt ${attemptNumber}, Level ${challengeLevel}, Response ${responseNumber}`);
+        console.log(`Expected response: ${expectedResponse}`);
+        console.log(`Expected mood: ${expectedMood}`);
+        console.log(`==========================================================================================================`);
         const baseLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
             `/parent::div` +
             `/following-sibling::section` +
@@ -431,39 +273,121 @@ export class SummaryReport {
         const moodLocator = `${baseLocator}//div[contains(@class, 'patient-reaction')]`;
 
         // Verify patient response text
-        // await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(responseLocator))
-        //     .toHaveText(patientResponse);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(responseLocator))
+            .toHaveText(expectedResponse);
 
         // Verify patient mood text
-        // await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(moodLocator))
-        //     .toHaveText("(" + patientMood + ")");
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(moodLocator))
+            .toHaveText("[" + expectedMood + "]");
     }
 
-    /**
-     * Formats a numeric score to display with appropriate decimal places
-     * - Whole numbers display with no decimal (e.g., "100")
-     * - Numbers with decimals display with up to 2 decimal places, removing trailing zeros
-     * 
-     * @param score The numeric score to format
-     * @param includePercentSign Whether to include the % sign in the output
-     * @returns Formatted score string
-     */
+
+    private getPatientResponseAndMood(
+        attemptNumber: number,
+        stepIndex: number,
+        currentAttempt: string[],
+        allAttempts: string[][] = [], // Make allAttempts optional with default empty array
+        testData: any
+    ): { patientResponse: string | null, patientMood: string | null } {
+        console.log(`Getting patient response for attempt ${attemptNumber}, step ${stepIndex}`);
+
+        // CASE 1: First step of first attempt - always use default response
+        if (attemptNumber === 1 && stepIndex === 0) {
+            console.log(`CASE 1: First step of first attempt - using default response`);
+            return {
+                patientResponse: testData["default_chat"]["Emily"],
+                patientMood: testData["default_chat"]["Emily_reply_mood"]
+            };
+        }
+
+        // CASE 2: Not the first step - use the immediate previous step's response
+        if (stepIndex > 0) {
+            const prevStep = currentAttempt[stepIndex - 1];
+            const [prevLevel, prevRawAction] = prevStep.split("_");
+            console.log(`CASE 2: Not first step - using previous step response from ${prevStep}`);
+            return this.getResponseDataForAction(prevRawAction, prevLevel, testData);
+        }
+
+        // CASE 3: First step of subsequent attempts
+        if (stepIndex === 0 && attemptNumber > 1) {
+            console.log(`CASE 3: First step of attempt ${attemptNumber}`);
+
+            // Look for the most recent CORRECT action in all previous attempts
+            for (let attemptIdx = attemptNumber - 2; attemptIdx >= 0; attemptIdx--) {
+                const attempt = allAttempts[attemptIdx];
+
+                if (!attempt || attempt.length === 0) continue;
+
+                // Scan each attempt from end to beginning
+                for (let stepIdx = attempt.length - 1; stepIdx >= 0; stepIdx--) {
+                    const step = attempt[stepIdx];
+                    const [level, rawAction] = step.split("_");
+
+                    if (rawAction === "CORRECT") {
+                        console.log(`Found CORRECT action ${step} in attempt ${attemptIdx + 1}, using its response`);
+
+                        return this.getResponseDataForAction(rawAction, level, testData);
+                    }
+                }
+            }
+
+            // If no CORRECT action was found, use the last action of the immediately previous attempt
+            const previousAttemptIdx = attemptNumber - 2;
+            const previousAttempt = allAttempts[previousAttemptIdx];
+
+            if (previousAttempt && previousAttempt.length > 0) {
+                const lastStep = previousAttempt[previousAttempt.length - 1];
+                console.log(`No CORRECT action found, using last action deffult`);
+                return {
+                    patientResponse: testData["default_chat"]["Emily"],
+                    patientMood: testData["default_chat"]["Emily_reply_mood"]
+                };
+            }
+        }
+        console.warn(`Fallback case - using default response`);
+        return {
+            patientResponse: testData["default_chat"]["Emily"],
+            patientMood: testData["default_chat"]["Emily_reply_mood"]
+        };
+    }
+
+
+    private getResponseDataForAction(actionType: string, level: string, testData: any): { patientResponse: string | null, patientMood: string | null } {
+        let patientResponse = null;
+        let patientMood = null;
+
+        switch (actionType) {
+            case "CORRECT":
+                patientResponse = testData[level]?.["ideal_reply"];
+                patientMood = testData[level]?.["ideal_reply_mood"];
+                break;
+            case "INCORRECT":
+                patientResponse = testData[level]?.["incorrect_reply"];
+                patientMood = testData[level]?.["incorrect_reply_mood"];
+                break;
+            case "DISTRACTOR":
+                patientResponse = testData[level]?.["distractor_reply"];
+                patientMood = testData[level]?.["distractor_reply_mood"];
+                break;
+            default:
+                patientResponse = testData["default_chat"]["Emily"];
+                patientMood = testData["default_chat"]["Emily_reply_mood"];
+        }
+        return { patientResponse, patientMood };
+    }
+
     private formatScore(score: number, includePercentSign: boolean = false): string {
         let formattedScore: string;
 
         if (score % 1 === 0) {
-            // It's a whole number
             formattedScore = score.toString();
         } else {
-            // Get 2 decimal places
             const scoreWithDecimals = score.toFixed(2);
-            // Remove trailing zeros but keep at least one decimal place if not a whole number
             formattedScore = scoreWithDecimals.replace(/\.?0+$/, '');
             if (!formattedScore.includes('.')) {
                 formattedScore = score.toFixed(1);
             }
         }
-
         return includePercentSign ? `${formattedScore}%` : formattedScore;
     }
 }

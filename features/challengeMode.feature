@@ -1,7 +1,7 @@
 @dho
 Feature: Launch Activity
 
-  Scenario Outline: Verify chat section functionality for scenario <scenario>
+  Scenario Outline: Verify chat section functionality for golden scenario <scenario>
     Given the user has launched the activity on the web
     And the learning objectives are displayed
     When the user clicks the Start button on the learning objectives page
@@ -16,7 +16,56 @@ Feature: Launch Activity
     Then Verify the scenario score <scenario>
 
     Examples:
-  | scenario |
+  # | scenario |
+  # # |    1     |
+
+  Scenario Outline: Verify chat section functionality for scenario <scenario>
+    Given the user has launched the activity on the web
+    And the learning objectives are displayed
+    When the user clicks the Start button on the learning objectives page
+    Then the step introduction popup should appear
+    And the first step of the activity should be displayed
+    And the step introduction text should be verified
+    When the user clicks the Continue button on the step introduction popup
+    Then the Choose an Avatar page should be displayed
+    When the user enters a name and clicks the Done button
+    Then the Chat section should be displayed
+    When the user selects the chat option for scenario "<scenario>"
+    Then Verify the scenario score "<scenario>"
+
+    Examples:
+      | scenario |
+      | S1       |
+      | S2       |
+      # | S3       |
+      # | S4       |
+      # | S5       |
+      # | S6       |
+      # | S7       |
+      # | S8       |
+      # | S9       |
+      # | S10      |
+      # | S11      |
+      # | S12      |
+      # | S13      |
+      # | S14      |
+      # | S15      |
+      # | S16      |
+      # | S17      |
+      # | S18      |
+      # | S19      |
+      # | S20      |
+      # | S21      |
+      # | S22      |
+      # | S23      |
+      # | S24      |
+      # | S25      |
+      # | S26      |
+      # | S27      |
+      # | S28      |
+      # | S29      |
+      # | S30      |
+      # | S31      |
   # |    1     |
   # |    2     |
   # |    3     |
@@ -36,7 +85,7 @@ Feature: Launch Activity
   # |   17     |
   # |   18     |
   # |   19     |
-  |   20     |
+  # |   20     |
   # |   21     |
   # |   22     |
   # |   23     |
@@ -49,10 +98,10 @@ Feature: Launch Activity
   # |   30     |
   # |   31     |
   # |   32     |
-  |   33     |
+  # |   33     |
   # |   34     |
   # |   35     |
-  |   36     |
+  # |   36     |
   # |   37     |
   # |   38     |
   # |   39     |
@@ -117,4 +166,3 @@ Feature: Launch Activity
   # |   98     |
   # |   99     |
   # |  100     |
-

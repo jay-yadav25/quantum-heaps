@@ -49,7 +49,7 @@
     "distractor_attempt_ending_popup_text": "The response you chose was empathetic but didn’t offer appropriate solutions that would solve the primary issue. Dealing with a caregiver requires an understanding approach and offering solutions that address the primary concern of the caregiver.",
     "incorrect": "Emily, this method of caring for your mother is not sustainable. If you keep doing everything yourself, you’ll end up too exhausted to even care for your mother properly. Then who’s going to look after you or your mother? Getting support can help you stay strong for your mother and allow you to take care of yourself.",
     "incorrect_reply": "Please, stop making this harder for me! Can’t you see I’m already overwhelmed? This isn’t easy for me or my family. I need to leave now, this is a complete waste of time.",
-    "incorrect_reply_mood": "Panics in fear and lashes out",
+    "incorrect_reply_mood": "panics in fear and lashes out",
     "incorrect_reportFeedback": "Your response lacked empathy and understanding, and added panic and anxiety in the conversation.",
     "incorrect_attempt_ending_popup_text": "The response you chose lacked empathy and understanding, and added panic and anxiety in the conversation. Dealing with a caregiver requires showing empathy and being supportive."
   },

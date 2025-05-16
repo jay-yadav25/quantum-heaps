@@ -17,7 +17,7 @@ export class ChallengeMode {
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
     this.page = page;
     this.frameLocator = page.frameLocator(`iframe[name="${iframeName}"]`);
-    this.startButton = this.frameLocator.locator("//button[@class='start-btn']");
+    this.startButton = this.frameLocator.locator("//button[@id='start-btn']");
     this.inputField = this.frameLocator.locator("//input[@class='input']");
     this.avatarSelectionDoneButton = this.frameLocator.locator("//button[@id='avatar-done-btn']");
     this.doneSubmitButton = this.frameLocator.locator("//button[@id='chat-done-btn']");
@@ -45,7 +45,12 @@ export class ChallengeMode {
         await this.verifyFailedScenario(previousStep, testData);
         break;
       }
-
+      if (step.startsWith('SUBMIT')) {
+        const attemptNumber = step.replace('SUBMIT', '');
+        console.log(` Submiting scenario — Last step was ${previousStep}`);
+        await this.verifyFailedScenarioInbeweenSubmit(previousStep, testData, attemptNumber);
+        break; 
+      }
       // ✅ If COMPLETE → terminate and mark as passed
       if (step === 'COMPLETE') {
         console.log(`✅ COMPLETE reached — Last step was ${previousStep}`);
@@ -60,11 +65,7 @@ export class ChallengeMode {
         await this.verifyFailedScenario2(previousStep, testData, attemptNumber);
         continue; // Skip rest of the loop for RESTART
       }
-
-      // 🎯 Handle regular interaction step
       await this.selectAndVerifyReplyText(step, testData);
-
-      // Update previous step
       previousStep = step;
     }
   }
@@ -119,20 +120,14 @@ export class ChallengeMode {
     const replyText = actionDetails[actionKey + "_reply"];
     const replyTextID = `${selectedOptionID}_rep_1`;
 
-    // Define the selector for the reply mood based on the selected option ID
-    const replyMoodSelector = `//span[@id='${replyTextID}']/parent::div/preceding-sibling::div/div[contains(@class, "patient-reaction")]`;
-
-    // Verify the reply mood
-    // console.log(this.page.locator(replyMoodSelector).innerText());
-    // await expect(this.page.locator(replyMoodSelector).first()).toHaveText("(" + replyMood + ")");
+    const replyMoodSelector = `//span[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+    await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
     await expect(this.frameLocator.locator(`//span[@id='${replyTextID}']`)).toHaveText(replyText);
   }
 
   private async verifyFailedScenario(previousStep: any, testData: any) {
-    // Verify text from chat section
     await expect(this.chatEndMessage).toHaveText("This conversation has ended without a positive resolution. Select the Done button to proceed.");
     await this.clickOnDoneButton();
-
     const [level, rawAction] = previousStep.split("_");
     const actionMap: { [key: string]: string } = {
       INCORRECT: "incorrect",
@@ -173,7 +168,28 @@ export class ChallengeMode {
     //await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
     await this.clickOnRetryButton();
   }
+  private async verifyFailedScenarioInbeweenSubmit(previousStep: any, testData: any, attemptNumber: string) {
+    // Verify text from chat section
+    await expect(this.chatEndMessage).toHaveText("This conversation has ended without a positive resolution. Select the Done button to proceed.");
+    await this.clickOnDoneButton();
 
+    const [level, rawAction] = previousStep.split("_");
+    const actionMap: { [key: string]: string } = {
+      INCORRECT: "incorrect",
+      DISTRACTOR: "distractor"
+    };
+
+    const actionKey = actionMap[rawAction.toUpperCase()];
+    const actionDetails = testData[level];
+    const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
+    const feedbackPopupFirstText = "The conversation path you took didn't reach a positive resolution. " + attemptEndingText;
+    const feedbackPopupSecondText = "Continue practicing your problem solving and communication skills by retrying the scenario once again or select the Submit button to end the scenario.";
+
+    // Verify text on popup for incorrect attempt
+    //await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
+    //await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
+    await this.clickOnSubmitButton();
+  }
   private async verifyPassedScenario() {
     await expect(this.chatEndMessage).toHaveText("This conversation has ended with a positive resolution. Select the Done button to proceed.");
     await this.clickOnDoneButton();
@@ -213,23 +229,33 @@ export class ChallengeMode {
     await this.retryButton.click();
   }
 
-  /**
-   * Generates option IDs based on the level identifier
-   * @param level The level identifier (e.g., "C1.2")
-   * @returns Object containing IDs for the three options
-   */
-  private async getOptionIds(level: string) {
-    const parts = level.replace("C", "").split(".");
-    const section = parts.map((n, i) => {
-      if (i === 0) return n.padStart(2, "0");
-      return ((parseInt(parts[0]) - 1) * 10 + parseInt(n)).toString().padStart(2, "0");
-    }).join("_");
+ private async getOptionIds(level: string) {
+  // Remove the "C" prefix and split by "."
+  const parts = level.replace("C", "").split(".");
 
-    const base = `ch_${section}`;
-    return {
-      distractorOptionID: `${base}_opt_1`,
-      correctOptionID: `${base}_opt_2`,
-      incorrectOptionID: `${base}_opt_3`
-    };
+  let base: string;
+  
+  // Handle different level depths
+  if (parts.length === 1) {
+    // Level 1 (e.g., "C1" → "ch_01_opt_X")
+    const mainSection = parts[0].padStart(2, "0");
+    base = `ch_${mainSection}`;
+  } else if (parts.length === 2) {
+    // Level 2 (e.g., "C1.1" → "ch_01_11_opt_X", "C1.2" → "ch_01_12_opt_X")
+    const mainSection = parts[0].padStart(2, "0");
+    base = `ch_${mainSection}_1${parts[1]}`;
+  } else if (parts.length === 3) {
+    // Level 3 (e.g., "C1.1.1" → "ch_01_21_opt_X")
+    const mainSection = parts[0].padStart(2, "0");
+    base = `ch_${mainSection}_21`;
+  } else {
+    throw new Error(`Unsupported level format: ${level}`);
   }
+
+  return {
+    distractorOptionID: `${base}_opt_1`,
+    correctOptionID: `${base}_opt_2`,
+    incorrectOptionID: `${base}_opt_3`
+  };
+}
 }

@@ -53,12 +53,12 @@ Then('the Chat section should be displayed', async function ({ }) {
 
 });
 
-When('the user selects the chat option for scenario {int}', async function ({ loginData, testData }, scenarioNumber: number) {
-  const scenarioPath = loginData[String(scenarioNumber)];
+When('the user selects the chat option for scenario {string}', async function ({ loginData, testData }, scenarioNumber: string) {
+  const scenarioPath = loginData[scenarioNumber];
   await challengeMode.runScenarioPath(scenarioPath, testData);
 });
 
-Then('Verify the scenario score {int}', async function ({ loginData, testData }, scenarioNumber: number) {
-  const scenarioPath = loginData[String(scenarioNumber)];
+Then('Verify the scenario score {string}', async function ({ loginData, testData }, scenarioNumber: string) {
+  const scenarioPath = loginData[scenarioNumber];
   await summaryReport.verifyFinalScore(scenarioPath, testData);
 });
