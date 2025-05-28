@@ -9,6 +9,114 @@ export class SummaryReport {
         this.finalScore = page.frameLocator('iframe[name="ext_012345678_1"]').locator("//div[@class='score-value']").first();
     }
 
+    // public async verifyFinalScore(path: string[], testData: any) {
+    //     const attempts: string[][] = [];
+    //     let currentAttempt: string[] = [];
+    //     for (let i = 0; i < path.length; i++) {
+    //         const step = path[i];
+
+    //         if (step.startsWith('SUBMIT') || step.startsWith('RESTART') || step === 'FAILED' || step === 'COMPLETE') {
+    //             if (currentAttempt.length > 0) {
+    //                 attempts.push([...currentAttempt]);
+    //                 currentAttempt = [];
+    //             }
+    //             if (step === 'FAILED' || step.startsWith('SUBMIT')) {
+    //                 break;
+    //             }
+    //         } else {
+    //             currentAttempt.push(step);
+    //         }
+    //     }
+    //     // Add the last attempt if it's not empty and not ended with FAILED/COMPLETE
+    //     if (currentAttempt.length > 0) {
+    //         attempts.push(currentAttempt);
+    //     }
+
+    //     console.log(`\nTotal attempts found: ${attempts.length}`);
+
+    //     // Calculate score for each attempt
+    //     const attemptScores: number[] = [];
+    //     const allAttemptsData = [];
+    //     let attemptNumber = 1;
+
+    //     for (const attempt of attempts) {
+    //         const levelData: Record<string, { correct: number, totalChallenges: number }> = {};
+    //         let highestLevel = 0;
+
+    //         for (const step of attempt) {
+    //             const levelMatch = step.match(/C(\d+)/);
+    //             if (!levelMatch) continue;
+    //             const levelNum = parseInt(levelMatch[1], 10);
+    //             if (levelNum > highestLevel) {
+    //                 highestLevel = levelNum;
+    //             }
+    //         }
+
+    //         for (const step of attempt) {
+    //             const levelMatch = step.match(/C(\d+)/);
+    //             if (!levelMatch) continue;
+    //             const level = levelMatch[1];
+    //             const isCorrect = step.includes('_CORRECT');
+    //             if (!levelData[level]) {
+    //                 levelData[level] = { correct: 0, totalChallenges: 0 };
+    //             }
+
+    //             levelData[level].totalChallenges++;
+    //             if (isCorrect) {
+    //                 levelData[level].correct++;
+    //             }
+    //         }
+    //         const levelScores: { level: string, score: number }[] = [];
+    //         for (let i = 1; i <= highestLevel; i++) {
+    //             const levelKey = i.toString();
+    //             const { correct = 0, totalChallenges = 0 } = levelData[levelKey] || { correct: 0, totalChallenges: 0 };
+    //             const score = totalChallenges > 0 ? (correct / totalChallenges) * 100 : 0;
+    //             levelScores.push({ level: levelKey, score });
+    //         }
+    //         const scores = levelScores.map(item => item.score);
+    //         let firstValidIndex = scores.findIndex(score => score > 0);
+    //         const attemptScore = (firstValidIndex >= 0)
+    //             ? scores.slice(firstValidIndex).reduce((sum, score) => sum + score, 0) /
+    //             scores.slice(firstValidIndex).length
+    //             : 0;
+    //         const scoresForDisplay = scores.map(s => this.formatScore(s));
+    //         const attemptScores1 = `[${scoresForDisplay.join(', ')}]`;
+    //         const attemptAverageScore = `${this.formatScore(attemptScore)}%`;
+    //         allAttemptsData.push({
+    //             attempt,
+    //             attemptScores: attemptScores1,
+    //             attemptAverageScore,
+    //             attemptNumber,
+    //             levelScores,
+    //             rawScores: scores
+    //         });
+
+    //         attemptScores.push(attemptScore);
+    //         attemptNumber++;
+    //     }
+    //     for (const attemptData of allAttemptsData) {
+    //         await this.veryfySelectedOptionAndReportResponse(
+    //             attemptData.attempt,
+    //             attemptData.rawScores,
+    //             attemptData.attemptAverageScore,
+    //             testData,
+    //             attemptData.attemptNumber,
+    //             attempts
+    //         );
+    //     }
+
+    //     const finalScore = Math.max(...attemptScores, 0);
+    //     console.log(`\n----- FINAL RESULT -----`);
+    //     console.log(`All attempt scores: [${attemptScores.map(s => this.formatScore(s)).join(', ')}]`);
+    //     console.log(`Final Score (highest attempt): ${this.formatScore(finalScore)}%`);
+    //     const formattedFinalScore = this.formatScore(finalScore);
+    //     await expect(this.finalScore).toHaveText(`${formattedFinalScore} %`);
+    //     return {
+    //         finalScore,
+    //         attemptScores,
+    //         allAttemptsData
+    //     };
+    // }
     public async verifyFinalScore(path: string[], testData: any) {
         const attempts: string[][] = [];
         let currentAttempt: string[] = [];
@@ -34,66 +142,161 @@ export class SummaryReport {
 
         console.log(`\nTotal attempts found: ${attempts.length}`);
 
-        // Calculate score for each attempt
+        // Calculate score for each attempt with carry-forward logic
         const attemptScores: number[] = [];
         const allAttemptsData = [];
         let attemptNumber = 1;
 
-        for (const attempt of attempts) {
-            const levelData: Record<string, { correct: number, totalChallenges: number }> = {};
+        // Object to track the best scores for each level across all attempts
+        const bestLevelScores: Record<string, { correct: number, totalChallenges: number }> = {};
+        const highestLevelReached: Record<number, number> = {}; // attempt number -> highest level
+
+        // First pass to collect all level data across attempts
+        for (let i = 0; i < attempts.length; i++) {
+            const attempt = attempts[i];
+            const currentAttemptLevelData: Record<string, { correct: number, totalChallenges: number }> = {};
             let highestLevel = 0;
 
+            // Process the current attempt to get level data
             for (const step of attempt) {
                 const levelMatch = step.match(/C(\d+)/);
                 if (!levelMatch) continue;
-                const levelNum = parseInt(levelMatch[1], 10);
+
+                const level = levelMatch[1];
+                const levelNum = parseInt(level, 10);
+                const isCorrect = step.includes('_CORRECT');
+
                 if (levelNum > highestLevel) {
                     highestLevel = levelNum;
                 }
+
+                if (!currentAttemptLevelData[level]) {
+                    currentAttemptLevelData[level] = { correct: 0, totalChallenges: 0 };
+                }
+
+                currentAttemptLevelData[level].totalChallenges++;
+                if (isCorrect) {
+                    currentAttemptLevelData[level].correct++;
+                }
             }
 
+            highestLevelReached[i + 1] = highestLevel;
+
+            // Update the best level scores
+            for (const [level, data] of Object.entries(currentAttemptLevelData)) {
+                if (!bestLevelScores[level]) {
+                    bestLevelScores[level] = { correct: 0, totalChallenges: 0 };
+                }
+
+                // If this level was played in this attempt, update the totalChallenges regardless
+                bestLevelScores[level].totalChallenges = Math.max(
+                    bestLevelScores[level].totalChallenges,
+                    data.totalChallenges
+                );
+
+                // Update the correct count if we have a better score
+                if (data.correct > bestLevelScores[level].correct) {
+                    bestLevelScores[level].correct = data.correct;
+                }
+            }
+        }
+
+        // Second pass to calculate scores for each attempt with carry-forward logic
+        let cumulativeAttemptData: Record<string, { correct: number, totalChallenges: number }> = {};
+
+        for (let i = 0; i < attempts.length; i++) {
+            const attempt = attempts[i];
+            const currentAttemptNum = i + 1;
+            const currentAttemptLevelData: Record<string, { correct: number, totalChallenges: number }> = {};
+
+            // Get level data for this specific attempt
             for (const step of attempt) {
                 const levelMatch = step.match(/C(\d+)/);
                 if (!levelMatch) continue;
+
                 const level = levelMatch[1];
                 const isCorrect = step.includes('_CORRECT');
-                if (!levelData[level]) {
-                    levelData[level] = { correct: 0, totalChallenges: 0 };
+
+                if (!currentAttemptLevelData[level]) {
+                    currentAttemptLevelData[level] = { correct: 0, totalChallenges: 0 };
                 }
 
-                levelData[level].totalChallenges++;
+                currentAttemptLevelData[level].totalChallenges++;
                 if (isCorrect) {
-                    levelData[level].correct++;
+                    currentAttemptLevelData[level].correct++;
                 }
             }
-            const levelScores: { level: string, score: number }[] = [];
-            for (let i = 1; i <= highestLevel; i++) {
-                const levelKey = i.toString();
-                const { correct = 0, totalChallenges = 0 } = levelData[levelKey] || { correct: 0, totalChallenges: 0 };
-                const score = totalChallenges > 0 ? (correct / totalChallenges) * 100 : 0;
-                levelScores.push({ level: levelKey, score });
+
+            // Apply carry-forward logic: inherit previous level scores if not in current attempt
+            const attemptWithCarryForward: Record<string, { correct: number, totalChallenges: number }> = {};
+
+            // First copy all previous attempt data as our starting point
+            for (const [level, data] of Object.entries(cumulativeAttemptData)) {
+                attemptWithCarryForward[level] = { ...data };
             }
+
+            // Then update with current attempt data for levels that were played
+            for (const [level, data] of Object.entries(currentAttemptLevelData)) {
+                if (!attemptWithCarryForward[level]) {
+                    attemptWithCarryForward[level] = { correct: 0, totalChallenges: 0 };
+                }
+                attemptWithCarryForward[level] = {
+                    correct: data.correct,
+                    totalChallenges: data.totalChallenges
+                };
+            }
+
+            // Save this attempt's cumulative data for the next iteration
+            cumulativeAttemptData = { ...attemptWithCarryForward };
+
+            // Calculate scores for this attempt's levels
+            const levelScores: { level: string, score: number }[] = [];
+            const highestLevel = highestLevelReached[currentAttemptNum];
+
+            // Calculate scores for all levels up to the highest one reached
+            for (let levelNum = 1; levelNum <= highestLevel; levelNum++) {
+                const levelKey = levelNum.toString();
+                const levelData = attemptWithCarryForward[levelKey];
+
+                if (levelData) {
+                    const { correct = 0, totalChallenges = 0 } = levelData;
+                    const score = totalChallenges > 0 ? (correct / totalChallenges) * 100 : 0;
+                    levelScores.push({ level: levelKey, score });
+                } else {
+                    // If we don't have data for this level but it's before the highest level,
+                    // add a zero score
+                    levelScores.push({ level: levelKey, score: 0 });
+                }
+            }
+
+            // Calculate average score - always divide by 3 levels
             const scores = levelScores.map(item => item.score);
-            let firstValidIndex = scores.findIndex(score => score > 0);
-            const attemptScore = (firstValidIndex >= 0)
-                ? scores.slice(firstValidIndex).reduce((sum, score) => sum + score, 0) /
-                scores.slice(firstValidIndex).length
-                : 0;
+            // Add 0% for any missing levels up to level 3
+            const paddedScores = [...scores];
+            while (paddedScores.length < 3) {
+                paddedScores.push(0);
+            }
+            // For levels beyond 3, we still include them in the calculation
+            const totalLevels = Math.max(3, scores.length);
+            const attemptScore = scores.reduce((sum, score) => sum + score, 0) / totalLevels;
+
             const scoresForDisplay = scores.map(s => this.formatScore(s));
             const attemptScores1 = `[${scoresForDisplay.join(', ')}]`;
-            const attemptAverageScore = `${this.formatScore(attemptScore)}%`;
+            const attemptAverageScore = `: ${this.formatScore(attemptScore)}%`;
+
             allAttemptsData.push({
                 attempt,
                 attemptScores: attemptScores1,
                 attemptAverageScore,
-                attemptNumber,
+                attemptNumber: currentAttemptNum,
                 levelScores,
                 rawScores: scores
             });
 
             attemptScores.push(attemptScore);
-            attemptNumber++;
         }
+
+        // Verify and report each attempt
         for (const attemptData of allAttemptsData) {
             await this.veryfySelectedOptionAndReportResponse(
                 attemptData.attempt,
@@ -110,14 +313,13 @@ export class SummaryReport {
         console.log(`All attempt scores: [${attemptScores.map(s => this.formatScore(s)).join(', ')}]`);
         console.log(`Final Score (highest attempt): ${this.formatScore(finalScore)}%`);
         const formattedFinalScore = this.formatScore(finalScore);
-        await expect(this.finalScore).toHaveText(`${formattedFinalScore} %`);
+        await expect(this.finalScore).toHaveText(`${formattedFinalScore}%`);
         return {
             finalScore,
             attemptScores,
             allAttemptsData
         };
     }
-
     private async veryfySelectedOptionAndReportResponse(
         attempt: string[],
         attemptScores: number[],
@@ -132,7 +334,7 @@ export class SummaryReport {
         console.log(`Attempt ${attemptNumber} Expected average Score: ${attemptAverageScore}`);
         if (attemptNumber > 1) {
             const attemptDropdownButton = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']`
-                + `/following-sibling::div//button[@id='attempt-dropdown-arrow-button']`
+                + `/following-sibling::button[@id='attempt-dropdown-arrow-button']`
             await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attemptDropdownButton).click();
         }
 
@@ -161,10 +363,11 @@ export class SummaryReport {
             // Get the correct score for current index
             if (i < attemptScores.length) {
                 const expectedScore = attemptScores[challengeLevel - 1];
-                console.log(`\nExpected score for challengeLevel ${challengeLevel}: ${expectedScore}%`);
+                const formattedExpectedScore = this.formatScore(expectedScore);
+                console.log(`\nExpected score for challengeLevel ${challengeLevel}: ${formattedExpectedScore}%`);
                 const actualScore = await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator).innerText();
                 console.log(`Actual score for challengeLevel ${challengeLevel}: ${actualScore}`);
-                await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator)).toHaveText(`${expectedScore}%`);
+                await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator)).toHaveText(`: ${formattedExpectedScore}%`);
             }
             // Response number is the index + 1
             const mainLevel = level.split('.')[0];

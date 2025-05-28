@@ -59,8 +59,11 @@
     "ideal_reply_mood": "feels acknowledged but shows resistance",
     "ideal_reportFeedback": "You showed empathy while also offering alternative options, keeping the conversation open and supportive.",
     "distractor": "I think you’re dealing with a lot right now. You should consider trying some relaxation techniques, like deep breathing or mindfulness exercises? Even just a few minutes a day can sometimes make a difference in how you feel.",
-    "distractor_reply": "Relaxation techniques? Seriously? Where do I find the time for that when I need to take care of my mother? You’ll never understand, though. You’re not living it, you don’t know what it’s like… (tears well up) Please… can you just give us some space for now?",
+    "distractor_reply": "Relaxation techniques? Seriously? Where do I find the time for that when I need to take care of my mother? You’ll never understand, though. You’re not living it, you don’t know what it’s like",
+    "distractor_reply2": "Tears well up in Emily's eyes.",
+    "distractor_reply3": "Please… can you just give us some space for now?",
     "distractor_reply_mood": "still frustrated",
+    "distractor_reply_mood2": "tired and dismissive",
     "distractor_reportFeedback": "Your response lacks empathy and offers solutions that don’t address the main concern.",
     "distractor_attempt_ending_popup_text": "The response you chose lacks empathy and offers solutions that don’t address the main concern. Dealing with a caregiver requires showing empathy and offering appropriate solutions.",
     "incorrect": "Emily, do you think you could try to manage your workload a bit better? I understand that your family’s got their responsibilities at work or school, just as you do. If you can’t get their help, then you should be open to getting some outside help.",
@@ -91,7 +94,8 @@
     "ideal_reply_mood": "co-operative though hesitant",
     "ideal_reportFeedback": "Your response demonstrates empathy and patience while clearly explaining the available options.",
     "distractor": "Ok, so you can probably consider options like in-home care, respite care, or even a short stay at a care center, which will give you and your family a break. Would you like to know more about any of these?",
-    "distractor_reply": "How can I take a break when my mother needs me? She has taken care of me her entire life, and I cannot abandon her now. I feel so burdened, but I... I can’t give up! I don’t want to see my family fail... (tears well out)",
+    "distractor_reply": "How can I take a break when my mother needs me? She has taken care of me her entire life, and I cannot abandon her now. I feel so burdened, but I... I can’t give up! I don’t want to see my family fail.",
+    "distractor_reply2": "Tears well up in Emily's eyes.",
     "distractor_reply_mood": "gets very emotional and sad",
     "distractor_reportFeedback": "Your response provides useful solutions, but lacks empathy, understanding and patience.",
     "distractor_attempt_ending_popup_text": "The response you chose provided useful solutions, but lacked empathy, understanding and patience. Dealing with a caregiver requires showing empathy, and being more supportive.",
@@ -116,5 +120,23 @@
     "incorrect_reply_mood": "angry and frustrated",
     "incorrect_reportFeedback": "Your response lacks effective communication skills and comes across as justifying and pushing an option that was already rejected.",
     "incorrect_attempt_ending_popup_text": "The response you chose lacked effective communication skills and came across as justifying and pushing an option that was already rejected. Dealing with a caregiver requires openness and a helpful attitude."
-  }
+  },
+  "activityTitle": "Communicatingwith a Patient’s Family",
+  "learningObjectiveTitle": "Learning Objectives",
+  "learningObjectives": [
+    "Identify healthy lifestyle practices that lead to good health.",
+    "Identify the correlation between positive and negative relationships on emotional, physical, and mental health.",
+    "Identify positive and negative stressors and how to eliminate or decrease negative stress.",
+    "Identify the characteristics of a successful healthcare team menber.",
+    "Describe the process and importance of effective communication in the healthcare workspace."
+  ],
+  "introductionTitle": "Introduction",
+  "introductionText": "You are a clinical social worker at a specialty hospital. Your role involves engaging with patients and their families to provide essential emotional and practical support. Emily Torres is the primary caregiver for her mother, Mrs. Gloria Diaz, who is in the late stages of Alzheimer’s disease. Your task is to connect with Emily, understand her concerns, and guide her through the process of finding the support she needs.",
+  "chatSectionTitle": "Communication Skills Training",
+  "instructionTitle": "Instructions",
+  "instructionText": "Select the most appropriate response to advance the conversation. Your goal is to de-escalate the situation and build rapport with the patient.",
+  "characterName": "Nurse Alex",
+  "characterRole": "Registered Nurse",
+  "patientName": "Sam Johnson",
+  "patientRole": "Patient"
 }
