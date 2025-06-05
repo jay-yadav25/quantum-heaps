@@ -59,7 +59,7 @@
     "ideal_reply_mood": "feels acknowledged but shows resistance",
     "ideal_reportFeedback": "You showed empathy while also offering alternative options, keeping the conversation open and supportive.",
     "distractor": "I think you’re dealing with a lot right now. You should consider trying some relaxation techniques, like deep breathing or mindfulness exercises? Even just a few minutes a day can sometimes make a difference in how you feel.",
-    "distractor_reply": "Relaxation techniques? Seriously? Where do I find the time for that when I need to take care of my mother? You’ll never understand, though. You’re not living it, you don’t know what it’s like",
+    "distractor_reply": "Relaxation techniques? Seriously? Where do I find the time for that when I need to take care of my mother? You’ll never understand, though. You’re not living it, you don’t know what it’s like.",
     "distractor_reply2": "Tears well up in Emily's eyes.",
     "distractor_reply3": "Please… can you just give us some space for now?",
     "distractor_reply_mood": "still frustrated",
@@ -75,14 +75,14 @@
   "C2": {
     "ideal": "I hear you, Emily. It’s clear how much you love your mom and how deeply you care about her well-being. Options like in-home care, respite care, or even a short stay at a care center would still keep her close but also give you some space to rest and recharge. How do you feel about these options?",
     "ideal_reply": "Okay, but... I just can’t imagine leaving my mom at a center or leaving her in the care of a stranger. You need to understand it is against our culture to abandon our family or hand over their care to strangers.",
-    "ideal_reply_mood": "co-operative though hesitant",
+    "ideal_reply_mood": "cooperative though hesitant",
     "ideal_reportFeedback": "Your response demonstrates empathy and patience while clearly explaining the available options.",
     "distractor": "Emily, I understand how difficult this must be for you, but there’s a limit to what you can do. You don’t need to feel guilty for not doing enough. Your efforts are really commendable! I think you need to take some responsibilities off your shoulders and let others assist you a bit.",
     "distractor_reply": "Yes, but I still feel so helpless! I can’t let go of my responsibilities. I have to look after her... in the end, she’s my mother. l don’t know, I... I feel like I’m not doing enough.",
     "distractor_reply_mood": "feels understood but still helpless",
     "distractor_reportFeedback": "Your response shows empathy and understanding, but providing some realistic solutions would have made it more helpful and actionable.",
     "distractor_attempt_ending_popup_text": "",
-    "incorrect": "Emily, the reality is that you can’t handle everything on your own. Options like respite care and short stays at a trusted care center are the only ways to give adequate and professional care to you mother. Your mom’s going to need more care as her condition worsens. You should accept that this is the right choice without feeling guilty.",
+    "incorrect": "Emily, the reality is that you can’t handle everything on your own. Options like respite care and short stays at a trusted care center are the only ways to give adequate and professional care to your mother. Your mom’s going to need more care as her condition worsens. You should accept that this is the right choice without feeling guilty.",
     "incorrect_reply": "No! I can’t believe you would even suggest that! I’d never leave my mom at a center just for our convenience. That’s just disrespectful! I have been taught to care for my elders, no matter what. We won’t hand them off to strangers. You just don’t get it. I don’t want to talk about this anymore.",
     "incorrect_reply_mood": "increased anger",
     "incorrect_reportFeedback": "Your response is more focused on forcing a solution rather than showing empathy and patience.",
@@ -91,7 +91,7 @@
   "C2.1": {
     "ideal": "I understand, Emily. Taking care of an Alzheimer’s patient is not easy. There are resources available that can make it easier for you and your family to provide care for your mom. You can consider options like in-home care, respite care, or even a short stay at a care center, which would help her get good care under your supervision.",
     "ideal_reply": "I would never leave my mom at a center or in the care of any stranger. In our culture, we believe in taking care of our family members when they’re sick, and not abandoning them.",
-    "ideal_reply_mood": "co-operative though hesitant",
+    "ideal_reply_mood": "cooperative though hesitant",
     "ideal_reportFeedback": "Your response demonstrates empathy and patience while clearly explaining the available options.",
     "distractor": "Ok, so you can probably consider options like in-home care, respite care, or even a short stay at a care center, which will give you and your family a break. Would you like to know more about any of these?",
     "distractor_reply": "How can I take a break when my mother needs me? She has taken care of me her entire life, and I cannot abandon her now. I feel so burdened, but I... I can’t give up! I don’t want to see my family fail.",
@@ -108,11 +108,11 @@
   "C3": {
     "ideal": "I understand, Emily. You need to be the primary caregiver. But a small amount of help, maybe just a few hours a week of in-home care, could give you a helping hand with looking after your mother. Would you be open to trying it?",
     "ideal_reply": "Yeah, that sounds really helpful! It would really help me and my family deal with other responsibilities in our life, while still keeping my mother in our care. Thank you so much!",
-    "ideal_reply_mood": "Happy and relieved",
+    "ideal_reply_mood": "happy and relieved",
     "ideal_reportFeedback": "Your response demonstrates strong communication skills, effective problem-solving, and good customer service.",
     "distractor": "Okay, got it, so that means you’re open to in-home care. A personal caregiver could handle everything like meals, or cleaning, and give you time for yourself. I think that’s a great option, you should totally go for it! There’s no reason to hesitate.",
     "distractor_reply": "No... I think that would be a bit too much for now considering our current situation. How about we discuss this some other time?",
-    "distractor_reply_mood": "Losing interest and skeptical",
+    "distractor_reply_mood": "losing interest and skeptical",
     "distractor_reportFeedback": "Your response could have demonstrated more discretion, stronger problem-solving, and better customer service for greater effectiveness.",
     "distractor_attempt_ending_popup_text": "The response you chose could have demonstrated more discretion, stronger problem-solving skills, and better customer service for greater effectiveness. Dealing with a caregiver requires more openness and support.",
     "incorrect": "Emily, some compromises will have to be made on your end as well. You won’t be abandoning your mother at the care center. The help provided to your mother there will be very professional, so there’s no cause for worry.",
@@ -121,6 +121,7 @@
     "incorrect_reportFeedback": "Your response lacks effective communication skills and comes across as justifying and pushing an option that was already rejected.",
     "incorrect_attempt_ending_popup_text": "The response you chose lacked effective communication skills and came across as justifying and pushing an option that was already rejected. Dealing with a caregiver requires openness and a helpful attitude."
   },
+
   "activityTitle": "Communicatingwith a Patient’s Family",
   "learningObjectiveTitle": "Learning Objectives",
   "learningObjectives": [
