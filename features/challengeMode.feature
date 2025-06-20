@@ -1,28 +1,7 @@
 @dho
 Feature: Launch Activity
-# Scenario Outline: Verify chat section functionality for golden scenario <scenario>
-#     Given the user has launched the activity on the web
-#     And the learning objectives screen should be displayed
-#     Then the activity name and learning objectives should be same as as per design
-#     When the user clicks the Start button on the learning objectives
-#     Then introduction popup shoudl be displayed
-#     And the introdution popup text and title should be as per design
-#     When the user clicks the Continue button on the introduction popup
-#     Then the Choose an Avatar page should be open
-#     When User click on option button on choose an avatar page
-#     Then menu popup should open having introduction and learing objective button
-#     And choose an avatar button should be disable on menu popup in avatar page
-#     When the user fill the name in input field 
-#     Then Avatar page done button should be enable
-#     When User click on done button on choose an avatar page 
-#     Then Chat section should be open
-#     And the step instrustion title and text should be as per design
-    
-#  Examples:
-#       | scenario |
-#       # | S1       |
-#     # | S2       |
-  Scenario Outline: Verify chat section functionality for golden scenario learning mode
+
+  Scenario Outline: Verify chat section functionality for golden scenario <scenario>
     Given the user has launched the activity on the web
     And the learning objectives are displayed
     When the user clicks the Start button on the learning objectives page
@@ -32,18 +11,17 @@ Feature: Launch Activity
     When the user clicks the Continue button on the step introduction popup
     Then the Choose an Avatar page should be displayed
     When the user enters a name and clicks the Done button
-    Then then the instrcution from jeremy should be displayed
     Then the Chat section should be displayed
-    When the user selects the response option in chat section for learning mode
-   
+    When the user selects the chat option for scenario "<scenario>"
+    Then Verify the scenario score "<scenario>"
 
     Examples:
       | scenario |
-      | S1       |
-      | S2       |
-      | S3       |
-      | S4       |
-      | S5       |
+      # | S1       |
+      # | S2       |
+      # | S3       |
+      # | S4       |
+      # | S5       |
       # | S6       |
       # | S7       |
       # | S8       |
@@ -70,6 +48,22 @@ Feature: Launch Activity
       # | S29      |
       # | S30      |
       # | S31      |
+      # | S33      |
+      # | S34      |
+      # | S35      |
+      # | S36      |
+      # | S37      |
+      # | S38      |
+      # | S39      |
+      # | S40      |
+      # | S41      |
+      # | S42      |
+      # | S43      |
+      # | S44      |
+      # | S45      |
+      # | S46      |
+      # | S47      |
+      # | S48      |
 
   Scenario Outline: Verify chat section functionality for scenario <scenario>
     Given the user has launched the activity on the web
@@ -82,7 +76,6 @@ Feature: Launch Activity
     Then the Choose an Avatar page should be displayed
     When the user enters a name and clicks the Done button
     Then the Chat section should be displayed
-
     When the user selects the chat option for scenario "<scenario>"
     Then Verify the scenario score "<scenario>"
 

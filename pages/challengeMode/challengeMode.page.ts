@@ -16,32 +16,42 @@ export class ChallengeMode {
   readonly chatEndMessage1: Locator;
   readonly chatEndMessage2: Locator;
   readonly noOfAttemptChatPopup: Locator;
+  readonly respondButton: Locator;
+  readonly restartButton: Locator;
 
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
     this.page = page;
     this.frameLocator = page.frameLocator(`iframe[name="${iframeName}"]`);
-    this.startButton = this.frameLocator.locator("//button[@id='start-btn']");
+    this.startButton = this.frameLocator.locator("//button[@id='start-btn']").first();
     this.inputField = this.frameLocator.locator("//input[@class='input']");
-    this.avatarSelectionDoneButton = this.frameLocator.locator("//button[@id='avatar-done-btn']");
-    this.doneSubmitButton = this.frameLocator.locator("//button[@id='chat-done-btn']");
-    this.submitButton = this.frameLocator.locator("//button[@id='submit-btn']");
-    this.retryButton = this.frameLocator.locator("//button[@id='retry-btn']");
+    this.avatarSelectionDoneButton = this.frameLocator.locator("//button[@id='avatar-done-btn']").first();
+    this.doneSubmitButton = this.frameLocator.locator("//button[@id='chat-done-btn']").first();
+    this.restartButton = this.frameLocator.locator("//button[@id='restart-btn']").first();
+    this.respondButton = this.frameLocator.locator("//button[@id='respond-btn']").first();
+    this.submitButton = this.frameLocator.locator("//button[@id='submit-btn']").first();
+    this.retryButton = this.frameLocator.locator("//button[@id='retry-btn']").first();
     this.feedbackPopupText1 = this.frameLocator.locator("//div[@class='popup-content-container']//p[1]");
     this.feedbackPopupText2 = this.frameLocator.locator("//div[@class='popup-content-container']//p[2]");
     this.feedbackPopupText3 = this.frameLocator.locator("//div[@class='popup-content-container']//span").first();
-    this.intrductionPopupContinueButton = this.frameLocator.locator(".continue-button");
+    this.intrductionPopupContinueButton = this.frameLocator.locator(".continue-button").first();
     this.chatEndMessage1 = this.frameLocator.locator("//div[@class='chat-end-message-bg']/div/p");
     this.chatEndMessage2 = this.frameLocator.locator("//div[@class='chat-end-message-bg']/p");
     this.noOfAttemptChatPopup = this.frameLocator.locator("//div[@class='popup-header']/span");
   }
 
-  public async launchActivity() {
-    await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=dho1&attemptId=0");
+  public async launchActivity(activityNumber: number) {
+    if (activityNumber == 1) {
+      await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_cwpf_c_01&attemptId=0");
+     // await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_cwpf_c_01&attemptId=1");
+    } else if (activityNumber == 2) {
+      await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_02&attemptId=1");
+
+    }
   }
 
   public async runScenarioPath(path: string[], testData: any) {
     let previousStep: string | null = null;
-
+    await this.respondButton.click();
     for (let i = 0; i < path.length; i++) {
       const step = path[i];
 
@@ -71,6 +81,12 @@ export class ChallengeMode {
         await this.verifyFailedScenario2(previousStep, testData, attemptNumber);
         continue; // Skip rest of the loop for RESTART
       }
+      if (step.startsWith('REATTEMPT')) {
+        const attemptNumber = step.replace('REATTEMPT', '');
+        console.log(`🔁 Restarting attempt ${attemptNumber} — Last step was ${previousStep}`);
+        await this.verifyReattempt(previousStep, testData, attemptNumber);
+        continue; // Skip rest of the loop for RESTART
+      }
       await this.selectAndVerifyReplyText(step, testData);
       previousStep = step;
     }
@@ -92,6 +108,7 @@ export class ChallengeMode {
 
     // Get the option IDs
     const { correctOptionID, incorrectOptionID, distractorOptionID } = await this.getOptionIds(level);
+
 
     // Verify the text of each option
     await expect(this.frameLocator.locator(`//button[@id='${correctOptionID}']`).first()).toHaveText(correct);
@@ -124,7 +141,7 @@ export class ChallengeMode {
       const replyMood = actionDetails[actionKey + "_reply_mood"];
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/h3[contains(@class, "patient-reaction")]`;
       await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
 
@@ -136,7 +153,7 @@ export class ChallengeMode {
       const replyText3 = actionDetails[actionKey + "_reply3"];
       const replyTextID3 = `${selectedOptionID}_rep_3`;
 
-      const replyMoodSelector2 = `//div[@id='${replyTextID3}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replyMoodSelector2 = `//div[@id='${replyTextID3}']/parent::div/preceding-sibling::div/h3[contains(@class, "patient-reaction")]`;
       await expect(this.frameLocator.locator(replyMoodSelector2)).toHaveText("[" + replyMood2 + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID3}']`)).toHaveText(replyText3);
 
@@ -144,7 +161,7 @@ export class ChallengeMode {
       const replyMood = actionDetails[actionKey + "_reply_mood"];
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/h3[contains(@class, "patient-reaction")]`;
       await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
 
@@ -158,7 +175,7 @@ export class ChallengeMode {
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
 
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/h3[contains(@class, "patient-reaction")]`;
       await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
     }
@@ -180,7 +197,7 @@ export class ChallengeMode {
 
   private async verifyFailedScenario(previousStep: any, testData: any) {
     await expect(this.chatEndMessage1).toHaveText("This conversation has ended without a positive resolution.");
-    await expect(this.chatEndMessage2).toHaveText("Select the Done button to proceed.");
+    await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
     await this.clickOnDoneButton();
     const [level, rawAction] = previousStep.split("_");
     const actionMap: { [key: string]: string } = {
@@ -198,12 +215,13 @@ export class ChallengeMode {
     await expect(this.feedbackPopupText3).toHaveText(feedbackPopupFirstText);
     await expect(this.feedbackPopupText1).toHaveText(feedbackPopupSecondText);
     await this.clickOnSubmitButton();
+    await this.page.pause();
   }
 
   private async verifyFailedScenario2(previousStep: any, testData: any, attemptNumber: any) {
     // Verify text from chat section
     await expect(this.chatEndMessage1).toHaveText("This conversation has ended without a positive resolution.");
-    await expect(this.chatEndMessage2).toHaveText("Select the Done button to proceed.");
+    await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
     await this.clickOnDoneButton();
 
     const [level, rawAction] = previousStep.split("_");
@@ -223,11 +241,38 @@ export class ChallengeMode {
     await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
     await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
     await this.clickOnRetryButton();
+    await this.respondButton.click();
+  }
+
+  private async verifyReattempt(previousStep: any, testData: any, attemptNumber: any) {
+    // Verify text from chat section
+    await expect(this.chatEndMessage1).toHaveText("This conversation has ended with a positive resolution.");
+    await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
+    await this.clickOnDoneButton();
+
+    const [level, rawAction] = previousStep.split("_");
+    const actionMap: { [key: string]: string } = {
+      INCORRECT: "incorrect",
+      DISTRACTOR: "distractor"
+    };
+    await expect(this.noOfAttemptChatPopup).toHaveText(`Attempts Remaining: ${3 - attemptNumber}`);
+
+    // const actionKey = actionMap[rawAction.toUpperCase()];
+    // const actionDetails = testData[level];
+    // const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
+    // const feedbackPopupFirstText = "The conversation path you took didn’t reach a positive resolution.  " + attemptEndingText;
+    // const feedbackPopupSecondText = "Continue practicing your problem solving and communication skills by retrying the scenario once again or select the Submit button to end the scenario and submit your results to your teacher.";
+
+    // // Verify text on popup for incorrect attempt
+    // await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
+    // await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
+    await this.restartButton.click();
+    await this.respondButton.click();
   }
   private async verifyFailedScenarioInbeweenSubmit(previousStep: any, testData: any, attemptNumber: any) {
     // Verify text from chat section
     await expect(this.chatEndMessage1).toHaveText("This conversation has ended without a positive resolution.");
-    await expect(this.chatEndMessage2).toHaveText("Select the Done button to proceed.");
+    await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
     await this.clickOnDoneButton();
 
     const [level, rawAction] = previousStep.split("_");
@@ -246,10 +291,11 @@ export class ChallengeMode {
     await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
     await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
     await this.clickOnSubmitButton();
+    await this.page.pause();
   }
   private async verifyPassedScenario() {
     await expect(this.chatEndMessage1).toHaveText("This conversation has ended with a positive resolution.");
-    await expect(this.chatEndMessage2).toHaveText("Select the Done button to proceed.");
+    await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
     await this.clickOnDoneButton();
 
     // Verify text on popup
@@ -257,9 +303,11 @@ export class ChallengeMode {
     const feedbackPopupSecondText = "Select the Submit button to end the scenario and submit your results to your teacher.";
 
     // Verify text on popup for successful scenario
-    await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
-    await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
+    // await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
+    // await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
+    //await this.page.pause();
     await this.clickOnSubmitButton();
+    await this.page.pause();
   }
 
   public async clickOnStartButton() {

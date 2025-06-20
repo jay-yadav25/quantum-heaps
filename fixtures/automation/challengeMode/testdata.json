@@ -133,6 +133,14 @@
   ],
   "introductionTitle": "Introduction",
   "introductionText": "You are a clinical social worker at a specialty hospital. Your role involves engaging with patients and their families to provide essential emotional and practical support. Emily Torres is the primary caregiver for her mother, Mrs. Gloria Diaz, who is in the late stages of Alzheimer’s disease. Your task is to connect with Emily, understand her concerns, and guide her through the process of finding the support she needs.",
+  "activityOverviewTitle": "Learning Objectives",
+  "activityOverview": [
+    "Identify healthy lifestyle practices that lead to good health.",
+    "Identify the correlation between positive and negative relationships on emotional, physical, and mental health.",
+    "Identify positive and negative stressors and how to eliminate or decrease negative stress.",
+    "Identify the characteristics of a successful healthcare team menber.",
+    "Describe the process and importance of effective communication in the healthcare workspace."
+  ],
   "chatSectionTitle": "Communication Skills Training",
   "instructionTitle": "Instructions",
   "instructionText": "Select the most appropriate response to advance the conversation. Your goal is to de-escalate the situation and build rapport with the patient.",

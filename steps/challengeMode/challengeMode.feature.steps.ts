@@ -16,7 +16,7 @@ Before({ tags: '@dho' }, async ({ page }) => {
 });
 
 Given('the user has launched the activity on the web', async function ({ }) {
-  await challengeMode.launchActivity();
+  await challengeMode.launchActivity(1);
 });
 
 Given('the learning objectives are displayed', async function ({ }) {
@@ -46,10 +46,7 @@ Then('the Choose an Avatar page should be displayed', async function ({ }) {
   // ...
 });
 
-When('the user enters a name and clicks the Done button', async function ({ }) {
-  await challengeMode.typeInInputText("jay");
-  await challengeMode.clickOnAvatarSelectionDone();
-});
+
 
 Then('the Chat section should be displayed', async function ({ }) {
 

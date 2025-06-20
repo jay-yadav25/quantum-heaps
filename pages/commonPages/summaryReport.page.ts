@@ -123,7 +123,7 @@ export class SummaryReport {
         for (let i = 0; i < path.length; i++) {
             const step = path[i];
 
-            if (step.startsWith('SUBMIT') || step.startsWith('RESTART') || step === 'FAILED' || step === 'COMPLETE') {
+            if (step.startsWith('SUBMIT') || step.startsWith('RESTART') || step.startsWith('REATTEMPT') || step === 'FAILED' || step === 'COMPLETE') {
                 if (currentAttempt.length > 0) {
                     attempts.push([...currentAttempt]);
                     currentAttempt = [];
@@ -199,6 +199,7 @@ export class SummaryReport {
                     bestLevelScores[level].correct = data.correct;
                 }
             }
+           // await this.page.pause();
         }
 
         // Second pass to calculate scores for each attempt with carry-forward logic
@@ -334,8 +335,8 @@ export class SummaryReport {
         console.log(`Attempt ${attemptNumber} Expected average Score: ${attemptAverageScore}`);
         if (attemptNumber > 1) {
             const attemptDropdownButton = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']`
-                + `/following-sibling::button[@id='attempt-dropdown-arrow-button']`
-            await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attemptDropdownButton).click();
+                + ` /parent::div/parent::div/following-sibling::div[1]//button[@id='attempt-dropdown-arrow-button']`
+            await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attemptDropdownButton).first().click();
         }
 
         const attepmtAverageScoreLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
@@ -355,8 +356,8 @@ export class SummaryReport {
             const challengeLevel = level.startsWith('C') ? parseInt(level.substring(1)) : 0;
 
             const attepmtScoresLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
-                `/parent::div` +
-                `/following-sibling::section` +
+                `/parent::div/parent::div/parent::div/parent::div` +
+                `//following-sibling::section` +
                 `/div[${challengeLevel}]` +
                 `/div[1]//div[contains(@class, 'score-value')]`;
 
@@ -397,8 +398,8 @@ export class SummaryReport {
             if (selectedOption) {
                 // XPath to locate the text element
                 const userResponse = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
-                    `/parent::div` +
-                    `/following-sibling::section` +
+                    `/parent::div/parent::div/parent::div/parent::div` +
+                    `//following-sibling::section` +
                     `/div[${challengeLevel}]` +
                     `/div[2]/div[${responseNumber}]//div[contains(@class, 'user-response-text')]`;
 
@@ -442,8 +443,8 @@ export class SummaryReport {
             if (reportResponse) {
                 // XPath to locate the text element
                 const reportResponseLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
-                    `/parent::div` +
-                    `/following-sibling::section` +
+                    `/parent::div/parent::div/parent::div/parent::div` +
+                    `//following-sibling::section` +
                     `/div[${challengeLevel}]` +
                     `/div[2]/div[${responseNumber}]//div[contains(@class, 'score-msg')]//div[2]`;
 
@@ -467,8 +468,8 @@ export class SummaryReport {
         console.log(`Expected mood: ${expectedMood}`);
         console.log(`==========================================================================================================`);
         const baseLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
-            `/parent::div` +
-            `/following-sibling::section` +
+            `/parent::div/parent::div/parent::div/parent::div` +
+            `//following-sibling::section` +
             `/div[${challengeLevel}]` +
             `/div[2]/div[${responseNumber}]`;
 
@@ -485,6 +486,74 @@ export class SummaryReport {
     }
 
 
+    // private getPatientResponseAndMood(
+    //     attemptNumber: number,
+    //     stepIndex: number,
+    //     currentAttempt: string[],
+    //     allAttempts: string[][] = [], // Make allAttempts optional with default empty array
+    //     testData: any
+    // ): { patientResponse: string | null, patientMood: string | null } {
+    //     console.log(`Getting patient response for attempt ${attemptNumber}, step ${stepIndex}`);
+
+    //     // CASE 1: First step of first attempt - always use default response
+    //     if (attemptNumber === 1 && stepIndex === 0) {
+    //         console.log(`CASE 1: First step of first attempt - using default response`);
+    //         return {
+    //             patientResponse: testData["default_chat"]["Emily"],
+    //             patientMood: testData["default_chat"]["Emily_reply_mood"]
+    //         };
+    //     }
+
+    //     // CASE 2: Not the first step - use the immediate previous step's response
+    //     if (stepIndex > 0) {
+    //         const prevStep = currentAttempt[stepIndex - 1];
+    //         const [prevLevel, prevRawAction] = prevStep.split("_");
+    //         console.log(`CASE 2: Not first step - using previous step response from ${prevStep}`);
+    //         return this.getResponseDataForAction(prevRawAction, prevLevel, testData);
+    //     }
+
+    //     // CASE 3: First step of subsequent attempts
+    //     if (stepIndex === 0 && attemptNumber > 1) {
+    //         console.log(`CASE 3: First step of attempt ${attemptNumber}`);
+
+    //         // Look for the most recent CORRECT action in all previous attempts
+    //         for (let attemptIdx = attemptNumber - 2; attemptIdx >= 0; attemptIdx--) {
+    //             const attempt = allAttempts[attemptIdx];
+
+    //             if (!attempt || attempt.length === 0) continue;
+
+    //             // Scan each attempt from end to beginning
+    //             for (let stepIdx = attempt.length - 1; stepIdx >= 0; stepIdx--) {
+    //                 const step = attempt[stepIdx];
+    //                 const [level, rawAction] = step.split("_");
+
+    //                 if (rawAction === "CORRECT") {
+    //                     console.log(`Found CORRECT action ${step} in attempt ${attemptIdx + 1}, using its response`);
+
+    //                     return this.getResponseDataForAction(rawAction, level, testData);
+    //                 }
+    //             }
+    //         }
+
+    //         // If no CORRECT action was found, use the last action of the immediately previous attempt
+    //         const previousAttemptIdx = attemptNumber - 2;
+    //         const previousAttempt = allAttempts[previousAttemptIdx];
+
+    //         if (previousAttempt && previousAttempt.length > 0) {
+    //             const lastStep = previousAttempt[previousAttempt.length - 1];
+    //             console.log(`No CORRECT action found, using last action deffult`);
+    //             return {
+    //                 patientResponse: testData["default_chat"]["Emily"],
+    //                 patientMood: testData["default_chat"]["Emily_reply_mood"]
+    //             };
+    //         }
+    //     }
+    //     console.warn(`Fallback case - using default response`);
+    //     return {
+    //         patientResponse: testData["default_chat"]["Emily"],
+    //         patientMood: testData["default_chat"]["Emily_reply_mood"]
+    //     };
+    // }
     private getPatientResponseAndMood(
         attemptNumber: number,
         stepIndex: number,
@@ -515,7 +584,25 @@ export class SummaryReport {
         if (stepIndex === 0 && attemptNumber > 1) {
             console.log(`CASE 3: First step of attempt ${attemptNumber}`);
 
-            // Look for the most recent CORRECT action in all previous attempts
+            // RE-ATTEMPT CHECK: If previous attempt ended with C3_CORRECT, start fresh
+            const previousAttemptIdx = attemptNumber - 2;
+            const previousAttempt = allAttempts[previousAttemptIdx];
+
+            if (previousAttempt && previousAttempt.length > 0) {
+                const lastStepOfPreviousAttempt = previousAttempt[previousAttempt.length - 1];
+
+                // Re-attempt functionality: Only C3_CORRECT triggers fresh start
+                if (lastStepOfPreviousAttempt === "C3_CORRECT") {
+                    console.log(`Previous attempt ended with C3_CORRECT - this is a re-attempt, starting fresh`);
+                    return {
+                        patientResponse: testData["default_chat"]["Emily"],
+                        patientMood: testData["default_chat"]["Emily_reply_mood"]
+                    };
+                }
+            }
+
+            // EXISTING LOGIC: Look for the most recent CORRECT action in all previous attempts
+            // (Only executed if previous attempt did NOT end with C3_CORRECT)
             for (let attemptIdx = attemptNumber - 2; attemptIdx >= 0; attemptIdx--) {
                 const attempt = allAttempts[attemptIdx];
 
@@ -528,32 +615,28 @@ export class SummaryReport {
 
                     if (rawAction === "CORRECT") {
                         console.log(`Found CORRECT action ${step} in attempt ${attemptIdx + 1}, using its response`);
-
                         return this.getResponseDataForAction(rawAction, level, testData);
                     }
                 }
             }
 
-            // If no CORRECT action was found, use the last action of the immediately previous attempt
-            const previousAttemptIdx = attemptNumber - 2;
-            const previousAttempt = allAttempts[previousAttemptIdx];
-
+            // If no CORRECT action was found, use default response
             if (previousAttempt && previousAttempt.length > 0) {
-                const lastStep = previousAttempt[previousAttempt.length - 1];
-                console.log(`No CORRECT action found, using last action deffult`);
+                console.log(`No CORRECT action found, using default response`);
                 return {
                     patientResponse: testData["default_chat"]["Emily"],
                     patientMood: testData["default_chat"]["Emily_reply_mood"]
                 };
             }
         }
+
+        // Fallback case - use default response
         console.warn(`Fallback case - using default response`);
         return {
             patientResponse: testData["default_chat"]["Emily"],
             patientMood: testData["default_chat"]["Emily_reply_mood"]
         };
     }
-
 
     private getResponseDataForAction(actionType: string, level: string, testData: any): { patientResponse: string | null, patientMood: string | null } {
         let patientResponse = null;

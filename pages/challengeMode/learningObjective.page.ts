@@ -14,6 +14,8 @@ export class LearningObjectivePage {
     readonly introductionPopUpTitle: Locator;
     readonly introPopupText: Locator;
     readonly intrductionPopupContinueButton: Locator;
+    readonly activityOverviewTitle: Locator;
+    readonly activityOverviewDetails: Locator;
 
     // Avatar Selection Page
     readonly avatarSelectionContainer: Locator;
@@ -59,6 +61,8 @@ export class LearningObjectivePage {
         // Introduction Popup
         this.introductionPopUpTitle = this.frameLocator.locator("h2.popup-title");
         this.introPopupText = this.frameLocator.locator("div.popup-details");
+         this.activityOverviewTitle = this.frameLocator.locator("div.overview-title");
+        this.activityOverviewDetails = this.frameLocator.locator("ul.overview-text  li");
         this.intrductionPopupContinueButton = this.frameLocator.locator(".continue-button");
 
         // Avatar Selection Page
@@ -138,6 +142,14 @@ export class LearningObjectivePage {
         await expect(this.introductionPopUpTitle).toHaveText(testData.introductionTitle);
         await expect(this.introPopupText).toBeVisible();
         await expect(this.introPopupText).toHaveText(testData.introductionText);
+         await expect(this.activityOverviewTitle).toHaveText(testData.activityOverviewTitle);
+
+        const objectiveItems = await this.activityOverviewDetails.all();
+        expect(objectiveItems.length).toBe(testData.activityOverview.length);
+
+        for (let i = 0; i < objectiveItems.length; i++) {
+            await expect(objectiveItems[i]).toHaveText(testData.activityOverview[i]);
+        }
     }
 
     /**
