@@ -248,7 +248,7 @@ export class LearningMode {
     const actualTimeTaken = performance.now() - this.scenarioStartTime;
 
     // Verify popup content
-    const feedbackPopupFirstText = "Great job! You successfully navigated the scenarios with competence and professionalism, and demonstrated effective use of decision making and problem solving skills.";
+    const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with patience, tact, and competence. You demonstrated effective use of communication and problem solving skills to reach a positive outcome!";
     //await this.page.pause();
     await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
 
@@ -262,9 +262,9 @@ export class LearningMode {
     // Parse displayed time and verify
     const displayedSeconds = this.parseDisplayedTime(displayedTime);
 
-    // Verify timing matches (with tolerance of ±2 seconds for UI delays)
-    // expect(displayedSeconds).toBeGreaterThanOrEqual(expectedSeconds - 2);
-    // expect(displayedSeconds).toBeLessThanOrEqual(expectedSeconds + 2);
+    //Verify timing matches (with tolerance of ±2 seconds for UI delays)
+    expect(displayedSeconds).toBeGreaterThanOrEqual(expectedSeconds - 2);
+    expect(displayedSeconds).toBeLessThanOrEqual(expectedSeconds + 2);
 
     // Path analysis  
     const pathAnalysis = this.analyzePath(path);
@@ -376,10 +376,11 @@ export class LearningMode {
         const mainSection = parts[0].padStart(2, "0");
         base = `ch_${mainSection}`;
       } else if (parts.length === 2) {
-        // Level 2 (e.g., "C1.1" → "ch_01_11_opt_X", "C1.2" → "ch_01_12_opt_X")
+        // e.g., "C1.1" → "ch_01_11", "C2.1" → "ch_02_21"
         const mainSection = parts[0].padStart(2, "0");
-        base = `ch_${mainSection}_1${parts[1]}`;
-      } else {
+        base = `ch_${mainSection}_${parts[0]}${parts[1]}`;
+      }
+      else {
         throw new Error(`Unsupported level format: ${level}`);
       }
     }

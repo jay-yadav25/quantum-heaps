@@ -3,19 +3,23 @@
   "default_chat": {
     "Jay": "Good morning, Mr. Gonzalez. I’m a registered nurse, and I am here to have you sign the consent form and get you ready for surgery. What did Jeremy tell you about your procedure?",
     "Ricardo_Gonzalez": "He said he would poke some holes into my stomach and remove my gallbladder, but I don’t really get what he means. How will I be able to eat if I have holes in my stomach?",
-    "Ricardo_Gonzalez_reply_mood": "Appears confused"
+    "Ricardo_Gonzalez_reply_mood": "appears confused"
   },
   "PA": {
     "hint_popup": {
-      "title": "",
+      "title": "Hint",
       "body": {
         "left_side_content": {
           "emoji": "",
-         "text1": "",
-          "text2": ""
+          "text1": "The PA",
+          "text2": "is being professional and following protocol"
         },
         "suggestionListItems": [
-          
+          "You can try to:",
+          "Use accurate terminology.",
+          "Avoid vague or incomplete summaries.",
+          "Recall key clinical and procedural details shared with you.",
+          "Repeat the information clearly and confidently."
         ]
       }
     },
@@ -25,7 +29,7 @@
     "ideal_reply_mood": "satisfied and confident",
     "ideal_feedbackAlertText": "",
     "distractor": "Yes, Mr. Gonzalez is getting a laparoscopic cholocystectomy. It involves, few incisions in the abdominal cavity. I’ll start an IV for... cephalosporin and... dexamethasone. And, I’ll also make him sign the consent form.",
-    "distractor_reply": "Okay, but keep in mind, there are ’five’ buttonhole incisions in the abdominal cavity. You’ll also need to draw a Type and Cross match and have a unit of packed RBC’s on hand. I’ll be on my way now.",
+    "distractor_reply": "Okay, but keep in mind, there are 'five' buttonhole incisions in the abdominal cavity. You’ll also need to draw a Type and Cross match and have a unit of packed RBC’s on hand. I’ll be on my way now.",
     "distractor_reply2": "The PA walks away and you enter Mr. Gonzalez’s hospital room.",
     "distractor_reply_mood": "corrective and assertive",
     "distractor_feedbackAlertText": "This response lacks competency in confirming the procedure’s understanding with the PA.",
@@ -43,7 +47,7 @@
       "body": {
         "left_side_content": {
           "emoji": "confused",
-         "text1": "The patient",
+          "text1": "The patient",
           "text2": "is confused and afraid"
         },
         "suggestionListItems": [
@@ -252,7 +256,7 @@
         "left_side_content": {
           "emoji": "confused",
           "text1": "The patient",
-          "text2": "is confused"
+          "text2": "is concerned"
         },
         "suggestionListItems": [
           "You can try to:",

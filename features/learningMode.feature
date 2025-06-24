@@ -24,7 +24,7 @@ Feature: Launch Activity
     # | S        |
     # | S        |
 
-  Scenario Outline: Verify chat section functionality for golden scenario learning mode
+  Scenario Outline: Verify chat section functionality for golden scenario learning mode <scenario>
     Given the user has launched the activity 2 on the web
     And the learning objectives are displayed
     When the user clicks the Start button on the learning objectives page
@@ -41,14 +41,14 @@ Feature: Launch Activity
       | scenario |
       # | S1       |
       # | S2       |
-      # | S3       |
+      | S3       |
       # | S4       |
       # | S5       |
       # | S6       |
-      # | S7       |
-      # | S8       |
-      # | S9       |
-      # | S10      |
+      | S7       |
+      | S8       |
+      | S9       |
+      | S10      |
       # | S11      |
       # | S12      |
       # | S13      |
@@ -67,11 +67,12 @@ Feature: Launch Activity
       # | S26      |
       # | S27      |
       # | S28      |
-      # | S29      |
+      | S29      |
       # | S30      |
       # | S31      |
-      # | S33      |
-      # | S34      |
+      | S32      |
+      | S33      |
+      | S34      |
       # | S35      |
       # | S36      |
       # | S37      |
@@ -93,14 +94,14 @@ Feature: Launch Activity
       # | S53      |
       # | S54      |
       # | S55      |
-      | S56      |
-      | S57      |
-      | S58      |
-      | S59      |
-      | S60      |
-      | S61      |
-      | S62      |
-      | S63      |
-      | S64      |
-      | S65      |
-      | S66      |
+      # | S56      |
+      # | S57      |
+      # | S58      |
+      # | S59      |
+      # | S60      |
+      # | S61      |
+      # | S62      |
+      # | S63      |
+      # | S64      |
+      # | S65      |
+      # | S66      |
