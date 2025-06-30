@@ -51,14 +51,14 @@ export class LearningMode {
     this.hintButton = this.frameLocator.locator("button#chat-hint-btn");
 
     this.hintTitle = this.frameLocator.locator("#dialog_label"); // hint title
-    this.emojiTitle = this.frameLocator.locator("div.emoji-title");
+    this.emojiTitle = this.frameLocator.locator("strong.emoji-title");
     this.emojiReaction = this.frameLocator.locator("div.emoji-reaction");
     this.suggestionTitle = this.frameLocator.locator("span.suggestion-title");
     this.suggestionList = this.frameLocator.locator("ul.suggestion-list");
     this.suggestionListItems = this.frameLocator.locator("ul.suggestion-list li");
-    this.timeTaken = this.frameLocator.locator(" div.time-value").first();
-    this.noOfAttemptUsed = this.frameLocator.locator("div.attempt-value").first();
-    this.noOfHintUsed = this.frameLocator.locator("div.hint-value").first();
+    this.timeTaken = this.frameLocator.locator(" strong.time-value").first();
+    this.noOfAttemptUsed = this.frameLocator.locator("strong.attempt-value").first();
+    this.noOfHintUsed = this.frameLocator.locator("strong.hint-value").first();
 
 
   }
