@@ -1,9 +1,10 @@
 {
-  "introduction": "I went over the consent form for the laparoscopic cholecystectomy with Mr. Gonzalez. He will require 5 buttonhole incisions in the abdominal cavity. Start an IV because he will receive a dose of cephalosporin to decrease the risk of infection, and dexamethasone for systemic analgesia. Also, draw a Type and Cross match and have a unit of packed RBC’s on hand. Please have Mr. Gonzalez sign the consent form.",
+  "introduction": "You are a registered nurse in a surgical unit at a specialty hospital. Your role involves preparing patients for surgery and ensuring they fully understand and consent to their procedures. Mr. Ricardo Gonzalez is scheduled for a laparoscopic cholecystectomy at 1030. Jeremy Daniels, the PA, meets you in the hallway to share the details of the surgery with you. Your task is to confirm your understanding of the surgery procedure with the PA, engage in a conversation with the patient to address his concerns, and guide him through the consent process with patience, tact, and competence.",
   "default_chat": {
     "Jay": "Good morning, Mr. Gonzalez. I’m a registered nurse, and I am here to have you sign the consent form and get you ready for surgery. What did Jeremy tell you about your procedure?",
     "Ricardo_Gonzalez": "He said he would poke some holes into my stomach and remove my gallbladder, but I don’t really get what he means. How will I be able to eat if I have holes in my stomach?",
-    "Ricardo_Gonzalez_reply_mood": "appears confused"
+    "Ricardo_Gonzalez_reply_mood": "appears confused",
+    "PA":"I reviewed the consent form with the patient who will receive the lap chole with 5 buttonhole incisions into the abdomen. Start an IV because he will receive a dose of cephalosporin to decrease the risk of infection, and dexamethasone for systemic analgesia. Also, draw a T&C and have a unit of packed RBC’s on hand. Please have Mr. Gonzalez sign the consent form so that we can proceed with the preparations for the surgery. He is scheduled for surgery at 1030. Do you have any questions?"
   },
   "PA": {
     "hint_popup": {
@@ -23,7 +24,7 @@
         ]
       }
     },
-    "ideal": "Got it. Mr. Gonzalez is scheduled for a laparoscopic cholecystectomy involving five buttonhole incisions in the abdominal cavity. I’ll start an IV for cephalosporin to prevent infection and dexamethasone for the pain. I’ll draw a Type and Cross match and ensure a unit of packed RBCs is available. I’ll also have Mr. Gonzalez sign the consent form.",
+    "ideal": "Let me confirm. I need to ensure Mr. Gonzalez understands the procedure for laparoscopic cholecystectomy and request that he sign the informed consent form. The surgery involves five buttonhole incisions in the abdominal cavity. I need to start an IV for antibiotics and pain medication, draw blood for a Type and Cross match, and confirm the OR has a unit of packed red blood cells on hand.",
     "ideal_reply": "Great! I’ll be on my way. Have a nice day!",
     "ideal_reply2": "The PA walks away and you enter Mr. Gonzalez’s hospital room.",
     "ideal_reply_mood": "satisfied and confident",
@@ -47,7 +48,7 @@
       "body": {
         "left_side_content": {
           "emoji": "confused",
-          "text1": "The patient",
+          "text1": "The Patient",
           "text2": "is confused and afraid"
         },
         "suggestionListItems": [
@@ -81,7 +82,7 @@
       "body": {
         "left_side_content": {
           "emoji": "anxious",
-          "text1": "The patient",
+          "text1": "The Patient",
           "text2": "is confused and unsure"
         },
         "suggestionListItems": [
@@ -115,7 +116,7 @@
       "body": {
         "left_side_content": {
           "emoji": "irritated",
-          "text1": "The patient",
+          "text1": "The Patient",
           "text2": "is irritated"
         },
         "suggestionListItems": [
@@ -149,7 +150,7 @@
       "body": {
         "left_side_content": {
           "emoji": "worried",
-          "text1": "The patient",
+          "text1": "The Patient",
           "text2": "is scared and unsure"
         },
         "suggestionListItems": [
@@ -186,7 +187,7 @@
       "body": {
         "left_side_content": {
           "emoji": "fearful",
-          "text1": "The patient",
+          "text1": "The Patient",
           "text2": "is nervous and uneasy"
         },
         "suggestionListItems": [
@@ -223,7 +224,7 @@
       "body": {
         "left_side_content": {
           "emoji": "raised_eyebrow",
-          "text1": "The patient",
+          "text1": "The Patient",
           "text2": "is doubtful"
         },
         "suggestionListItems": [
@@ -255,7 +256,7 @@
       "body": {
         "left_side_content": {
           "emoji": "confused",
-          "text1": "The patient",
+          "text1": "The Patient",
           "text2": "is concerned"
         },
         "suggestionListItems": [
@@ -287,7 +288,7 @@
       "body": {
         "left_side_content": {
           "emoji": "uncertain",
-          "text1": "The patient",
+          "text1": "The Patient",
           "text2": "is anxious and uncertain"
         },
         "suggestionListItems": [
