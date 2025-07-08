@@ -199,7 +199,6 @@ export class SummaryReport {
                     bestLevelScores[level].correct = data.correct;
                 }
             }
-           // await this.page.pause();
         }
 
         // Second pass to calculate scores for each attempt with carry-forward logic
@@ -414,8 +413,9 @@ export class SummaryReport {
                 attemptNumber,
                 i,
                 attempt,
-                allAttempts || [], // Provide empty array as default if allAttempts is undefined
-                testData
+                allAttempts || [],
+                testData,
+                step
             );
 
             if (patientResponseData.patientResponse && patientResponseData.patientMood) {
@@ -485,160 +485,81 @@ export class SummaryReport {
             .toHaveText("[" + expectedMood + "]");
     }
 
-
-    // private getPatientResponseAndMood(
-    //     attemptNumber: number,
-    //     stepIndex: number,
-    //     currentAttempt: string[],
-    //     allAttempts: string[][] = [], // Make allAttempts optional with default empty array
-    //     testData: any
-    // ): { patientResponse: string | null, patientMood: string | null } {
-    //     console.log(`Getting patient response for attempt ${attemptNumber}, step ${stepIndex}`);
-
-    //     // CASE 1: First step of first attempt - always use default response
-    //     if (attemptNumber === 1 && stepIndex === 0) {
-    //         console.log(`CASE 1: First step of first attempt - using default response`);
-    //         return {
-    //             patientResponse: testData["default_chat"]["Emily"],
-    //             patientMood: testData["default_chat"]["Emily_reply_mood"]
-    //         };
-    //     }
-
-    //     // CASE 2: Not the first step - use the immediate previous step's response
-    //     if (stepIndex > 0) {
-    //         const prevStep = currentAttempt[stepIndex - 1];
-    //         const [prevLevel, prevRawAction] = prevStep.split("_");
-    //         console.log(`CASE 2: Not first step - using previous step response from ${prevStep}`);
-    //         return this.getResponseDataForAction(prevRawAction, prevLevel, testData);
-    //     }
-
-    //     // CASE 3: First step of subsequent attempts
-    //     if (stepIndex === 0 && attemptNumber > 1) {
-    //         console.log(`CASE 3: First step of attempt ${attemptNumber}`);
-
-    //         // Look for the most recent CORRECT action in all previous attempts
-    //         for (let attemptIdx = attemptNumber - 2; attemptIdx >= 0; attemptIdx--) {
-    //             const attempt = allAttempts[attemptIdx];
-
-    //             if (!attempt || attempt.length === 0) continue;
-
-    //             // Scan each attempt from end to beginning
-    //             for (let stepIdx = attempt.length - 1; stepIdx >= 0; stepIdx--) {
-    //                 const step = attempt[stepIdx];
-    //                 const [level, rawAction] = step.split("_");
-
-    //                 if (rawAction === "CORRECT") {
-    //                     console.log(`Found CORRECT action ${step} in attempt ${attemptIdx + 1}, using its response`);
-
-    //                     return this.getResponseDataForAction(rawAction, level, testData);
-    //                 }
-    //             }
-    //         }
-
-    //         // If no CORRECT action was found, use the last action of the immediately previous attempt
-    //         const previousAttemptIdx = attemptNumber - 2;
-    //         const previousAttempt = allAttempts[previousAttemptIdx];
-
-    //         if (previousAttempt && previousAttempt.length > 0) {
-    //             const lastStep = previousAttempt[previousAttempt.length - 1];
-    //             console.log(`No CORRECT action found, using last action deffult`);
-    //             return {
-    //                 patientResponse: testData["default_chat"]["Emily"],
-    //                 patientMood: testData["default_chat"]["Emily_reply_mood"]
-    //             };
-    //         }
-    //     }
-    //     console.warn(`Fallback case - using default response`);
-    //     return {
-    //         patientResponse: testData["default_chat"]["Emily"],
-    //         patientMood: testData["default_chat"]["Emily_reply_mood"]
-    //     };
-    // }
     private getPatientResponseAndMood(
         attemptNumber: number,
         stepIndex: number,
         currentAttempt: string[],
-        allAttempts: string[][] = [], // Make allAttempts optional with default empty array
-        testData: any
-    ): { patientResponse: string | null, patientMood: string | null } {
+        allAttempts: string[][] = [],
+        testData: any,
+        step: string
+    ) {
         console.log(`Getting patient response for attempt ${attemptNumber}, step ${stepIndex}`);
 
-        // CASE 1: First step of first attempt - always use default response
-        if (attemptNumber === 1 && stepIndex === 0) {
-            console.log(`CASE 1: First step of first attempt - using default response`);
+        // First step of any attempt
+        if (stepIndex === 0) {
+            return this.getFirstStepResponse(step, attemptNumber, allAttempts, testData);
+        }
+
+        // Subsequent steps use previous step's response
+        const prevStep = currentAttempt[stepIndex - 1];
+        const [prevLevel, prevRawAction] = prevStep.split("_");
+        console.log(`Using previous step response from ${prevStep}`);
+
+        return this.getResponseDataForAction(prevRawAction, prevLevel, testData);
+    }
+
+    private getFirstStepResponse(
+        step: string,
+        attemptNumber: number,
+        allAttempts: string[][],
+        testData: any
+    ) {
+        // First attempt always uses default response
+        if (step.startsWith("C1_CORRECT")) {
             return {
                 patientResponse: testData["default_chat"]["Emily"],
                 patientMood: testData["default_chat"]["Emily_reply_mood"]
             };
         }
 
-        // CASE 2: Not the first step - use the immediate previous step's response
-        if (stepIndex > 0) {
-            const prevStep = currentAttempt[stepIndex - 1];
-            const [prevLevel, prevRawAction] = prevStep.split("_");
-            console.log(`CASE 2: Not first step - using previous step response from ${prevStep}`);
-            return this.getResponseDataForAction(prevRawAction, prevLevel, testData);
+        // For subsequent attempts, find the last CORRECT action from previous attempts
+        const lastCorrectResponse = this.findLastCorrectResponse(attemptNumber, allAttempts, testData);
+        if (lastCorrectResponse) {
+            return lastCorrectResponse;
         }
 
-        // CASE 3: First step of subsequent attempts
-        if (stepIndex === 0 && attemptNumber > 1) {
-            console.log(`CASE 3: First step of attempt ${attemptNumber}`);
-
-            // RE-ATTEMPT CHECK: If previous attempt ended with C3_CORRECT, start fresh
-            const previousAttemptIdx = attemptNumber - 2;
-            const previousAttempt = allAttempts[previousAttemptIdx];
-
-            if (previousAttempt && previousAttempt.length > 0) {
-                const lastStepOfPreviousAttempt = previousAttempt[previousAttempt.length - 1];
-
-                // Re-attempt functionality: Only C3_CORRECT triggers fresh start
-                if (lastStepOfPreviousAttempt === "C3_CORRECT") {
-                    console.log(`Previous attempt ended with C3_CORRECT - this is a re-attempt, starting fresh`);
-                    return {
-                        patientResponse: testData["default_chat"]["Emily"],
-                        patientMood: testData["default_chat"]["Emily_reply_mood"]
-                    };
-                }
-            }
-
-            // EXISTING LOGIC: Look for the most recent CORRECT action in all previous attempts
-            // (Only executed if previous attempt did NOT end with C3_CORRECT)
-            for (let attemptIdx = attemptNumber - 2; attemptIdx >= 0; attemptIdx--) {
-                const attempt = allAttempts[attemptIdx];
-
-                if (!attempt || attempt.length === 0) continue;
-
-                // Scan each attempt from end to beginning
-                for (let stepIdx = attempt.length - 1; stepIdx >= 0; stepIdx--) {
-                    const step = attempt[stepIdx];
-                    const [level, rawAction] = step.split("_");
-
-                    if (rawAction === "CORRECT") {
-                        console.log(`Found CORRECT action ${step} in attempt ${attemptIdx + 1}, using its response`);
-                        return this.getResponseDataForAction(rawAction, level, testData);
-                    }
-                }
-            }
-
-            // If no CORRECT action was found, use default response
-            if (previousAttempt && previousAttempt.length > 0) {
-                console.log(`No CORRECT action found, using default response`);
-                return {
-                    patientResponse: testData["default_chat"]["Emily"],
-                    patientMood: testData["default_chat"]["Emily_reply_mood"]
-                };
-            }
-        }
-
-        // Fallback case - use default response
-        console.warn(`Fallback case - using default response`);
+        // Fallback to default if no CORRECT action found
         return {
             patientResponse: testData["default_chat"]["Emily"],
             patientMood: testData["default_chat"]["Emily_reply_mood"]
         };
     }
 
-    private getResponseDataForAction(actionType: string, level: string, testData: any): { patientResponse: string | null, patientMood: string | null } {
+    private findLastCorrectResponse(
+        attemptNumber: number,
+        allAttempts: string[][],
+        testData: any
+    ) {
+        // Search from most recent to oldest attempt
+        for (let attemptIdx = attemptNumber - 2; attemptIdx >= 0; attemptIdx--) {
+            const attempt = allAttempts[attemptIdx];
+            if (!attempt?.length) continue;
+
+            // Search from last to first step in attempt
+            for (let stepIdx = attempt.length - 1; stepIdx >= 0; stepIdx--) {
+                const step = attempt[stepIdx];
+                const [level, rawAction] = step.split("_");
+
+                if (rawAction === "CORRECT") {
+                    console.log(`Found CORRECT action ${step} in attempt ${attemptIdx + 1}`);
+                    return this.getResponseDataForAction(rawAction, level, testData);
+                }
+            }
+        }
+        return null;
+    }
+
+    private getResponseDataForAction(actionType: string, level: string, testData: any) {
         let patientResponse = null;
         let patientMood = null;
 

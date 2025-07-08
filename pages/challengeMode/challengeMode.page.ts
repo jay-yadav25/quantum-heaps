@@ -246,7 +246,7 @@ export class ChallengeMode {
     const actionDetails = testData[level];
     const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
     const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with empathy and patience, and demonstrated effective use of communication and problem solving skills to reach a positive outcome!";
-    const feedbackPopupSecondText = "Continue practicing your problem solving and communication skills by retrying the scenario once again or select the Submit button to end the scenario and submit your results to your teacher.";
+    const feedbackPopupSecondText = "Select the Restart button to retry the scenario again from the start or select the Submit button to finish the scenario and submit your results to your teacher.";
 
     // Verify text on popup for incorrect attempt
     await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
@@ -288,8 +288,8 @@ export class ChallengeMode {
     const feedbackPopupSecondText = "Select the Submit button to end the scenario and submit your results to your teacher.";
 
     // Verify text on popup for successful scenario
-    // await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
-    // await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
+    await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
+    await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
     //await this.page.pause();
     await this.clickOnSubmitButton();
     await this.page.pause();
