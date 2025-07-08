@@ -41,8 +41,8 @@ export class ChallengeMode {
 
   public async launchActivity(activityNumber: number) {
     if (activityNumber == 1) {
-      await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_cwpf_c_01&attemptId=0");
-     // await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_cwpf_c_01&attemptId=1");
+      //await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_cwpf_c_01&attemptId=0");
+      await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=0&dho=cs_c_01&attemptId=0");
     } else if (activityNumber == 2) {
       await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_02&attemptId=1");
 
@@ -52,6 +52,7 @@ export class ChallengeMode {
   public async runScenarioPath(path: string[], testData: any) {
     let previousStep: string | null = null;
     await this.respondButton.click();
+    console.log(path);
     for (let i = 0; i < path.length; i++) {
       const step = path[i];
 
@@ -141,7 +142,7 @@ export class ChallengeMode {
       const replyMood = actionDetails[actionKey + "_reply_mood"];
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/h3[contains(@class, "patient-reaction")]`;
+      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
       await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
 
@@ -153,7 +154,7 @@ export class ChallengeMode {
       const replyText3 = actionDetails[actionKey + "_reply3"];
       const replyTextID3 = `${selectedOptionID}_rep_3`;
 
-      const replyMoodSelector2 = `//div[@id='${replyTextID3}']/parent::div/preceding-sibling::div/h3[contains(@class, "patient-reaction")]`;
+      const replyMoodSelector2 = `//div[@id='${replyTextID3}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
       await expect(this.frameLocator.locator(replyMoodSelector2)).toHaveText("[" + replyMood2 + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID3}']`)).toHaveText(replyText3);
 
@@ -161,7 +162,7 @@ export class ChallengeMode {
       const replyMood = actionDetails[actionKey + "_reply_mood"];
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/h3[contains(@class, "patient-reaction")]`;
+      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
       await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
 
@@ -175,7 +176,7 @@ export class ChallengeMode {
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
 
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/h3[contains(@class, "patient-reaction")]`;
+      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
       await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
     }

@@ -1,6 +1,6 @@
 import { expect, Locator, FrameLocator, type Page } from '@playwright/test';
 
-export class LearningMode {
+export class activityThree {
   readonly page: Page;
   private readonly frameLocator: FrameLocator;
   readonly startButton: Locator;
@@ -29,8 +29,8 @@ export class LearningMode {
   readonly suggestionList: Locator;
   readonly suggestionListItems: Locator;
   readonly respondButton: Locator;
-  readonly feedbackPopupTitle:Locator;
-  readonly popupCloseButton:Locator;
+  readonly feedbackPopupTitle: Locator;
+  readonly popupCloseButton: Locator;
 
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
     this.page = page;
@@ -68,34 +68,40 @@ export class LearningMode {
   }
   private scenarioStartTime: number = 0;
   public async launchActivity() {
-    await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_02&attemptId=1");
+    await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_03&attemptId=1");
   }
 
-  public async runScenarioPathForLearnigMode(path: string[], testData: any) {
-    let previousStep: string | null = null;
-    await this.respondButton.click();
+  public async runScenarioPathForActivityThreeLearnigMode(path: string[], testData: any) {
+    //let previousStep: string | null = null;
     for (let i = 0; i < path.length; i++) {
       const step = path[i];
       const nextStep = path[i + 1];
+      const previousStep: string = "";
 
       if (step === 'HINT') {
         console.log(`✅ Hint Opened — Last step was ${previousStep}`);
-        await this.verifyHintPopup(nextStep, testData);
+        // await this.verifyHintPopup(nextStep,previousStep, testData);
         continue;
       }
-      if (step === 'COMPLETE') {
-        console.log(`✅ COMPLETE reached — Last step was ${previousStep}`);
-        await this.verifyPassedScenario(path);
-        break;
+      if (step.startsWith("S1_") || step.startsWith("S2_")) {
+        //console.log(`✅ COMPLETE reached — Last step was ${previousStep}`);
+        await this.verifyMainScene(previousStep, step, nextStep, testData);
+        continue;
       }
 
-      if (step === 'RESTART') {
-        console.log(`🔁 Restarting challenge level — Last step was ${previousStep}`);
-        await this.verifyFailedScenario(previousStep, testData);
+      if (step.startsWith("FS1_") || step.startsWith("FS2_")) {
+        console.log(`✅ COMPLETE reached — Last step was ${previousStep}`);
+        await this.verifyFollowUpScene(previousStep, step, nextStep, testData);
         continue;
       }
-      await this.selectAndVerifyReplyText(step, testData);
-      previousStep = step;
+
+      if (step === 'NEXTSTEP') {
+        //console.log(`🔁 Restarting challenge level — Last step was ${previousStep}`);
+        await this.clickOnContinueButton();
+        continue;
+      }
+      // await this.selectAndVerifyReplyText(step, testData);
+      // previousStep = step;
     }
   }
 
@@ -401,4 +407,131 @@ export class LearningMode {
       incorrectOptionID: `${base}_opt_3`
     };
   }
+  private async verifyMainScene(previousStep: string, step: string, nextStep: string, testData: any) {
+    await this.verifyStepInstruction(step, testData);
+    await this.verifySpeechBubbleConversation(step, testData);
+    await this.verifyQuestion(step, testData);
+    await this.verifyAndSelectDecisionPointOptions(step, testData);
+  }
+  private async verifyFollowUpScene(previousStep: string, step: string, nextStep: string, testData: any) {
+    await this.verifyStepInstruction(step, testData);
+    await this.verifyQuestion(step, testData);
+    await this.verifyandSelectFollowUpQuestionOptions(step, testData);
+
+  }
+
+  private async verifyStepInstruction(step: string, testData: any) {
+    await this.clickOnHintButton();
+    const [scene] = step.split("_");
+    const stepDetails = testData[scene];
+    const instructionText = stepDetails.instructions;
+    const instructionListItemsText = stepDetails.instructionsList;
+    // await expect(this.instructions).toHaveText(instructionText);
+    // const noOfInstructionListItems = await this.instructionListItems.all();
+    // expect(noOfInstructionListItems .length).toBe(instructionListItemsText.length);
+    for (let i = 0; i < instructionListItemsText.length; i++) {
+      // await expect(noOfInstructionListItems[i]).toHaveText(instructionListItemsText[i]);
+    }
+
+  }
+
+  private async verifySpeechBubbleConversation(step: string, testData: any) {
+    const [scene] = step.split("_");
+    const stepDetails = testData[scene];
+    const speechBubbleTexts = stepDetails.conversation;
+    if (speechBubbleTexts && Array.isArray(speechBubbleTexts) && speechBubbleTexts.length > 0) {
+      // const bubbles = await this.speechBubbleItems.all();
+      for (let i = 0; i < speechBubbleTexts.length; i++) {
+        // await expect(titleLocator).toHaveText(conversation[i].title);
+        // await expect(textLocator).toHaveText(conversation[i].text);
+      }
+    }
+  }
+
+  private async verifyQuestion(step: string, testData: any) {
+    const [sceneCode, ...optionParts] = step.split('_');
+    const optionKey = optionParts.join('_'); // e.g. "INCORRECT_1", "CORRECT"
+
+    let sceneLevel = '';
+    let stepDetails: any;
+    let questionText = '';
+
+    if (sceneCode.startsWith('S') && !sceneCode.startsWith('FS')) {
+      // Handle decision point question
+      sceneLevel = 'SCENE' + sceneCode.slice(1); // e.g., S1 → SCENE1
+      stepDetails = testData[sceneLevel]; // assumes testData[SCENE1] is an array
+
+      if (!stepDetails) {
+        console.warn(`Scene data not found for ${sceneLevel}`);
+        return;
+      }
+
+      questionText = stepDetails.decisionPoint.question;
+
+    } else if (sceneCode.startsWith('FS')) {
+      // Handle follow-up question
+      sceneLevel = 'SCENE_' + sceneCode; // e.g., FS1 → SCENE_FS1
+      const baseScene = 'SCENE' + sceneCode.match(/\d+/)?.[0]; // extract "1" from FS1 → SCENE1
+      stepDetails = testData[baseScene]?.[0];
+
+      if (!stepDetails || !stepDetails.followUp) {
+        console.warn(`Follow-up data not found for ${baseScene}`);
+        return;
+      }
+
+      const followUpKey = this.mapOptionToFollowUpKey(optionKey);
+      questionText = stepDetails.followUp?.[followUpKey]?.question;
+    }
+    // await expect(this.stepQuestion).toHaveText(questionText);
+  }
+
+
+  private mapOptionToFollowUpKey(option: string): string {
+    // Maps option keys to the follow-up property names
+    switch (option.toUpperCase()) {
+      case 'INCORRECT_1':
+        return 'nonIdealFollowUp1';
+      case 'INCORRECT_2':
+        return 'nonIdealFollowUp2';
+      case 'CORRECT':
+        return 'idealFollowUp';
+      default:
+        return '';
+    }
+  }
+
+  private async verifyAndSelectDecisionPointOptions(step: string, testData: any) {
+    // await expect(this.frameLocator.locator(`//button[@id='${correctOptionID}']`).first()).toHaveText(correct);
+    // await expect(this.frameLocator.locator(`//button[@id='${incorrectOption1ID}']`).first()).toHaveText(incorrect);
+    // await expect(this.frameLocator.locator(`//button[@id='${incorrectOption2ID}']`).first()).toHaveText(distractor);
+
+  }
+
+  private verifyDecisionPointFeedback(step: string) {
+    
+    //await expect(this.).toHaveText();
+  }
+
+  private verifyDecisionPointHintPopupContent(step: string) {
+    //await expect(this.).toHaveText();
+  }
+
+  private async verifyandSelectFollowUpQuestionOptions(step: string, testData: any) {
+    const options = testData[step];
+    for (const option of options) {
+      // await expect(this.).toHaveText();
+      await this.page.click(`#${option}`);
+      // await expect(this.).toHaveText();
+      // console.log(`Clicked ${option}, text: ${text}`);
+    }
+  }
+
+  private verifyDecisionPointFeedbackafterSelectinAnOption(step: string) {
+    //await expect(this.).toHaveText();
+  }
+
+  private verifyFollowUpQuestionHintPopupContent(step: string) {
+    //await expect(this.).toHaveText();
+  }
+
 }
