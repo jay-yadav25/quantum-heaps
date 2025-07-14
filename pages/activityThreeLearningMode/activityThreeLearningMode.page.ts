@@ -344,7 +344,7 @@ export class activityThree {
   }
 
   public async clickOnStartButton() {
-    await this.page.waitForTimeout(55000);
+    await this.page.waitForTimeout(5000);
     await this.startButton.click();
     await this.intrductionPopupContinueButton.click();
   }

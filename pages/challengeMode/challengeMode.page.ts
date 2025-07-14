@@ -41,10 +41,10 @@ export class ChallengeMode {
 
   public async launchActivity(activityNumber: number) {
     if (activityNumber == 1) {
-      //await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_cwpf_c_01&attemptId=0");
-      await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=0&dho=cs_c_01&attemptId=0");
+      //await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_c_01&attemptId=1");
+      await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_c_01&attemptId=0");
     } else if (activityNumber == 2) {
-      await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_02&attemptId=1");
+      await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_l_02&attemptId=0");
 
     }
   }
@@ -52,7 +52,6 @@ export class ChallengeMode {
   public async runScenarioPath(path: string[], testData: any) {
     let previousStep: string | null = null;
     await this.respondButton.click();
-    console.log(path);
     for (let i = 0; i < path.length; i++) {
       const step = path[i];
       if (step === 'RESTART3') {
@@ -107,12 +106,13 @@ export class ChallengeMode {
 
     // Get the option IDs
     const { correctOptionID, incorrectOptionID, distractorOptionID } = await this.getOptionIds(level);
+    
 
-
-    // Verify the text of each option
-    await expect(this.frameLocator.locator(`//button[@id='${correctOptionID}']`).first()).toHaveText(correct);
-    await expect(this.frameLocator.locator(`//button[@id='${incorrectOptionID}']`).first()).toHaveText(incorrect);
-    await expect(this.frameLocator.locator(`//button[@id='${distractorOptionID}']`).first()).toHaveText(distractor);
+    // // Verify the text of each option
+    
+    await expect(this.frameLocator.locator(`//button[@id='${correctOptionID}']//span//span[2]`).first()).toHaveText(correct);
+    await expect(this.frameLocator.locator(`//button[@id='${incorrectOptionID}']//span//span[2]`).first()).toHaveText(incorrect);
+    await expect(this.frameLocator.locator(`//button[@id='${distractorOptionID}']//span//span[2]`).first()).toHaveText(distractor);
 
     // Determine which option to click based on the action
     const actionKey = actionMap[rawAction.toUpperCase()];
@@ -296,7 +296,7 @@ export class ChallengeMode {
   }
 
   public async clickOnStartButton() {
-    await this.page.waitForTimeout(55000);
+    await this.page.waitForTimeout(15000);
     await this.startButton.click();
     await this.intrductionPopupContinueButton.click();
   }

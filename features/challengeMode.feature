@@ -31,9 +31,9 @@ Feature: Launch Activity
       # | S12      |
       # | S13      |
       # | S14      |
-      # | S15      |
-      # | S16      |
-      # | S17      |
+      # # | S15      |
+      # # | S16      |
+      # # | S17      |
       # | S18      |
       # | S19      |
       # | S20      |
@@ -55,15 +55,15 @@ Feature: Launch Activity
       # | S37      |
       # | S38      |
       # | S39      |
-      | S40      |
-      | S41      |
-      | S42      |
-      | S43      |
+      # | S40      |
+      # | S41      |
+      # | S42      |
+      # | S43      |
       | S44      |
-      | S45      |
-      | S46      |
-      | S47      |
-      | S48      |
+      # | S45      |
+      # | S46      |
+      # | S47      |
+      # | S48      |
 
   Scenario Outline: Verify chat section functionality for scenario <scenario>
     Given the user has launched the activity on the web

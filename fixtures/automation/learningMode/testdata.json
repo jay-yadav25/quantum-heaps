@@ -100,7 +100,7 @@
     "ideal_reply_mood2": "feels a little relieved",
     "ideal_feedbackAlertText": "",
     "distractor": "Sir, the procedure involves small incisions, which will be stitched after the surgery is completed. It’s not a complicated procedure. There’s no reason for you to be so afraid. Now, would you like to sign the consent form, as we cannot start preparing for the surgery until you sign it?",
-    "distractor_reply": "Wait, stitched up? I’m still not totally clear on where exactly these cuts are going to be. And saying it’s ’not complicated’ doesn’t make me feel any better. I don’t want to sign the consent form now... I need to think about it some more.",
+    "distractor_reply": "Wait, stitched up? I’m still not totally clear on where exactly these cuts are going to be. And saying it’s 'not complicated' doesn’t make me feel any better. I don’t want to sign the consent form now... I need to think about it some more.",
     "distractor_reply_mood": "unclear and doubtful",
     "distractor_feedbackAlertText": "This response lacked empathy and competence.",
     "distractor_attempt_ending_popup_text": "The response you chose did not explain the procedure clearly and came across as dismissive. Dealing with an anxious and uncertain patient requires you to respond with empathy and competence.",

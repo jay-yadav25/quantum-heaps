@@ -6,117 +6,9 @@ export class SummaryReport {
 
     constructor(page: Page) {
         this.page = page;
-        this.finalScore = page.frameLocator('iframe[name="ext_012345678_1"]').locator("//div[@class='score-value']").first();
+        this.finalScore = page.frameLocator('iframe[name="ext_012345678_1"]').locator("//strong[@class='score-value']").first();
     }
 
-    // public async verifyFinalScore(path: string[], testData: any) {
-    //     const attempts: string[][] = [];
-    //     let currentAttempt: string[] = [];
-    //     for (let i = 0; i < path.length; i++) {
-    //         const step = path[i];
-
-    //         if (step.startsWith('SUBMIT') || step.startsWith('RESTART') || step === 'FAILED' || step === 'COMPLETE') {
-    //             if (currentAttempt.length > 0) {
-    //                 attempts.push([...currentAttempt]);
-    //                 currentAttempt = [];
-    //             }
-    //             if (step === 'FAILED' || step.startsWith('SUBMIT')) {
-    //                 break;
-    //             }
-    //         } else {
-    //             currentAttempt.push(step);
-    //         }
-    //     }
-    //     // Add the last attempt if it's not empty and not ended with FAILED/COMPLETE
-    //     if (currentAttempt.length > 0) {
-    //         attempts.push(currentAttempt);
-    //     }
-
-    //     console.log(`\nTotal attempts found: ${attempts.length}`);
-
-    //     // Calculate score for each attempt
-    //     const attemptScores: number[] = [];
-    //     const allAttemptsData = [];
-    //     let attemptNumber = 1;
-
-    //     for (const attempt of attempts) {
-    //         const levelData: Record<string, { correct: number, totalChallenges: number }> = {};
-    //         let highestLevel = 0;
-
-    //         for (const step of attempt) {
-    //             const levelMatch = step.match(/C(\d+)/);
-    //             if (!levelMatch) continue;
-    //             const levelNum = parseInt(levelMatch[1], 10);
-    //             if (levelNum > highestLevel) {
-    //                 highestLevel = levelNum;
-    //             }
-    //         }
-
-    //         for (const step of attempt) {
-    //             const levelMatch = step.match(/C(\d+)/);
-    //             if (!levelMatch) continue;
-    //             const level = levelMatch[1];
-    //             const isCorrect = step.includes('_CORRECT');
-    //             if (!levelData[level]) {
-    //                 levelData[level] = { correct: 0, totalChallenges: 0 };
-    //             }
-
-    //             levelData[level].totalChallenges++;
-    //             if (isCorrect) {
-    //                 levelData[level].correct++;
-    //             }
-    //         }
-    //         const levelScores: { level: string, score: number }[] = [];
-    //         for (let i = 1; i <= highestLevel; i++) {
-    //             const levelKey = i.toString();
-    //             const { correct = 0, totalChallenges = 0 } = levelData[levelKey] || { correct: 0, totalChallenges: 0 };
-    //             const score = totalChallenges > 0 ? (correct / totalChallenges) * 100 : 0;
-    //             levelScores.push({ level: levelKey, score });
-    //         }
-    //         const scores = levelScores.map(item => item.score);
-    //         let firstValidIndex = scores.findIndex(score => score > 0);
-    //         const attemptScore = (firstValidIndex >= 0)
-    //             ? scores.slice(firstValidIndex).reduce((sum, score) => sum + score, 0) /
-    //             scores.slice(firstValidIndex).length
-    //             : 0;
-    //         const scoresForDisplay = scores.map(s => this.formatScore(s));
-    //         const attemptScores1 = `[${scoresForDisplay.join(', ')}]`;
-    //         const attemptAverageScore = `${this.formatScore(attemptScore)}%`;
-    //         allAttemptsData.push({
-    //             attempt,
-    //             attemptScores: attemptScores1,
-    //             attemptAverageScore,
-    //             attemptNumber,
-    //             levelScores,
-    //             rawScores: scores
-    //         });
-
-    //         attemptScores.push(attemptScore);
-    //         attemptNumber++;
-    //     }
-    //     for (const attemptData of allAttemptsData) {
-    //         await this.veryfySelectedOptionAndReportResponse(
-    //             attemptData.attempt,
-    //             attemptData.rawScores,
-    //             attemptData.attemptAverageScore,
-    //             testData,
-    //             attemptData.attemptNumber,
-    //             attempts
-    //         );
-    //     }
-
-    //     const finalScore = Math.max(...attemptScores, 0);
-    //     console.log(`\n----- FINAL RESULT -----`);
-    //     console.log(`All attempt scores: [${attemptScores.map(s => this.formatScore(s)).join(', ')}]`);
-    //     console.log(`Final Score (highest attempt): ${this.formatScore(finalScore)}%`);
-    //     const formattedFinalScore = this.formatScore(finalScore);
-    //     await expect(this.finalScore).toHaveText(`${formattedFinalScore} %`);
-    //     return {
-    //         finalScore,
-    //         attemptScores,
-    //         allAttemptsData
-    //     };
-    // }
     public async verifyFinalScore(path: string[], testData: any) {
         const attempts: string[][] = [];
         let currentAttempt: string[] = [];
@@ -135,7 +27,6 @@ export class SummaryReport {
                 currentAttempt.push(step);
             }
         }
-        // Add the last attempt if it's not empty and not ended with FAILED/COMPLETE
         if (currentAttempt.length > 0) {
             attempts.push(currentAttempt);
         }
@@ -263,8 +154,6 @@ export class SummaryReport {
                     const score = totalChallenges > 0 ? (correct / totalChallenges) * 100 : 0;
                     levelScores.push({ level: levelKey, score });
                 } else {
-                    // If we don't have data for this level but it's before the highest level,
-                    // add a zero score
                     levelScores.push({ level: levelKey, score: 0 });
                 }
             }
@@ -282,7 +171,7 @@ export class SummaryReport {
 
             const scoresForDisplay = scores.map(s => this.formatScore(s));
             const attemptScores1 = `[${scoresForDisplay.join(', ')}]`;
-            const attemptAverageScore = `: ${this.formatScore(attemptScore)}%`;
+            const attemptAverageScore = `: ${this.formatScore(attemptScore)}`;
 
             allAttemptsData.push({
                 attempt,
@@ -295,6 +184,15 @@ export class SummaryReport {
 
             attemptScores.push(attemptScore);
         }
+        for (const attemptData of allAttemptsData) {
+            console.log(
+                attemptData.attempt, //steps in this attempt 
+                attemptData.rawScores,// all three challenge level score 
+                attemptData.attemptAverageScore,// attempt average score
+                
+                attemptData.attemptNumber,//this is which attempt like1,2,3 
+                attempts  //all attempt data will be here[[],[],]
+            );}
 
         // Verify and report each attempt
         for (const attemptData of allAttemptsData) {
@@ -311,9 +209,9 @@ export class SummaryReport {
         const finalScore = Math.max(...attemptScores, 0);
         console.log(`\n----- FINAL RESULT -----`);
         console.log(`All attempt scores: [${attemptScores.map(s => this.formatScore(s)).join(', ')}]`);
-        console.log(`Final Score (highest attempt): ${this.formatScore(finalScore)}%`);
+        console.log(`Final Score (highest attempt): ${this.formatScore(finalScore)}`);
         const formattedFinalScore = this.formatScore(finalScore);
-        await expect(this.finalScore).toHaveText(`${formattedFinalScore}%`);
+        await expect(this.finalScore).toHaveText(`${formattedFinalScore}`);
         return {
             finalScore,
             attemptScores,
@@ -333,43 +231,39 @@ export class SummaryReport {
         console.log(`Attempt ${attemptNumber} scores: [${attemptScores}]`);
         console.log(`Attempt ${attemptNumber} Expected average Score: ${attemptAverageScore}`);
         if (attemptNumber > 1) {
-            const attemptDropdownButton = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']`
-                + ` /parent::div/parent::div/following-sibling::div[1]//button[@id='attempt-dropdown-arrow-button']`
+            const attemptDropdownButton = `#attempt-dropdown-arrow-button-${attemptNumber-1}`
             await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attemptDropdownButton).first().click();
         }
-
+        //Which is heading and work for reattempt as well the score are in format of :100%
         const attepmtAverageScoreLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
             `/parent::div //div[contains(@class, 'score-value')]`;
         const actualAverageScore = await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtAverageScoreLocator).innerText();
         console.log(`Attempt ${attemptNumber} Actual average Score: ${actualAverageScore}`);
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtAverageScoreLocator)).toHaveText(attemptAverageScore);
 
+        //verfying all three level score in each attempt
+        for (let i = 0; i < attemptScores.length; i++) {
+            const challengeLevelForScore=i+1
+            const attepmtScoresLocator = ` //div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div` +
+                `//following-sibling::section/div[${challengeLevelForScore}]//div[contains(@class, 'score-value')]`;
+                const expectedScore = attemptScores[challengeLevelForScore - 1];
+                const formattedExpectedScore = this.formatScore(expectedScore);
+                console.log(`\nExpected score for challengeLevel ${challengeLevelForScore}: ${formattedExpectedScore}`);
+                const actualScore = await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator).first().innerText();
+                console.log(`Actual score for challengeLevel ${challengeLevelForScore}: ${actualScore}`);
+                await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator).first()).toHaveText(`: ${formattedExpectedScore}`);
+            }
+
+        await this.verifyPreviouslyCompletedAndNotReachLevel( attempt,attemptScores,attemptNumber);
         let responseNumber = 0;
         let currentMainLevel = "";
-
+        //attempt is string so i am running it from first to last
         for (let i = 0; i < attempt.length; i++) {
             const step = attempt[i];
             const [level, rawAction] = step.split("_");
 
             // Extract challenge level number (e.g., C1 -> 1, C2 -> 2, C3 -> 3)
             const challengeLevel = level.startsWith('C') ? parseInt(level.substring(1)) : 0;
-
-            const attepmtScoresLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
-                `/parent::div/parent::div/parent::div/parent::div` +
-                `//following-sibling::section` +
-                `/div[${challengeLevel}]` +
-                `/div[1]//div[contains(@class, 'score-value')]`;
-
-            // Get the correct score for current index
-            if (i < attemptScores.length) {
-                const expectedScore = attemptScores[challengeLevel - 1];
-                const formattedExpectedScore = this.formatScore(expectedScore);
-                console.log(`\nExpected score for challengeLevel ${challengeLevel}: ${formattedExpectedScore}%`);
-                const actualScore = await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator).innerText();
-                console.log(`Actual score for challengeLevel ${challengeLevel}: ${actualScore}`);
-                await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator)).toHaveText(`: ${formattedExpectedScore}%`);
-            }
-            // Response number is the index + 1
             const mainLevel = level.split('.')[0];
 
             // If we've moved to a new main level, reset responseNumber
@@ -384,29 +278,34 @@ export class SummaryReport {
             console.log(`\nStep: ${step}, Response Number: ${responseNumber}`);
 
             let selectedOption = null;
+            let stepScore:any="";
 
             // Map the raw action to the corresponding option
             if (rawAction === "CORRECT") {
+                stepScore=": 1";
                 selectedOption = testData[level]?.["ideal"];
             } else if (rawAction === "INCORRECT") {
                 selectedOption = testData[level]?.["incorrect"];
+                stepScore=": 0";
             } else if (rawAction === "DISTRACTOR") {
                 selectedOption = testData[level]?.["distractor"];
+                stepScore=": 0";
             }
+            //verifying selectedoption for each step with their score .
+            //here ican add those logic for first and last text
+           
+            const userResponse = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
+                `/div[${challengeLevel}]` +
+                `/div[2]/div[${responseNumber}]//div[contains(@class, 'user-response-text')]`;
 
-            if (selectedOption) {
-                // XPath to locate the text element
-                const userResponse = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
-                    `/parent::div/parent::div/parent::div/parent::div` +
-                    `//following-sibling::section` +
-                    `/div[${challengeLevel}]` +
-                    `/div[2]/div[${responseNumber}]//div[contains(@class, 'user-response-text')]`;
+            const stepScoreLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
+                `/div[${challengeLevel}]` +
+                `/div[2]/div[${responseNumber}]//div[contains(@class, 'response-score-value')]`;
 
-                // Assert that the element text matches the expected selectedOption
-                await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(userResponse)).toHaveText(selectedOption);
-            } else {
-                console.warn(`No matching option found for level ${level} with action ${rawAction}`);
-            }
+            // Assert that the element text matches the expected selectedOption
+            await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(stepScoreLocator)).toHaveText(stepScore);
+            await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(userResponse)).toHaveText(selectedOption);
+        
 
             // Get patient response and mood based on current step and previous actions
             const patientResponseData = this.getPatientResponseAndMood(
@@ -418,15 +317,15 @@ export class SummaryReport {
                 step
             );
 
-            if (patientResponseData.patientResponse && patientResponseData.patientMood) {
-                await this.verifyPatientResponseAndMood(
-                    attemptNumber,
-                    challengeLevel,
-                    responseNumber,
-                    patientResponseData.patientResponse,
-                    patientResponseData.patientMood
-                );
-            }
+        
+            await this.verifyPatientResponseAndMood(
+                attemptNumber,
+                challengeLevel,
+                responseNumber,
+                patientResponseData.patientResponse,
+                patientResponseData.patientMood
+            );
+        
 
             // Report response should still be based on the current step
             let reportResponse = null;
@@ -440,19 +339,13 @@ export class SummaryReport {
                 reportResponse = testData[level]?.["distractor_reportFeedback"];
             }
 
-            if (reportResponse) {
-                // XPath to locate the text element
-                const reportResponseLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
-                    `/parent::div/parent::div/parent::div/parent::div` +
-                    `//following-sibling::section` +
-                    `/div[${challengeLevel}]` +
-                    `/div[2]/div[${responseNumber}]//div[contains(@class, 'score-msg')]//div[2]`;
+            const reportResponseLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
+                `/div[${challengeLevel}]` +
+                `/div[2]/div[${responseNumber}]//div[contains(@class, 'score-msg')]//div[2]`;
 
-                // Assert that the element text matches the expected selectedOption
-                await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(reportResponseLocator)).toHaveText(reportResponse);
-            } else {
-                console.warn(`No matching option found for level ${level} with action ${rawAction}`);
-            }
+            // Assert that the element text matches the expected selectedOption
+            await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(reportResponseLocator)).toHaveText(reportResponse);
+        
         }
     }
 
@@ -467,9 +360,7 @@ export class SummaryReport {
         console.log(`Expected response: ${expectedResponse}`);
         console.log(`Expected mood: ${expectedMood}`);
         console.log(`==========================================================================================================`);
-        const baseLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']` +
-            `/parent::div/parent::div/parent::div/parent::div` +
-            `//following-sibling::section` +
+        const baseLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
             `/div[${challengeLevel}]` +
             `/div[2]/div[${responseNumber}]`;
 
@@ -515,24 +406,14 @@ export class SummaryReport {
         testData: any
     ) {
         // First attempt always uses default response
-        if (step.startsWith("C1_CORRECT")) {
+        if (step.startsWith("C1")) {
             return {
                 patientResponse: testData["default_chat"]["Emily"],
                 patientMood: testData["default_chat"]["Emily_reply_mood"]
             };
         }
-
-        // For subsequent attempts, find the last CORRECT action from previous attempts
         const lastCorrectResponse = this.findLastCorrectResponse(attemptNumber, allAttempts, testData);
-        if (lastCorrectResponse) {
             return lastCorrectResponse;
-        }
-
-        // Fallback to default if no CORRECT action found
-        return {
-            patientResponse: testData["default_chat"]["Emily"],
-            patientMood: testData["default_chat"]["Emily_reply_mood"]
-        };
     }
 
     private findLastCorrectResponse(
@@ -556,7 +437,11 @@ export class SummaryReport {
                 }
             }
         }
-        return null;
+        // Return default if no CORRECT action found
+        return {
+            patientResponse: testData["default_chat"]["Emily"],
+            patientMood: testData["default_chat"]["Emily_reply_mood"]
+        };
     }
 
     private getResponseDataForAction(actionType: string, level: string, testData: any) {
@@ -583,7 +468,7 @@ export class SummaryReport {
         return { patientResponse, patientMood };
     }
 
-    private formatScore(score: number, includePercentSign: boolean = false): string {
+    private formatScore(score: number): string {
         let formattedScore: string;
 
         if (score % 1 === 0) {
@@ -595,6 +480,40 @@ export class SummaryReport {
                 formattedScore = score.toFixed(1);
             }
         }
-        return includePercentSign ? `${formattedScore}%` : formattedScore;
+        return  `${formattedScore}%`;
     }
+
+public async verifyPreviouslyCompletedAndNotReachLevel( attempt: string[],attemptScores: number[],attemptNumber:number) {
+  const firstStep = attempt[0];
+  const [level, rawAction] = firstStep.split("_");
+  const firstchallengeLevel = level.startsWith('C') ? parseInt(level.substring(1)) : 0;
+  
+  const lastStep = attempt[attempt.length - 1];
+  console.log(lastStep);
+  const [level1, rawAction1] = lastStep.split("_");
+  const lastchallengeLevel = level1.startsWith('C') ? parseInt(level1.substring(1)) : 0;
+  // Check if first challenge level is greater than 1
+  console.log("first" +firstchallengeLevel);
+  console.log("las" +lastchallengeLevel);
+   
+  
+  if (firstchallengeLevel > 1) {
+    // Loop from 1 to firstchallengeLevel-1
+    for (let i = 1; i < firstchallengeLevel; i++) {
+     const textLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
+            `/div[${i}]//div[contains(@class ,'empty-response-box')]/div/p`
+      await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(textLocator)).toHaveText("You have cleared this challenge level in your previous attempt.");
+    }
+  }
+  if (lastchallengeLevel < 3) {
+    // Loop from lastchallengeLevel+1 to 3
+    for (let i = lastchallengeLevel + 1; i <= 3; i++) {
+        const textLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
+            `/div[${i}]//div[contains(@class ,'empty-response-box')]/div/p`
+      console.log(`Verifying text for iteration ${i} (last range)`);
+      await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(textLocator)).toHaveText("You did not clear the previous challenge level to progress to this one.");
+    }
+  }
+}
+    
 }

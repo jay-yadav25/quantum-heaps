@@ -68,7 +68,7 @@ export class LearningMode {
   }
   private scenarioStartTime: number = 0;
   public async launchActivity() {
-    await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_02&attemptId=1");
+    await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_l_02&attemptId=0");
   }
 
   public async runScenarioPathForLearnigMode(path: string[], testData: any) {
@@ -116,10 +116,10 @@ export class LearningMode {
     // Get the option IDs
     const { correctOptionID, incorrectOptionID, distractorOptionID } = await this.getOptionIds(level);
 
-    // Verify the text of each option
-    await expect(this.frameLocator.locator(`//button[@id='${correctOptionID}']`).first()).toHaveText(correct);
-    await expect(this.frameLocator.locator(`//button[@id='${incorrectOptionID}']`).first()).toHaveText(incorrect);
-    await expect(this.frameLocator.locator(`//button[@id='${distractorOptionID}']`).first()).toHaveText(distractor);
+    
+    await expect(this.frameLocator.locator(`//button[@id='${correctOptionID}']//span//span[2]`).first()).toHaveText(correct);
+    await expect(this.frameLocator.locator(`//button[@id='${incorrectOptionID}']//span//span[2]`).first()).toHaveText(incorrect);
+    await expect(this.frameLocator.locator(`//button[@id='${distractorOptionID}']//span//span[2]`).first()).toHaveText(distractor);
 
     // Determine which option to click based on the action
     const actionKey = actionMap[rawAction.toUpperCase()];
