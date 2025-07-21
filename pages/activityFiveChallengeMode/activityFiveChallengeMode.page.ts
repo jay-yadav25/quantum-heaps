@@ -1,6 +1,6 @@
 import { expect, Locator, FrameLocator, type Page } from '@playwright/test';
 
-export class ChallengeMode {
+export class ActivityFiveChallengeMode {
   readonly page: Page;
   private readonly frameLocator: FrameLocator;
   readonly startButton: Locator;
@@ -137,10 +137,14 @@ export class ChallengeMode {
       .locator(`//button[@id='${selectedOptionID}']`).first()
       .click();
     if (selectedOptionID == "ch_01_12_opt_1") {
+      //for C1-C,C1.1-C,C1.2-C,C3-C,C4-D,C4-I,C5CID
+      const replierName = actionDetails[actionKey + "_replier_name"];
       const replyMood = actionDetails[actionKey + "_reply_mood"];
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
       const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replierNameLocator = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-name")]`;
+      await expect(this.frameLocator.locator(replierNameLocator)).toHaveText(replierName + "");
       await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
 
@@ -148,19 +152,26 @@ export class ChallengeMode {
       const replyTextID2 = `${selectedOptionID}_rep_2`;
       await expect(this.frameLocator.locator(`//span[@id='${replyTextID2}']`)).toHaveText(replyText2);
 
-      const replyMood2 = actionDetails[actionKey + "_reply_mood2"];
+      const replierName3 = actionDetails[actionKey + "_replier_name3"];
+      const replyMood3 = actionDetails[actionKey + "_reply_mood3"];
       const replyText3 = actionDetails[actionKey + "_reply3"];
       const replyTextID3 = `${selectedOptionID}_rep_3`;
 
-      const replyMoodSelector2 = `//div[@id='${replyTextID3}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
-      await expect(this.frameLocator.locator(replyMoodSelector2)).toHaveText("[" + replyMood2 + "]");
+      const replyMoodSelector3 = `//div[@id='${replyTextID3}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replierNameLocator3 = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-name")]`;
+      await expect(this.frameLocator.locator(replierNameLocator3)).toHaveText(replierName3 + "");
+      await expect(this.frameLocator.locator(replyMoodSelector3)).toHaveText("[" + replyMood3 + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID3}']`)).toHaveText(replyText3);
 
     } else if (selectedOptionID == "ch_02_11_opt_1") {
+      //for C2-C and C2.1-C
+      const replierName = actionDetails[actionKey + "_replier_name"];
       const replyMood = actionDetails[actionKey + "_reply_mood"];
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
       const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replierNameLocator = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-name")]`;
+      await expect(this.frameLocator.locator(replierNameLocator)).toHaveText(replierName + "");
       await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
 
@@ -170,11 +181,14 @@ export class ChallengeMode {
 
     } else {
       // Get the reply mood and text for the selected action
+      const replierName = actionDetails[actionKey + "_replier_name"];
       const replyMood = actionDetails[actionKey + "_reply_mood"];
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
 
       const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replierNameLocator = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-name")]`;
+      await expect(this.frameLocator.locator(replierNameLocator)).toHaveText(replierName + "");
       await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
     }
@@ -296,7 +310,7 @@ export class ChallengeMode {
   }
 
   public async clickOnStartButton() {
-    await this.page.waitForTimeout(35000);
+    await this.page.waitForTimeout(15000);
     await this.startButton.click();
     await this.intrductionPopupContinueButton.click();
   }

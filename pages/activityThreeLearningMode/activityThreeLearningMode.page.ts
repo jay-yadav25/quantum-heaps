@@ -1,299 +1,178 @@
 import { expect, Locator, FrameLocator, type Page } from '@playwright/test';
 
-export class activityThree {
+export class ActivityThree {
   readonly page: Page;
   private readonly frameLocator: FrameLocator;
   readonly startButton: Locator;
-  readonly inputField: Locator;
-  readonly avatarSelectionDoneButton: Locator;
-  readonly doneSubmitButton: Locator;
   readonly submitButton: Locator;
-  readonly retryButton: Locator;
-  readonly feedbackPopupText1: Locator;
-  readonly feedbackPopupText2: Locator;
-  readonly feedbackPopupText3: Locator;
-  readonly intrductionPopupContinueButton: Locator;
-  readonly chatEndMessage1: Locator;
-  readonly chatEndMessage2: Locator;
-  readonly noOfAttemptChatPopup: Locator;
   readonly continueButton: Locator;
   readonly hintButton: Locator;
-  readonly timeTaken: Locator;
-  readonly noOfHintUsed: Locator;
-  readonly noOfAttemptUsed: Locator;
-
   readonly hintTitle: Locator;
-  readonly emojiTitle: Locator;
-  readonly emojiReaction: Locator;
-  readonly suggestionTitle: Locator;
-  readonly suggestionList: Locator;
-  readonly suggestionListItems: Locator;
-  readonly respondButton: Locator;
-  readonly feedbackPopupTitle: Locator;
   readonly popupCloseButton: Locator;
+  readonly hintPopupAskListItems: Locator;
+  readonly hintPopupListItems: Locator;
+  readonly hintPopupThinkListItems: Locator;
+  readonly introductionContinueButton:Locator;
+  readonly stepInstruction:Locator;
+  readonly stepInstructionList:Locator;
+  private scenarioStartTime: number = 0;
 
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
     this.page = page;
     this.frameLocator = page.frameLocator(`iframe[name="${iframeName}"]`);
     this.startButton = this.frameLocator.locator("//button[@id='start-btn']");
-    this.inputField = this.frameLocator.locator("//input[@class='input']");
-    this.avatarSelectionDoneButton = this.frameLocator.locator("//button[@id='avatar-done-btn']");
-    this.doneSubmitButton = this.frameLocator.locator("//button[@id='chat-done-btn']");
     this.submitButton = this.frameLocator.locator("//button[@id='submit-btn']");
-    this.retryButton = this.frameLocator.locator("//button[@id='retry-btn']");
-    this.feedbackPopupText1 = this.frameLocator.locator("//div[@class='popup-content-container']//p[1]");
-    this.feedbackPopupText2 = this.frameLocator.locator("//div[@class='popup-content-container']//p[2]");
-    this.feedbackPopupText3 = this.frameLocator.locator("//div[@class='popup-content-container']//span").first();
-    this.intrductionPopupContinueButton = this.frameLocator.locator(".continue-button");
-    this.chatEndMessage1 = this.frameLocator.locator("//div[@class='chat-end-message-bg']/div/p");
-    this.chatEndMessage2 = this.frameLocator.locator("//div[@class='chat-end-message-bg']/p");
-    this.noOfAttemptChatPopup = this.frameLocator.locator("//div[@class='popup-header']/span");
-    this.respondButton = this.frameLocator.locator("//button[@id='respond-btn']").first();
     this.continueButton = this.frameLocator.locator("button#continue-btn");
+     this.introductionContinueButton = this.frameLocator.locator("button#introduction-continue-btn");
     this.hintButton = this.frameLocator.locator("button#chat-hint-btn");
-
-    this.hintTitle = this.frameLocator.locator("#dialog_label"); // hint title
-    this.emojiTitle = this.frameLocator.locator("strong.emoji-title");
-    this.emojiReaction = this.frameLocator.locator("div.emoji-reaction");
-    this.suggestionTitle = this.frameLocator.locator("strong.suggestion-title");
-    this.suggestionList = this.frameLocator.locator("ul.suggestion-list");
-    this.suggestionListItems = this.frameLocator.locator("ul.suggestion-list li");
-    this.timeTaken = this.frameLocator.locator(" strong.time-value").first();
-    this.noOfAttemptUsed = this.frameLocator.locator("strong.attempt-value").first();
-    this.noOfHintUsed = this.frameLocator.locator("strong.hint-value").first();
-    this.feedbackPopupTitle = this.frameLocator.locator("#dialog_label").first();
     this.popupCloseButton = this.frameLocator.locator("#popup-close-btn").first();
-
-
+    this.hintTitle = this.frameLocator.locator("#dialog_label");
+    this.hintPopupAskListItems = this.frameLocator.locator(""); 
+    this.hintPopupListItems = this.frameLocator.locator("ul.info-list-container>li>p"); 
+    this.hintPopupThinkListItems = this.frameLocator.locator("");
+    this.stepInstruction = this.frameLocator.locator("div.instruction-content");
+    this.stepInstructionList = this.frameLocator.locator("ul.instruction-description>li");
   }
-  private scenarioStartTime: number = 0;
+
   public async launchActivity() {
-    await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_03&attemptId=1");
+    await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=dm_l_03&attemptId=1");
   }
 
-  public async runScenarioPathForActivityThreeLearnigMode(path: string[], testData: any) {
-    //let previousStep: string | null = null;
-    for (let i = 0; i < path.length; i++) {
-      const step = path[i];
-      const nextStep = path[i + 1];
-      const previousStep: string = "";
+ public async runScenarioPathForActivityThreeLearnigMode(path: string[], testData: any) {
+  for (let i = 0; i < path.length; i++) {
+    const rawStep = path[i];
+    const nextStep = path[i + 1];
+    
+    // Find the actual current step based on the logic
+    const currentStep = this.findCurrentStep(path, i);
+    
+    // Find the actual previous step (not HINT or NEXTSTEP)
+    const previousStep = this.findPreviousStep(path, i);
+    
+    await this.processStep(rawStep,currentStep,previousStep, testData);
+  }
+}
 
-      if (step === 'HINT') {
-        console.log(`✅ Hint Opened — Last step was ${previousStep}`);
-        // await this.verifyHintPopup(nextStep,previousStep, testData);
-        continue;
-      }
-      if (step.startsWith("S1_") || step.startsWith("S2_")) {
-        //console.log(`✅ COMPLETE reached — Last step was ${previousStep}`);
-        await this.verifyMainScene(previousStep, step, nextStep, testData);
-        continue;
-      }
+private findCurrentStep(path: string[], currentIndex: number): string {
+  const rawStep = path[currentIndex];
+  
+  if (rawStep === 'HINT') {
+    // For HINT, use the previous valid step
+    return this.findPreviousValidStep(path, currentIndex);
+  } else if (rawStep === 'NEXTSTEP') {
+    // For NEXTSTEP, use the next valid step
+    return this.findNextValidStep(path, currentIndex);
+  } else {
+    // For regular steps, return as-is
+    return rawStep;
+  }
+}
 
-      if (step.startsWith("FS1_") || step.startsWith("FS2_")) {
-        console.log(`✅ COMPLETE reached — Last step was ${previousStep}`);
-        await this.verifyFollowUpScene(previousStep, step, nextStep, testData);
-        continue;
-      }
-
-      if (step === 'NEXTSTEP') {
-        //console.log(`🔁 Restarting challenge level — Last step was ${previousStep}`);
-        await this.clickOnContinueButton();
-        continue;
-      }
-      // await this.selectAndVerifyReplyText(step, testData);
-      // previousStep = step;
+private findPreviousValidStep(path: string[], currentIndex: number): string {
+  // Go backwards from current position
+  for (let i = currentIndex - 1; i >= 0; i--) {
+    const stepName = path[i];
+    if (stepName !== 'HINT' && stepName !== 'NEXTSTEP') {
+      return stepName;
     }
   }
+  return "NOTFOUND";
+}
 
-  private async selectAndVerifyReplyText(step: string, testData: any) {
-    const [level, rawAction] = step.split("_");
-
-    const actionMap: { [key: string]: string } = {
-      CORRECT: "ideal",
-      INCORRECT: "incorrect",
-      DISTRACTOR: "distractor"
-    };
-
-    const actionDetails = testData[level];
-    const correct = actionDetails["ideal"];
-    const incorrect = actionDetails["incorrect"];
-    const distractor = actionDetails["distractor"];
-
-    // Get the option IDs
-    const { correctOptionID, incorrectOptionID, distractorOptionID } = await this.getOptionIds(level);
-
-    // Verify the text of each option
-    await expect(this.frameLocator.locator(`//button[@id='${correctOptionID}']`).first()).toHaveText(correct);
-    await expect(this.frameLocator.locator(`//button[@id='${incorrectOptionID}']`).first()).toHaveText(incorrect);
-    await expect(this.frameLocator.locator(`//button[@id='${distractorOptionID}']`).first()).toHaveText(distractor);
-
-    // Determine which option to click based on the action
-    const actionKey = actionMap[rawAction.toUpperCase()];
-    let selectedOptionID: string;
-
-    switch (actionKey) {
-      case "ideal":
-        selectedOptionID = correctOptionID;
-        break;
-      case "incorrect":
-        selectedOptionID = incorrectOptionID;
-        break;
-      case "distractor":
-        selectedOptionID = distractorOptionID;
-        break;
-      default:
-        throw new Error(`Unknown actionKey: ${actionKey}`);
-    }
-
-    // Click the selected option
-    await this.frameLocator
-      .locator(`//button[@id='${selectedOptionID}']`).first()
-      .click();
-    if (selectedOptionID.startsWith("pa")) {
-      const replyMood = actionDetails[actionKey + "_reply_mood"];
-      const replyText = actionDetails[actionKey + "_reply"];
-      const replyTextID = `${selectedOptionID}_rep_1`;
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
-      await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
-      await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
-      if (selectedOptionID != "pa_ch_01_opt_2") {
-        const feedbackAlertText = actionDetails[actionKey + "_feedbackAlertText"];
-        const feedbackAlertTextID = `${selectedOptionID}fb`;
-        await expect(this.frameLocator.locator(`//span[@id='${feedbackAlertTextID}']`)).toHaveText(feedbackAlertText);
-      }
-      const replyText2 = actionDetails[actionKey + "_reply2"];
-      const replyTextID2 = `${selectedOptionID}_rep_2`;
-      await expect(this.frameLocator.locator(`//span[@id='${replyTextID2}']`)).toHaveText(replyText2);
-      const defaultChat = testData["default_chat"]["Jay"];
-      const defaultReply = testData["default_chat"]["Ricardo_Gonzalez"];
-      const defaultMood = testData["default_chat"]["Ricardo_Gonzalez_reply_mood"];
-      const defaultReplyMoodSelector = `//div[@id='ch_01_default_opt_1_rep_1']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
-
-      await expect(this.frameLocator.locator(`//span[@id='ch_01_default_opt_1']`)).toHaveText(defaultChat);
-      await expect(this.frameLocator.locator(`//div[@id='ch_01_default_opt_1_rep_1']`)).toHaveText(defaultReply);
-      await expect(this.frameLocator.locator(defaultReplyMoodSelector)).toHaveText("[" + defaultMood + "]");
-
-
-    } else if (selectedOptionID.endsWith("opt_2") && (selectedOptionID === "ch_02_opt_2" || selectedOptionID === "ch_02_21_opt_2")) {
-      const replyMood = actionDetails[actionKey + "_reply_mood"];
-      const replyText = actionDetails[actionKey + "_reply"];
-      const replyTextID = `${selectedOptionID}_rep_1`;
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
-      await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
-      await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
-
-      const replyText2 = actionDetails[actionKey + "_reply2"];
-      const replyTextID2 = `${selectedOptionID}_rep_2`;
-      await expect(this.frameLocator.locator(`//span[@id='${replyTextID2}']`)).toHaveText(replyText2);
-
-      const replyMood3 = actionDetails[actionKey + "_reply_mood3"];
-      const replyText3 = actionDetails[actionKey + "_reply3"];
-      const replyTextID3 = `${selectedOptionID}_rep_3`;
-      const replyMoodSelector2 = `//div[@id='${replyTextID3}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
-      await expect(this.frameLocator.locator(replyMoodSelector2)).toHaveText("[" + replyMood3 + "]");
-      await expect(this.frameLocator.locator(`//div[@id='${replyTextID3}']`)).toHaveText(replyText3);
-    } else if (selectedOptionID.endsWith("opt_2") && (selectedOptionID === "ch_01_opt_2" || selectedOptionID === "ch_01_12_opt_2" || selectedOptionID === "ch_01_11_opt_2")) {
-      const replyText = actionDetails[actionKey + "_reply"];
-      const replyTextID = `${selectedOptionID}_rep_1`;
-      await expect(this.frameLocator.locator(`//span[@id='${replyTextID}']`)).toHaveText(replyText);
-
-      const replyMood2 = actionDetails[actionKey + "_reply_mood2"];
-      const replyText2 = actionDetails[actionKey + "_reply2"];
-      const replyTextID1 = `${selectedOptionID}_rep_2`;
-      const replyMoodSelector = `//div[@id='${replyTextID1}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
-      await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood2 + "]");
-      await expect(this.frameLocator.locator(`//div[@id='${replyTextID1}']`)).toHaveText(replyText2);
-    } else if (selectedOptionID.endsWith("opt_2")) {
-      const replyMood = actionDetails[actionKey + "_reply_mood"];
-      const replyText = actionDetails[actionKey + "_reply"];
-      const replyTextID = `${selectedOptionID}_rep_1`;
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
-      await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
-      await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
-    } else {
-      const replyMood = actionDetails[actionKey + "_reply_mood"];
-      const replyText = actionDetails[actionKey + "_reply"];
-      const replyTextID = `${selectedOptionID}_rep_1`;
-      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
-      await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
-      await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
-
-      const feedbackAlertText = actionDetails[actionKey + "_feedbackAlertText"];
-      const feedbackAlertTextID = `${selectedOptionID}fb`;
-      await expect(this.frameLocator.locator(`//span[@id='${feedbackAlertTextID}']`)).toHaveText(feedbackAlertText);
+private findNextValidStep(path: string[], currentIndex: number): string {
+  // Go forwards from current position
+  for (let i = currentIndex + 1; i < path.length; i++) {
+    const stepName = path[i];
+    if (stepName !== 'HINT' && stepName !== 'NEXTSTEP') {
+      return stepName;
     }
   }
+  return "NOTFOUND";
+}
 
-  private async verifyFailedScenario(previousStep: any, testData: any) {
-    await expect(this.chatEndMessage1).toHaveText("This conversation has ended without a positive resolution.");
-    await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
-    await this.clickOnDoneButton();
-    const [level, rawAction] = previousStep.split("_");
-    const actionMap: { [key: string]: string } = {
-      INCORRECT: "incorrect",
-      DISTRACTOR: "distractor"
-    };
+private findPreviousStep(path: string[], currentIndex: number): string {
+  // If we're at the first step, there's no previous step
+  if (currentIndex <= 0) {
+    return "NOTFOUND";
+  }
+  
+  // Go backwards from current position
+  for (let i = currentIndex - 1; i >= 0; i--) {
+    const stepName = path[i];
+    
+    // Check if this step is not HINT or NEXTSTEP
+    if (stepName !== 'HINT' && stepName !== 'NEXTSTEP') {
+      return stepName;
+    }
+  }
+  
+  // If we've gone through all previous steps and found none that aren't HINT or NEXTSTEP
+  return "NOTFOUND";
+}
 
-    const actionKey = actionMap[rawAction.toUpperCase()];
-    const actionDetails = testData[level];
-    const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
-    const feedbackPopupFirstText = "The conversation path you took did not lead to a positive resolution.  " + attemptEndingText;
-    const feedbackPopupSecondText = "Continue practicing your problem-solving and communication skills by retrying the scenario once again.";
-    const feedbackPopupTitle = "Conversation Ended";
-
-    // Verify text on popup for last incorrect attempt
-    await expect(this.feedbackPopupTitle).toHaveText(feedbackPopupTitle);
-    await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
-    await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
-    await this.clickOnRetryButton();
-    await this.respondButton.click();
+  public async clickOnStartButton() {
+   await this.startButton.click();
   }
 
+  public async verifyLearningObjectivePageIsVisible() {
+    await this.page.waitForTimeout(5000);
+    await this.startButton.isVisible();
+  }
+  public async verifyTitleAndLearningObjectives() {
+    //await expect
+  }
 
-  private async verifyPassedScenario(path: string[]) {
-    await expect(this.chatEndMessage1).toHaveText("This conversation has ended with a positive resolution.");
-    await expect(this.chatEndMessage2).toHaveText("Select the Submit button to submit your results to your teacher.");
-    // Click done button and calculate time taken
-    await this.clickOnDoneButton();
-    const actualTimeTaken = performance.now() - this.scenarioStartTime;
+  public async verifyIntroductionPageIsVisible() {
+    await this.introductionContinueButton.isVisible();
+  }
+  public async verifyIntroduction() {
+   // await expect()
+  }
+  public async clickOnContinueButton() {
+    await this.continueButton.click();
+  }
+  public async clickOnIntroductionContinueButton() {
+    await this.introductionContinueButton.click();
+  }
 
-    // Verify popup content
-    const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with patience, tact, and competence. You demonstrated effective use of communication and problem solving skills to reach a positive outcome!";
-    const feedbackPopupTitle = "Activity Completed";
-    //await this.page.pause();
-    await expect(this.feedbackPopupTitle).toHaveText(feedbackPopupTitle);
-    await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
+  public async verifyFirstStepIsVisible() {
+    
+  }
+  public async clickOnSubmitButton() {
+    await this.submitButton.click();
+  }
 
-    // Compare actual time with displayed time
-    const displayedTime = await this.timeTaken.innerText();
-    const expectedSeconds = Math.round(actualTimeTaken / 1000);
+  public async clickOnHintButton() {
+    await this.hintButton.click();
+  }
 
-    console.log(`Total scenario time: ${actualTimeTaken}ms (${expectedSeconds}s)`);
-    console.log(`Displayed time: ${displayedTime}`);
+  private async processStep(step: string, currentStep: string, previousStep: string, testData: any) {
+    if (step === 'HINT') {
+      console.log(`✅ Hint Opened — Last step was ${previousStep}`);
+      await this.verifyHintPopup(currentStep, testData);
+      return;
+    }
 
-    // Parse displayed time and verify
-    const displayedSeconds = this.parseDisplayedTime(displayedTime);
+    if (step.startsWith("S")) {
+      await this.verifyMainScene(step,previousStep, testData);
+      return;
+    }
 
-    //Verify timing matches (with tolerance of ±2 seconds for UI delays)
-    expect(displayedSeconds).toBeGreaterThanOrEqual(expectedSeconds - 2);
-    expect(displayedSeconds).toBeLessThanOrEqual(expectedSeconds + 2);
+    if (step.startsWith("FS")) {
+      console.log(`✅ COMPLETE reached — Last step was ${previousStep}`);
+      await this.verifyFollowUpScene(step, previousStep, testData);
+      return;
+    }
 
-    // Path analysis  
-    const pathAnalysis = this.analyzePath(path);
-    await expect(this.noOfAttemptUsed).toHaveText(`${pathAnalysis.restartCount}`);
-    await expect(this.noOfHintUsed).toHaveText(`${pathAnalysis.hintCount}`);
-    await this.popupCloseButton.click();
-    await expect(this.chatEndMessage1).toHaveText("This conversation has ended with a positive resolution.");
-    await expect(this.chatEndMessage2).toHaveText("Select the Summary button to view your conversation summary.");
-    await this.clickOnDoneButton();
-    // Return the actual time taken for further use if needed
-    return actualTimeTaken;
+    if (step === 'NEXTSTEP') {
+      await this.clickOnContinueButton();
+      return;
+    }
   }
 
   private parseDisplayedTime(displayedTime: string): number {
     if (!displayedTime) return 0;
 
-    // Handle format like "00 min 45 sec" or "01 min 30 sec"
     const minMatch = displayedTime.match(/(\d+)\s*min/);
     const secMatch = displayedTime.match(/(\d+)\s*sec/);
 
@@ -314,180 +193,188 @@ export class activityThree {
     };
   }
 
-  private async verifyHintPopup(nextStep: string, testData: any) {
+  private async verifyHintPopup(currentStep: string, testData: any) {
     await this.clickOnHintButton();
-    const [level, rawAction] = nextStep.split("_");
-    const actionDetails = testData[level];
-    console.log(nextStep);
-    // Access the hint popup data correctly
-    const hintPopup = actionDetails.hint_popup;
-    const hintBody = hintPopup.body;
+    await expect(this.hintTitle).toHaveText("");
+    
+    if (currentStep.startsWith('S') && !currentStep.startsWith('FS')) {
+      await this.verifyMainSceneHints(currentStep, testData);
+    } else if (currentStep.startsWith('FS')) {
+      await this.verifyFollowUpSceneHints(currentStep, testData);
+    }
+    
+    await this.clickOnContinueButton();
+  }
 
-    // Verify hint title
-    await expect(this.hintTitle).toHaveText(hintPopup.title);
+  private async verifyMainSceneHints(step: string, testData: any) {
+    const stepNumber = step.match(/S(\d+)/)?.[1];
+    const stepDetails = testData['SCENE' + stepNumber];
 
-    // Access emoji and text from left_side_content
-    await expect(this.emojiTitle).toHaveText(hintBody.left_side_content.text1);
-    await expect(this.emojiReaction).toHaveText(hintBody.left_side_content.text2);
+    const thinkItemTexts = stepDetails.hints.thinkAbout;
+    const thinkItems = await this.hintPopupThinkListItems.all();
+    expect(thinkItems.length).toBe(thinkItemTexts.length);
 
-    // Access suggestion list items
-    const suggestionItems = hintBody.suggestionListItems;
-    await expect(this.suggestionTitle).toHaveText(suggestionItems[0]);
-    const objectiveItems = await this.suggestionListItems.all();
-    expect(objectiveItems.length).toBe(suggestionItems.length - 1);
+    for (let i = 0; i < thinkItemTexts.length; i++) {
+      await expect(thinkItems[i]).toHaveText(thinkItemTexts[i]);
+    }
 
-    // Loop through all suggestion items (starting from 1)
-    for (let i = 1; i < objectiveItems.length; i++) {
-      await expect(objectiveItems[i - 1]).toHaveText(suggestionItems[i]);
+    const askItemTexts = stepDetails.hints.askYourself;
+    const askItems = await this.hintPopupAskListItems.all();
+    expect(askItems.length).toBe(askItemTexts.length);
+
+    for (let i = 0; i < askItemTexts.length; i++) {
+      await expect(askItems[i]).toHaveText(askItemTexts[i]);
+    }
+  }
+
+  private async verifyFollowUpSceneHints(step: string, testData: any) {
+    const stepNumber = step.match(/FS(\d+)/)?.[1];
+    const stepDetails = testData['SCENE' + stepNumber];
+    const listContent = stepDetails.followUp.hints;
+    const listItem = await this.hintPopupListItems.all();
+    expect(listItem.length).toBe(listContent.length);
+
+    for (let i = 0; i < listContent.length; i++) {
+      await expect(listItem[i]).toHaveText(listContent[i]);
     }
     await this.clickOnContinueButton();
   }
 
-  public async clickOnStartButton() {
-    await this.page.waitForTimeout(5000);
-    await this.startButton.click();
-    await this.intrductionPopupContinueButton.click();
-  }
-  public async clickOnContinueButton() {
-    await this.continueButton.click();
-  }
-
-  public async typeInInputText(text: string) {
-    await this.inputField.fill(text);
-  }
-
-  public async clickOnAvatarSelectionDone() {
-    this.scenarioStartTime = performance.now();
-    await this.avatarSelectionDoneButton.click();
-  }
-
-  public async clickOnDoneButton() {
-    await this.doneSubmitButton.click();
-  }
-
-  public async clickOnSubmitButton() {
-    await this.submitButton.click();
-  }
-
-  public async clickOnRetryButton() {
-    await this.retryButton.click();
-  }
-
-  public async clickOnHintButton() {
-    await this.hintButton.click();
-  }
-
-  private async getOptionIds(level: string) {
-    // Remove the "C" prefix and split by "."
-    const parts = level.replace("C", "").split(".");
-
-    let base: string;
-    if (level === "PA") {
-      base = `pa_ch_01`;
-    } else {
-      // Handle different level depths
-      if (parts.length === 1) {
-        // Level 1 (e.g., "C1" → "ch_01_opt_X")
-        const mainSection = parts[0].padStart(2, "0");
-        base = `ch_${mainSection}`;
-      } else if (parts.length === 2) {
-        // e.g., "C1.1" → "ch_01_11", "C2.1" → "ch_02_21"
-        const mainSection = parts[0].padStart(2, "0");
-        base = `ch_${mainSection}_${parts[0]}${parts[1]}`;
-      }
-      else {
-        throw new Error(`Unsupported level format: ${level}`);
-      }
+  private async getOptionIds(step: string, preStep?: string) {
+    if (step.startsWith('S') && !step.startsWith('FS')) {
+      return this.getMainSceneOptionIds(step);
+    } else if (step.startsWith('FS')) {
+      return this.getFollowUpSceneOptionIds(step, preStep);
     }
-
-
-    return {
-      distractorOptionID: `${base}_opt_1`,
-      correctOptionID: `${base}_opt_2`,
-      incorrectOptionID: `${base}_opt_3`
-    };
+    return [];
   }
-  private async verifyMainScene(previousStep: string, step: string, nextStep: string, testData: any) {
+
+  private getMainSceneOptionIds(step: string): string[] {
+    const stepNumber = step.match(/S(\d+)/)?.[1];
+    const count = Number(stepNumber) * 2 - 1; 
+    if (!stepNumber) return [];
+    
+    return [
+      `slt_step_${count}_opt_1`,
+      `slt_step_${count}_opt_2`,
+      `slt_step_${count}_opt_3`
+    ];
+  }
+
+  private getFollowUpSceneOptionIds(step: string, preStep?: string): string[] {
+    const fsNumber = step.match(/FS(\d+)/)?.[1];
+    if (!fsNumber || !preStep) return [];
+    
+    const multipliedStep = parseInt(fsNumber) * 2;
+    let correctIncorrectNumber: string;
+    
+    if (preStep.includes('_CORRECT')) {
+      correctIncorrectNumber = '1';
+    } else if (preStep.includes('_INCORRECT_')) {
+      const incorrectMatch = preStep.match(/_INCORRECT_(\d+)/);
+      correctIncorrectNumber = incorrectMatch ? (parseInt(incorrectMatch[1]) + 1).toString() : '2';
+    } else {
+      correctIncorrectNumber = '1';
+    }
+    
+    return [
+      `mlt_step_${multipliedStep}_${correctIncorrectNumber}_opt_1`,
+      `mlt_step_${multipliedStep}_${correctIncorrectNumber}_opt_2`,
+      `mlt_step_${multipliedStep}_${correctIncorrectNumber}_opt_3`,
+      `mlt_step_${multipliedStep}_${correctIncorrectNumber}_opt_4`
+    ];
+  }
+
+  private async verifyMainScene(step: string,previousStep:string, testData: any) {
     await this.verifyStepInstruction(step, testData);
     await this.verifySpeechBubbleConversation(step, testData);
-    await this.verifyQuestion(step, testData);
+    await this.verifyQuestion(step,previousStep, testData);
     await this.verifyAndSelectDecisionPointOptions(step, testData);
   }
-  private async verifyFollowUpScene(previousStep: string, step: string, nextStep: string, testData: any) {
-    await this.verifyStepInstruction(step, testData);
-    await this.verifyQuestion(step, testData);
-    await this.verifyandSelectFollowUpQuestionOptions(step, testData);
 
+  private async verifyFollowUpScene(step: string, previousStep: string, testData: any) {
+    await this.verifyStepInstructionFollowUpScene(step, previousStep,testData);
+    await this.verifyQuestion(step,previousStep, testData);
+    await this.verifyAndSelectFollowUpQuestionOptions(step, previousStep, testData);
   }
 
   private async verifyStepInstruction(step: string, testData: any) {
-    await this.clickOnHintButton();
-    const [scene] = step.split("_");
-    const stepDetails = testData[scene];
+    const stepNumber = step.match(/S(\d+)/)?.[1];
+    const stepDetails = testData["SCENE"+stepNumber];
     const instructionText = stepDetails.instructions;
+    await expect(this.stepInstruction).toHaveText(instructionText);
     const instructionListItemsText = stepDetails.instructionsList;
-    // await expect(this.instructions).toHaveText(instructionText);
-    // const noOfInstructionListItems = await this.instructionListItems.all();
-    // expect(noOfInstructionListItems .length).toBe(instructionListItemsText.length);
+    const noOfInstructionListItems = await this.stepInstructionList.all();
     for (let i = 0; i < instructionListItemsText.length; i++) {
-      // await expect(noOfInstructionListItems[i]).toHaveText(instructionListItemsText[i]);
+     await expect(noOfInstructionListItems[i]).toHaveText(instructionListItemsText[i]);
     }
+  }
 
+  private async verifyStepInstructionFollowUpScene(step: string, previousStep:string,testData: any) {
+    const stepNumber = step.match(/FS(\d+)/)?.[1];
+    const stepDetails = testData['SCENE' + stepNumber];
+    const [sceneCode, ...optionParts] = previousStep.split('_');
+    const optionKey = optionParts.join('_');
+    const followUpKey = this.mapOptionToFollowUpKey(optionKey);
+    const instructionText = stepDetails.followUp[followUpKey].instructions;
+    const instructionListItemsText = stepDetails.followUp[followUpKey].instructionsList;
+   // await expect(this.stepInstruction).toHaveText(instructionText);
+    const noOfInstructionListItems = await this.stepInstructionList.all();
+    for (let i = 0; i < instructionListItemsText.length; i++) {
+     //await expect(noOfInstructionListItems[i]).toHaveText(instructionListItemsText[i]);
+    }
   }
 
   private async verifySpeechBubbleConversation(step: string, testData: any) {
-    const [scene] = step.split("_");
-    const stepDetails = testData[scene];
+     const stepNumber = step.match(/S(\d+)/)?.[1];
+    const stepDetails = testData["SCENE"+stepNumber];
     const speechBubbleTexts = stepDetails.conversation;
+    console.log(speechBubbleTexts);
     if (speechBubbleTexts && Array.isArray(speechBubbleTexts) && speechBubbleTexts.length > 0) {
-      // const bubbles = await this.speechBubbleItems.all();
       for (let i = 0; i < speechBubbleTexts.length; i++) {
-        // await expect(titleLocator).toHaveText(conversation[i].title);
-        // await expect(textLocator).toHaveText(conversation[i].text);
+        const characterName=speechBubbleTexts[i].title;
+        await expect(this.frameLocator.locator(`//h3[@class='name-title' and normalize-space()='${characterName}']/following-sibling::span[1]`).first()).toHaveText(speechBubbleTexts[i].text);
       }
     }
   }
 
-  private async verifyQuestion(step: string, testData: any) {
+  private async verifyQuestion(step: string,previousStep:string, testData: any) {
     const [sceneCode, ...optionParts] = step.split('_');
-    const optionKey = optionParts.join('_'); // e.g. "INCORRECT_1", "CORRECT"
+    const optionKey = optionParts.join('_');
 
     let sceneLevel = '';
     let stepDetails: any;
     let questionText = '';
+    let stepID='';
+    let stepType='';
 
-    if (sceneCode.startsWith('S') && !sceneCode.startsWith('FS')) {
-      // Handle decision point question
-      sceneLevel = 'SCENE' + sceneCode.slice(1); // e.g., S1 → SCENE1
-      stepDetails = testData[sceneLevel]; // assumes testData[SCENE1] is an array
-
-      if (!stepDetails) {
-        console.warn(`Scene data not found for ${sceneLevel}`);
-        return;
-      }
-
+    if (step.startsWith('S') && !step.startsWith('FS')) {
+      const stepNumber = step.match(/S(\d+)/)?.[1];
+      sceneLevel = 'SCENE' + stepNumber;
+      stepDetails = testData[sceneLevel];
       questionText = stepDetails.decisionPoint.question;
-
-    } else if (sceneCode.startsWith('FS')) {
-      // Handle follow-up question
-      sceneLevel = 'SCENE_' + sceneCode; // e.g., FS1 → SCENE_FS1
-      const baseScene = 'SCENE' + sceneCode.match(/\d+/)?.[0]; // extract "1" from FS1 → SCENE1
-      stepDetails = testData[baseScene]?.[0];
-
-      if (!stepDetails || !stepDetails.followUp) {
-        console.warn(`Follow-up data not found for ${baseScene}`);
-        return;
-      }
-
+      const count = Number(sceneCode.slice(1)) * 2 - 1; 
+      stepID="slt_step_"+ count;
+      stepType="single"
+    } else if (step.startsWith('FS')) {
+      const stepNumber = step.match(/FS(\d+)/)?.[1];
+      const stepDetails = testData['SCENE' + stepNumber];
+      const [sceneCode, ...optionParts] = previousStep.split('_');
+      const optionKey = optionParts.join('_');
       const followUpKey = this.mapOptionToFollowUpKey(optionKey);
       questionText = stepDetails.followUp?.[followUpKey]?.question;
+      console.log(followUpKey);
+      //stepID="mlt_step_"+ parseInt(sceneCode.match(/\d+/)?.[0] || '0', 10) * 2;
+      stepID = `mlt_step_${(parseInt(sceneCode.match(/\d+/)?.[0] || '0', 10) * 2)}`;
+
+      stepType="multi"
     }
-    // await expect(this.stepQuestion).toHaveText(questionText);
+    console.log(questionText);
+    const questionLocator=`//*[contains(@id,'${stepID}')]/ancestor::*[contains(@class,'${stepType}-select-component')]/preceding-sibling::strong`
+    await expect(this.frameLocator.locator(questionLocator)).toHaveText(questionText);
   }
 
-
   private mapOptionToFollowUpKey(option: string): string {
-    // Maps option keys to the follow-up property names
     switch (option.toUpperCase()) {
       case 'INCORRECT_1':
         return 'nonIdealFollowUp1';
@@ -501,37 +388,96 @@ export class activityThree {
   }
 
   private async verifyAndSelectDecisionPointOptions(step: string, testData: any) {
-    // await expect(this.frameLocator.locator(`//button[@id='${correctOptionID}']`).first()).toHaveText(correct);
-    // await expect(this.frameLocator.locator(`//button[@id='${incorrectOption1ID}']`).first()).toHaveText(incorrect);
-    // await expect(this.frameLocator.locator(`//button[@id='${incorrectOption2ID}']`).first()).toHaveText(distractor);
-
-  }
-
-  private verifyDecisionPointFeedback(step: string) {
+    const stepNumber = step.match(/S(\d+)/)?.[1];
+    const optionIds = await this.getOptionIds(step);
     
-    //await expect(this.).toHaveText();
+    if (optionIds.length < 3) {
+      throw new Error(`Expected at least 3 options for step ${step}, got ${optionIds.length}`);
+    }
+
+    const stepDetails = testData['SCENE' + stepNumber];
+    const correctOptionText = stepDetails.decisionPoint.ideal;
+    const incorrectOptionText = stepDetails.decisionPoint.nonIdeal1;
+    const incorrectOptionText2 = stepDetails.decisionPoint.nonIdeal2;
+    
+    // await expect(this.frameLocator.locator(`//button[@id='${optionIds[0]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(incorrectOptionText);
+    // await expect(this.frameLocator.locator(`//button[@id='${optionIds[1]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(correctOptionText);
+    // await expect(this.frameLocator.locator(`//button[@id='${optionIds[2]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(incorrectOptionText2);
+
+    let selectedOptionID: string;
+    let decisionPointFeedback: string;
+    let decisionPointFeedbackTitle: string;
+
+    if (step.includes('_CORRECT')) {
+      selectedOptionID = optionIds[1];
+      decisionPointFeedback = stepDetails.decisionPointFeedback.ideal.text;
+      decisionPointFeedbackTitle = stepDetails.decisionPointFeedback.ideal.title;
+    } else if (step.includes('_INCORRECT_1')) {
+      selectedOptionID = optionIds[0];
+      decisionPointFeedback = stepDetails.decisionPointFeedback.nonIdeal.text;
+      decisionPointFeedbackTitle = stepDetails.decisionPointFeedback.nonIdeal.title;
+    } else if (step.includes('_INCORRECT_2')) {
+      selectedOptionID = optionIds[2];
+      decisionPointFeedback = stepDetails.decisionPointFeedback.nonIdeal.text;
+      decisionPointFeedbackTitle = stepDetails.decisionPointFeedback.nonIdeal.title;
+    } else {
+      throw new Error(`Unknown step format: ${step}`);
+    }
+
+    await this.frameLocator.locator(`//button[@id='${selectedOptionID}']`).first().click();
+    await expect(this.frameLocator.locator(`//button[@id='${selectedOptionID}']//following-sibling::p[@class='card-text']`).nth(1)).toHaveText(decisionPointFeedback);
+    await expect(this.frameLocator.locator(`//button[@id='${selectedOptionID}']//following-sibling::p[@class='card-text']/preceding-sibling::h3`)).toHaveText(decisionPointFeedbackTitle);
+
   }
 
-  private verifyDecisionPointHintPopupContent(step: string) {
-    //await expect(this.).toHaveText();
-  }
+  private async verifyAndSelectFollowUpQuestionOptions(step: string, previousStep: string, testData: any) {
+    const fsNumber = step.match(/FS(\d+)/)?.[1];
+    const stepDetails = testData['SCENE' + fsNumber];
+    const stepData = stepDetails[step];
+    
+    if (!stepData) {
+      console.log(`No data found for step: ${step}`);
+      return;
+    }
 
-  private async verifyandSelectFollowUpQuestionOptions(step: string, testData: any) {
-    const options = testData[step];
-    for (const option of options) {
-      // await expect(this.).toHaveText();
-      await this.page.click(`#${option}`);
-      // await expect(this.).toHaveText();
-      // console.log(`Clicked ${option}, text: ${text}`);
+    let feedbackType: string;
+    if (previousStep.includes('_CORRECT')) {
+      feedbackType = "idealChoiceFeedback";
+    } else {
+      feedbackType = "nonIdealChoiceFeedback";
+    }
+
+    const idealChoices = stepDetails.followUp.correctAnswers || [];
+    const nonIdealChoices = stepDetails.followUp.incorrectAnswers || [];
+    
+    for (const item of stepData) {
+      let optionToClick:any;
+      
+      if (item.startsWith("CORRECT")) {
+        const correctIndex = parseInt(item.split("_")[1]) - 1;
+        if (correctIndex >= 0 && correctIndex < idealChoices.length) {
+          optionToClick = idealChoices[correctIndex];
+        }
+      } else if (item.startsWith("INCORRECT")) {
+        const incorrectIndex = parseInt(item.split("_")[1]) - 1;
+        if (incorrectIndex >= 0 && incorrectIndex < nonIdealChoices.length) {
+          optionToClick = nonIdealChoices[incorrectIndex];
+        }
+      } else if (item.startsWith("HINT")) {
+        this.verifyHintPopup(step,testData);
+        continue;
+        }
+      
+      if (optionToClick) {
+        const selectedOptionFeedback = stepDetails.followUp[feedbackType][optionToClick];
+        const actualStepNumber = fsNumber ? parseInt(fsNumber, 10) * 2 : null;
+        const commonLocatorMultiselect=`//button[contains(@id, 'mlt_step_${actualStepNumber}') ]//strong[normalize-space(text()) = '${optionToClick}']`
+        await this.frameLocator.locator(commonLocatorMultiselect).first().click();
+        console.log("clicked:"+ optionToClick)
+        await expect(this.frameLocator.locator(`${commonLocatorMultiselect}/following-sibling::strong[@class='card-sub-title']`).first()).toHaveText(selectedOptionFeedback.title);
+        //await expect(this.frameLocator.locator(`${commonLocatorMultiselect}/following-sibling::p[@class='card-text']`).first()).toHaveText(selectedOptionFeedback.text);
+       
+      }
     }
   }
-
-  private verifyDecisionPointFeedbackafterSelectinAnOption(step: string) {
-    //await expect(this.).toHaveText();
-  }
-
-  private verifyFollowUpQuestionHintPopupContent(step: string) {
-    //await expect(this.).toHaveText();
-  }
-
 }

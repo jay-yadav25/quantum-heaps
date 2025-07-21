@@ -3,6 +3,9 @@ import { expect, Locator, type Page } from '@playwright/test';
 export class SummaryReport {
     readonly page: Page;
     readonly finalScore: Locator;
+    
+    private readonly MAX_CHALLENGE_LEVELS = 5;
+    private readonly MAX_TOTAL_ATTEMPTS = 3;
 
     constructor(page: Page) {
         this.page = page;
@@ -12,6 +15,7 @@ export class SummaryReport {
     public async verifyFinalScore(path: string[], testData: any) {
         const attempts: string[][] = [];
         let currentAttempt: string[] = [];
+        
         for (let i = 0; i < path.length; i++) {
             const step = path[i];
 
@@ -36,60 +40,25 @@ export class SummaryReport {
         // Calculate score for each attempt with carry-forward logic
         const attemptScores: number[] = [];
         const allAttemptsData = [];
-        //let attemptNumber = 1;
-
-        // Object to track the best scores for each level across all attempts
-        const bestLevelScores: Record<string, { correct: number, totalChallenges: number }> = {};
         const highestLevelReached: Record<number, number> = {}; // attempt number -> highest level
 
-        // First pass to collect all level data across attempts
+        // First pass to track highest level reached in each attempt
         for (let i = 0; i < attempts.length; i++) {
             const attempt = attempts[i];
-            const currentAttemptLevelData: Record<string, { correct: number, totalChallenges: number }> = {};
             let highestLevel = 0;
 
-            // Process the current attempt to get level data
+            // Process the current attempt to get highest level
             for (const step of attempt) {
                 const levelMatch = step.match(/C(\d+)/);
                 if (!levelMatch) continue;
 
-                const level = levelMatch[1];
-                const levelNum = parseInt(level, 10);
-                const isCorrect = step.includes('_CORRECT');
-
+                const levelNum = parseInt(levelMatch[1], 10);
                 if (levelNum > highestLevel) {
                     highestLevel = levelNum;
-                }
-
-                if (!currentAttemptLevelData[level]) {
-                    currentAttemptLevelData[level] = { correct: 0, totalChallenges: 0 };
-                }
-
-                currentAttemptLevelData[level].totalChallenges++;
-                if (isCorrect) {
-                    currentAttemptLevelData[level].correct++;
                 }
             }
 
             highestLevelReached[i + 1] = highestLevel;
-
-            // Update the best level scores
-            for (const [level, data] of Object.entries(currentAttemptLevelData)) {
-                if (!bestLevelScores[level]) {
-                    bestLevelScores[level] = { correct: 0, totalChallenges: 0 };
-                }
-
-                // If this level was played in this attempt, update the totalChallenges regardless
-                bestLevelScores[level].totalChallenges = Math.max(
-                    bestLevelScores[level].totalChallenges,
-                    data.totalChallenges
-                );
-
-                // Update the correct count if we have a better score
-                if (data.correct > bestLevelScores[level].correct) {
-                    bestLevelScores[level].correct = data.correct;
-                }
-            }
         }
 
         // Second pass to calculate scores for each attempt with carry-forward logic
@@ -158,18 +127,20 @@ export class SummaryReport {
                 }
             }
 
-            // Calculate average score - always divide by 3 levels
-            const scores = levelScores.map(item => item.score);
-            // Add 0% for any missing levels up to level 3
-            const paddedScores = [...scores];
-            while (paddedScores.length < 3) {
-                paddedScores.push(0);
+            // Extract raw scores and pad to MAX_CHALLENGE_LEVELS
+            const rawScores = levelScores.map(item => item.score);
+            
+            // Pad rawScores to MAX_CHALLENGE_LEVELS with 0s if needed
+            while (rawScores.length < this.MAX_CHALLENGE_LEVELS) {
+                rawScores.push(0);
             }
-            // For levels beyond 3, we still include them in the calculation
-            const totalLevels = Math.max(3, scores.length);
-            const attemptScore = scores.reduce((sum, score) => sum + score, 0) / totalLevels;
 
-            const scoresForDisplay = scores.map(s => this.formatScore(s));
+            // Calculate average score - always divide by MAX_CHALLENGE_LEVELS or actual levels if more than MAX_CHALLENGE_LEVELS
+            const totalLevels = this.MAX_CHALLENGE_LEVELS;
+            const sumOfScores = levelScores.reduce((sum, item) => sum + item.score, 0);
+            const attemptScore = sumOfScores / totalLevels;
+
+            const scoresForDisplay = rawScores.slice(0, this.MAX_CHALLENGE_LEVELS).map(s => this.formatScore(s));
             const attemptScores1 = `[${scoresForDisplay.join(', ')}]`;
             const attemptAverageScore = `: ${this.formatScore(attemptScore)}`;
 
@@ -179,20 +150,21 @@ export class SummaryReport {
                 attemptAverageScore,
                 attemptNumber: currentAttemptNum,
                 levelScores,
-                rawScores: scores
+                rawScores // This will now always have at least MAX_CHALLENGE_LEVELS elements (padded with 0s)
             });
 
             attemptScores.push(attemptScore);
         }
+
         for (const attemptData of allAttemptsData) {
             console.log(
                 attemptData.attempt, //steps in this attempt 
-                attemptData.rawScores,// all three challenge level score 
+                attemptData.rawScores,// all three challenge level scores (padded to MAX_CHALLENGE_LEVELS)
                 attemptData.attemptAverageScore,// attempt average score
-                
                 attemptData.attemptNumber,//this is which attempt like1,2,3 
                 attempts  //all attempt data will be here[[],[],]
-            );}
+            );
+        }
 
         // Verify and report each attempt
         for (const attemptData of allAttemptsData) {
@@ -218,6 +190,7 @@ export class SummaryReport {
             allAttemptsData
         };
     }
+
     private async veryfySelectedOptionAndReportResponse(
         attempt: string[],
         attemptScores: number[],
@@ -243,18 +216,18 @@ export class SummaryReport {
 
         //verfying all three level score in each attempt
         for (let i = 0; i < attemptScores.length; i++) {
-            const challengeLevelForScore=i+1
+            const challengeLevelForScore = i + 1;
             const attepmtScoresLocator = ` //div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div` +
                 `//following-sibling::section/div[${challengeLevelForScore}]//div[contains(@class, 'score-value')]`;
-                const expectedScore = attemptScores[i];
-                const formattedExpectedScore = this.formatScore(expectedScore);
-                console.log(`\nExpected score for challengeLevel ${challengeLevelForScore}: ${formattedExpectedScore}`);
-                const actualScore = await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator).first().innerText();
-                console.log(`Actual score for challengeLevel ${challengeLevelForScore}: ${actualScore}`);
-                await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator).first()).toHaveText(`: ${formattedExpectedScore}`);
-            }
+            const expectedScore = attemptScores[i];
+            const formattedExpectedScore = this.formatScore(expectedScore);
+            console.log(`\nExpected score for challengeLevel ${challengeLevelForScore}: ${formattedExpectedScore}`);
+            const actualScore = await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator).first().innerText();
+            console.log(`Actual score for challengeLevel ${challengeLevelForScore}: ${actualScore}`);
+            await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(attepmtScoresLocator).first()).toHaveText(`: ${formattedExpectedScore}`);
+        }
 
-        await this.verifyPreviouslyCompletedAndNotReachLevel( attempt,attemptScores,attemptNumber);
+        await this.verifyPreviouslyCompletedAndNotReachLevel(attempt, attemptScores, attemptNumber);
         let responseNumber = 0;
         let currentMainLevel = "";
         //attempt is string so i am running it from first to last
@@ -278,18 +251,18 @@ export class SummaryReport {
             console.log(`\nStep: ${step}, Response Number: ${responseNumber}`);
 
             let selectedOption = null;
-            let stepScore:any="";
+            let stepScore: any = "";
 
             // Map the raw action to the corresponding option
             if (rawAction === "CORRECT") {
-                stepScore=": 1";
+                stepScore = ": 1";
                 selectedOption = testData[level]?.["ideal"];
             } else if (rawAction === "INCORRECT") {
                 selectedOption = testData[level]?.["incorrect"];
-                stepScore=": 0";
+                stepScore = ": 0";
             } else if (rawAction === "DISTRACTOR") {
                 selectedOption = testData[level]?.["distractor"];
-                stepScore=": 0";
+                stepScore = ": 0";
             }
             //verifying selectedoption for each step with their score .
             //here ican add those logic for first and last text
@@ -306,7 +279,6 @@ export class SummaryReport {
             await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(stepScoreLocator)).toHaveText(stepScore);
             await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(userResponse)).toHaveText(selectedOption);
         
-
             // Get patient response and mood based on current step and previous actions
             const patientResponseData = this.getPatientResponseAndMood(
                 attemptNumber,
@@ -317,7 +289,6 @@ export class SummaryReport {
                 step
             );
 
-        
             await this.verifyPatientResponseAndMood(
                 attemptNumber,
                 challengeLevel,
@@ -325,7 +296,6 @@ export class SummaryReport {
                 patientResponseData.patientResponse,
                 patientResponseData.patientMood
             );
-        
 
             // Report response should still be based on the current step
             let reportResponse = null;
@@ -345,7 +315,6 @@ export class SummaryReport {
 
             // Assert that the element text matches the expected selectedOption
             await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(reportResponseLocator)).toHaveText(reportResponse);
-        
         }
     }
 
@@ -413,7 +382,7 @@ export class SummaryReport {
             };
         }
         const lastCorrectResponse = this.findLastCorrectResponse(attemptNumber, allAttempts, testData);
-            return lastCorrectResponse;
+        return lastCorrectResponse;
     }
 
     private findLastCorrectResponse(
@@ -480,40 +449,40 @@ export class SummaryReport {
                 formattedScore = score.toFixed(1);
             }
         }
-        return  `${formattedScore}%`;
+        return `${formattedScore}%`;
     }
 
-public async verifyPreviouslyCompletedAndNotReachLevel( attempt: string[],attemptScores: number[],attemptNumber:number) {
-  const firstStep = attempt[0];
-  const [level, rawAction] = firstStep.split("_");
-  const firstchallengeLevel = level.startsWith('C') ? parseInt(level.substring(1)) : 0;
-  
-  const lastStep = attempt[attempt.length - 1];
-  console.log(lastStep);
-  const [level1, rawAction1] = lastStep.split("_");
-  const lastchallengeLevel = level1.startsWith('C') ? parseInt(level1.substring(1)) : 0;
-  // Check if first challenge level is greater than 1
-  console.log("first" +firstchallengeLevel);
-  console.log("las" +lastchallengeLevel);
-   
-  
-  if (firstchallengeLevel > 1) {
-    // Loop from 1 to firstchallengeLevel-1
-    for (let i = 1; i < firstchallengeLevel; i++) {
-     const textLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
-            `/div[${i}]//div[contains(@class ,'empty-response-box')]/div/p`
-      await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(textLocator)).toHaveText("You have cleared this challenge level in your previous attempt.");
+    public async verifyPreviouslyCompletedAndNotReachLevel(attempt: string[], attemptScores: number[], attemptNumber: number) {
+        const firstStep = attempt[0];
+        const [level, rawAction] = firstStep.split("_");
+        const firstChallengeLevel = level.startsWith('C') ? parseInt(level.substring(1)) : 0;
+        
+        const lastStep = attempt[attempt.length - 1];
+        console.log(lastStep);
+        const [level1, rawAction1] = lastStep.split("_");
+        const lastChallengeLevel = level1.startsWith('C') ? parseInt(level1.substring(1)) : 0;
+        
+        // Check if first challenge level is greater than 1
+        console.log("first " + firstChallengeLevel);
+        console.log("last " + lastChallengeLevel);
+        
+        if (firstChallengeLevel > 1) {
+            // Loop from 1 to firstChallengeLevel-1
+            for (let i = 1; i < firstChallengeLevel; i++) {
+                const textLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
+                    `/div[${i}]//div[contains(@class ,'empty-response-box')]/div/p`
+                await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(textLocator)).toHaveText("You have cleared this challenge level in your previous attempt.");
+            }
+        }
+        
+        if (lastChallengeLevel < this.MAX_CHALLENGE_LEVELS) {
+            // Loop from lastChallengeLevel+1 to MAX_CHALLENGE_LEVELS
+            for (let i = lastChallengeLevel + 1; i <= this.MAX_CHALLENGE_LEVELS; i++) {
+                const textLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
+                    `/div[${i}]//div[contains(@class ,'empty-response-box')]/div/p`
+                console.log(`Verifying text for iteration ${i} (last range)`);
+                await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(textLocator)).toHaveText("You did not clear the previous challenge level to progress to this one.");
+            }
+        }
     }
-  }
-  if (lastchallengeLevel < 3) {
-    // Loop from lastchallengeLevel+1 to 3
-    for (let i = lastchallengeLevel + 1; i <= 3; i++) {
-        const textLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
-            `/div[${i}]//div[contains(@class ,'empty-response-box')]/div/p`
-      console.log(`Verifying text for iteration ${i} (last range)`);
-      await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(textLocator)).toHaveText("You did not clear the previous challenge level to progress to this one.");
-    }
-  }
-}
-    
 }

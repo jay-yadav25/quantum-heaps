@@ -20,88 +20,35 @@ Feature: Launch Activity
     And the step instrustion title and text should be as per design
 
     Examples:
-    # | scenario |
-    # | S        |
-    # | S        |
+  # | scenario |
+  # | S1     |
+  # | S        |
 
-  Scenario Outline: Verify chat section functionality for golden scenario learning mode <scenario>
-    Given the user has launched the activity 2 on the web
-    And the learning objectives are displayed
-    When the user clicks the Start button on the learning objectives page
-    Then the step introduction popup should appear
-    And the first step of the activity should be displayed
-    And the step introduction text should be verified
-    When the user clicks the Continue button on the step introduction popup
-    Then the Choose an Avatar page should be displayed
-    When the user enters a name and clicks the Done button
-    Then the Chat section should be displayed
-    When the user selects the response option in chat section for learning mode "<scenario>"
+  Scenario Outline: Verify all step functionalities for the golden path in Activity Three - Learning Mode "<scenario>"
+
+    Given the user has launched Activity Three - Learning Mode on the web
+    Then the Learning Objectives page of Activity Three - Learning Mode should be displayed
+    And the activity title and learning objectives should match the content matrix of Activity Three - Learning Mode
+
+    When the user clicks the Start button on the Learning Objectives page of Activity Three - Learning Mode
+    Then the Introduction page of Activity Three - Learning Mode should be visible
+    And the introduction text should match the content matrix of Activity Three - Learning Mode
+
+    When the user clicks the Continue button on the Introduction page of Activity Three - Learning Mode
+    Then the first step of Activity Three - Learning Mode should be displayed
+
+    When the user selects the response option according to the "<scenario>" for Activity Three - Learning Mode
+    Then the Report page of Activity Three - Learning Mode should be visible
+    And the report content should match the performed "<scenario>" for Activity Three - Learning Mode
 
     Examples:
-      | scenario |
+      # | scenario |
       # | S1       |
       # | S2       |
       # | S3       |
       # | S4       |
       # | S5       |
       # | S6       |
-      # | S7       |
-      # | S8       |
-      # | S9       |
-      # | S10      |
-      # | S11      |
-      # | S12      |
-      # | S13      |
-      # | S14      |
-      # | S15      |
-      # | S16      |
-      # | S17      |
-      # | S18      |
-      # | S19      |
-      # | S20      |
-      # | S21      |
-      # | S22      |
-      # | S23      |
-      # | S24      |
-      # | S25      |
-      # | S26      |
-      # | S27      |
-      # | S28      |
-      # | S29      |
-      # | S30      |
-      # | S31      |
-      # | S32      |
-      # | S33      |
-      # | S34      |
-      # | S35      |
-      # | S36      |
-      # | S37      |
-      # | S38      |
-      # | S39      |
-      # | S40      |
-      # | S41      |
-      # | S42      |
-      # | S43      |
-      # | S44      |
-      # | S45      |
-      # | S46      |
-      # | S47      |
-      # | S48      |
-      # | S49      |
-      # | S50      |
-      # | S51      |
-      # | S52      |
-      # | S53      |
-      # | S54      |
-      # | S55      |
-      # | S56      |
-      # | S57      |
-      # | S58      |
-      # | S59      |
-      # | S60      |
-      # | S61      |
-      # | S62      |
-      # | S63      |
-      # | S64      |
-      # | S65      |
-      # | S66      |
+# | S7       |
+# | S8       |
+# | S9       |

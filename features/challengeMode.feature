@@ -29,7 +29,7 @@ Feature: Launch Activity
       # | S10      |
       # | S11      |
       # | S12      |
-      # | S13      |
+      | S13      |
       # | S14      |
       # # | S15      |
       # # | S16      |
@@ -59,7 +59,7 @@ Feature: Launch Activity
       # | S41      |
       # | S42      |
       # | S43      |
-      | S44      |
+      # | S44      |
       # | S45      |
       # | S46      |
       # | S47      |
