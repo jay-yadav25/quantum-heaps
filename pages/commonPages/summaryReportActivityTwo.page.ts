@@ -10,6 +10,7 @@ export class SummaryReportActivityTwo {
     }
 
     public async verifyFinalScore(path: string[], testData: any) {
+        await this.page.pause();
         const attempts: string[][] = [];
         let currentAttempt: string[] = [];
         
@@ -283,11 +284,11 @@ export class SummaryReportActivityTwo {
             break;
         case "INCORRECT":
             if (isC2Level) {
-                patientResponse = testData[level]?.["incorrect_reply2"];
-                patientMood = testData[level]?.["incorrect_reply_mood2"];
+                patientResponse = testData[level]?.["incorrect_reply"];
+                patientMood = testData[level]?.["incorrect_reply_mood"];
             } else if (isC3Level) {
-                patientResponse = testData[level]?.["incorrect_reply3"];
-                patientMood = testData[level]?.["incorrect_reply_mood3"];
+                patientResponse = testData[level]?.["incorrect_reply"];
+                patientMood = testData[level]?.["incorrect_reply_mood"];
             } else {
                 patientResponse = testData[level]?.["incorrect_reply"];
                 patientMood = testData[level]?.["incorrect_reply_mood"];
@@ -295,11 +296,11 @@ export class SummaryReportActivityTwo {
             break;
         case "DISTRACTOR":
             if (isC2Level) {
-                patientResponse = testData[level]?.["distractor_reply2"];
-                patientMood = testData[level]?.["distractor_reply_mood2"];
+                patientResponse = testData[level]?.["distractor_reply"];
+                patientMood = testData[level]?.["distractor_reply_mood"];
             } else if (isC3Level) {
-                patientResponse = testData[level]?.["distractor_reply3"];
-                patientMood = testData[level]?.["distractor_reply_mood3"];
+                patientResponse = testData[level]?.["distractor_reply"];
+                patientMood = testData[level]?.["distractor_reply_mood"];
             } else {
                 patientResponse = testData[level]?.["distractor_reply"];
                 patientMood = testData[level]?.["distractor_reply_mood"];

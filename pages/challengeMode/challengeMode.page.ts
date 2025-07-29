@@ -41,8 +41,8 @@ export class ChallengeMode {
 
   public async launchActivity() {
 
-      await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_c_01&attemptId=1");
-      //await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_c_01&attemptId=0");
+      //await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_c_01&attemptId=1");
+      await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_c_01&attemptId=0");
     
   }
 

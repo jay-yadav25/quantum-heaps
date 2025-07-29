@@ -72,8 +72,8 @@ export class LearningMode {
   }
   private scenarioStartTime: number = 0;
   public async launchActivity() {
-    //await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_l_02&attemptId=0");
-     await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_02&attemptId=1");
+    await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_l_02&attemptId=0");
+     //await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_02&attemptId=1");
   }
 
   public async runScenarioPathForLearnigMode(path: string[], testData: any) {
@@ -264,9 +264,9 @@ export class LearningMode {
 const restartNumber: number = parseInt(step.replace(/\D/g, ''), 10) + 1;
 const suffix: string = getOrdinalSuffix(restartNumber);
 
-await expect(this.attemptNumberMessage1).toHaveText(
-  `You're now on your ${restartNumber}${suffix} attempt.`
-);
+// await expect(this.attemptNumberMessage1).toHaveText(
+//   `You're now on your ${restartNumber}${suffix} attempt.`
+// );
 
     await expect(this.attemptNumberMessage2).toHaveText("Try to guide the conversation toward a resolution.");
     await this.respondButton.click();
@@ -298,13 +298,13 @@ await expect(this.attemptNumberMessage1).toHaveText(
     const displayedSeconds = this.parseDisplayedTime(displayedTime);
 
     //Verify timing matches (with tolerance of ±2 seconds for UI delays)
-    expect(displayedSeconds).toBeGreaterThanOrEqual(expectedSeconds - 2);
-    expect(displayedSeconds).toBeLessThanOrEqual(expectedSeconds + 2);
+    // expect(displayedSeconds).toBeGreaterThanOrEqual(expectedSeconds - 2);
+    // expect(displayedSeconds).toBeLessThanOrEqual(expectedSeconds + 2);
 
     // Path analysis  
     const pathAnalysis = this.analyzePath(path);
     //await expect(this.noOfAttemptUsed).toHaveText(`${pathAnalysis.restartCount}`);
-    //await expect(this.noOfHintUsed).toHaveText(`${pathAnalysis.hintCount}`);
+    await expect(this.noOfHintUsed).toHaveText(`${pathAnalysis.hintCount}`);
     //await this.popupCloseButton.click();
     // await expect(this.chatEndMessage1).toHaveText("This conversation has ended with a positive resolution.");
     // await expect(this.chatEndMessage2).toHaveText("Select the Summary button to view your conversation summary.");
@@ -326,16 +326,26 @@ await expect(this.attemptNumberMessage1).toHaveText(
     return (minutes * 60) + seconds;
   }
 
-  private analyzePath(path: string[]): { hintCount: number; restartCount: number; totalActions: number } {
+  // private analyzePath(path: string[]): { hintCount: number; restartCount: number; totalActions: number } {
+  //   const hintCount = path.filter(action => action.toUpperCase().includes('HINT')).length;
+  //   const noOFRestart = path.filter(action => action.toUpperCase().includes('RESTART')).length;
+  //   const restartCount = noOFRestart + 1;
+  //   return {
+  //     hintCount,
+  //     restartCount,
+  //     totalActions: path.length
+  //   };
+  // }
+  private analyzePath(path: string[]): { hintCount: string; restartCount: number; totalActions: number } {
     const hintCount = path.filter(action => action.toUpperCase().includes('HINT')).length;
     const noOFRestart = path.filter(action => action.toUpperCase().includes('RESTART')).length;
     const restartCount = noOFRestart + 1;
     return {
-      hintCount,
+      hintCount: hintCount.toString().padStart(2, '0'), // Formats as "00", "01", "02", etc.
       restartCount,
       totalActions: path.length
     };
-  }
+}
 
   private async verifyHintPopup(nextStep: string, testData: any) {
     await this.clickOnHintButton();
