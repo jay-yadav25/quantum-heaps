@@ -36,10 +36,11 @@ Feature: Launch Activity
     When the user enters a name and clicks the Done button
     Then the Chat section should be displayed
     When the user selects the response option in chat section for learning mode "<scenario>"
+    Then Verify the scenario report for activity two "<scenario>"
 
     Examples:
       | scenario |
-      # | S1       |
+      | S1       |
       # | S2       |
       # | S3       |
       # | S4       |

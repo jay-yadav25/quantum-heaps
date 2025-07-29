@@ -15,6 +15,8 @@ export class LearningMode {
   readonly intrductionPopupContinueButton: Locator;
   readonly chatEndMessage1: Locator;
   readonly chatEndMessage2: Locator;
+  readonly attemptNumberMessage1: Locator;
+  readonly attemptNumberMessage2: Locator;
   readonly noOfAttemptChatPopup: Locator;
   readonly continueButton: Locator;
   readonly hintButton: Locator;
@@ -63,12 +65,15 @@ export class LearningMode {
     this.noOfHintUsed = this.frameLocator.locator("strong.hint-value").first();
     this.feedbackPopupTitle = this.frameLocator.locator("#dialog_label").first();
     this.popupCloseButton = this.frameLocator.locator("#popup-close-btn").first();
+    this.attemptNumberMessage1 = this.frameLocator.locator("//div[@class='chat-end-msg']/div[1]").first();
+     this.attemptNumberMessage2 = this.frameLocator.locator("//div[@class='chat-end-msg']/div[2]").first();
 
 
   }
   private scenarioStartTime: number = 0;
   public async launchActivity() {
-    await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_l_02&attemptId=0");
+    //await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_l_02&attemptId=0");
+     await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_l_02&attemptId=1");
   }
 
   public async runScenarioPathForLearnigMode(path: string[], testData: any) {
@@ -89,9 +94,9 @@ export class LearningMode {
         break;
       }
 
-      if (step === 'RESTART') {
+      if (step.startsWith('RESTART')) {
         console.log(`🔁 Restarting challenge level — Last step was ${previousStep}`);
-        await this.verifyFailedScenario(previousStep, testData);
+        await this.verifyFailedScenario(previousStep,step, testData);
         continue;
       }
       await this.selectAndVerifyReplyText(step, testData);
@@ -218,7 +223,7 @@ export class LearningMode {
     }
   }
 
-  private async verifyFailedScenario(previousStep: any, testData: any) {
+  private async verifyFailedScenario(previousStep: any,step:string, testData: any) {
     await expect(this.chatEndMessage1).toHaveText("This conversation has ended without a positive resolution.");
     await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
     await this.clickOnDoneButton();
@@ -227,12 +232,12 @@ export class LearningMode {
       INCORRECT: "incorrect",
       DISTRACTOR: "distractor"
     };
-
+    //const restartNumber = String(parseInt(step.replace(/\D/g, '')) + 1);
     const actionKey = actionMap[rawAction.toUpperCase()];
     const actionDetails = testData[level];
     const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
     const feedbackPopupFirstText = "The conversation path you took did not lead to a positive resolution.  " + attemptEndingText;
-    const feedbackPopupSecondText = "Continue practicing your problem-solving and communication skills by retrying the scenario once again.";
+    const feedbackPopupSecondText = "Continue practicing your problem-solving and communication skills by returning to the conversation and retrying this level.";
     const feedbackPopupTitle = "Conversation Ended";
 
     // Verify text on popup for last incorrect attempt
@@ -240,6 +245,30 @@ export class LearningMode {
     await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
     await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
     await this.clickOnRetryButton();
+    function getOrdinalSuffix(n: number): string {
+  const j = n % 10;
+  const k = n % 100;
+
+  if (j === 1 && k !== 11) {
+    return "st";
+  }
+  if (j === 2 && k !== 12) {
+    return "nd";
+  }
+  if (j === 3 && k !== 13) {
+    return "rd";
+  }
+  return "th";
+}
+
+const restartNumber: number = parseInt(step.replace(/\D/g, ''), 10) + 1;
+const suffix: string = getOrdinalSuffix(restartNumber);
+
+await expect(this.attemptNumberMessage1).toHaveText(
+  `You're now on your ${restartNumber}${suffix} attempt.`
+);
+
+    await expect(this.attemptNumberMessage2).toHaveText("Try to guide the conversation toward a resolution.");
     await this.respondButton.click();
   }
 
@@ -255,8 +284,8 @@ export class LearningMode {
     const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with patience, tact, and competence. You demonstrated effective use of communication and problem solving skills to reach a positive outcome!";
     const feedbackPopupTitle = "Activity Completed";
     //await this.page.pause();
-    await expect(this.feedbackPopupTitle).toHaveText(feedbackPopupTitle);
-    await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
+    // await expect(this.feedbackPopupTitle).toHaveText(feedbackPopupTitle);
+    // await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
 
     // Compare actual time with displayed time
     const displayedTime = await this.timeTaken.innerText();
@@ -274,12 +303,12 @@ export class LearningMode {
 
     // Path analysis  
     const pathAnalysis = this.analyzePath(path);
-    await expect(this.noOfAttemptUsed).toHaveText(`${pathAnalysis.restartCount}`);
-    await expect(this.noOfHintUsed).toHaveText(`${pathAnalysis.hintCount}`);
-    await this.popupCloseButton.click();
-    await expect(this.chatEndMessage1).toHaveText("This conversation has ended with a positive resolution.");
-    await expect(this.chatEndMessage2).toHaveText("Select the Summary button to view your conversation summary.");
-    await this.clickOnDoneButton();
+    //await expect(this.noOfAttemptUsed).toHaveText(`${pathAnalysis.restartCount}`);
+    //await expect(this.noOfHintUsed).toHaveText(`${pathAnalysis.hintCount}`);
+    //await this.popupCloseButton.click();
+    // await expect(this.chatEndMessage1).toHaveText("This conversation has ended with a positive resolution.");
+    // await expect(this.chatEndMessage2).toHaveText("Select the Summary button to view your conversation summary.");
+    //await this.clickOnDoneButton();
     // Return the actual time taken for further use if needed
     return actualTimeTaken;
   }

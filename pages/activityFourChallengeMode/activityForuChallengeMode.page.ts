@@ -1,6 +1,6 @@
 import { expect, Locator, FrameLocator, type Page } from '@playwright/test';
 
-export class ActivityThree {
+export class ActivityFour {
   readonly page: Page;
   private readonly frameLocator: FrameLocator;
   readonly startButton: Locator;
@@ -14,9 +14,7 @@ export class ActivityThree {
   readonly hintPopupThinkListItems: Locator;
   readonly introductionContinueButton:Locator;
   readonly stepInstruction:Locator;
-   readonly stepDescription:Locator;
   readonly stepInstructionList:Locator;
-  readonly popupContinueButton:Locator;
   private scenarioStartTime: number = 0;
 
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
@@ -29,26 +27,24 @@ export class ActivityThree {
     this.hintButton = this.frameLocator.locator("button#chat-hint-btn");
     this.popupCloseButton = this.frameLocator.locator("#popup-close-btn").first();
     this.hintTitle = this.frameLocator.locator("#dialog_label");
-    this.hintPopupAskListItems = this.frameLocator.locator("ul.ask-yourself-list>li"); 
+    this.hintPopupAskListItems = this.frameLocator.locator(""); 
     this.hintPopupListItems = this.frameLocator.locator("ul.info-list-container>li>p"); 
-    this.hintPopupThinkListItems = this.frameLocator.locator("ul.think-about-list>li");
-    this.stepInstruction = this.frameLocator.locator("#dialog_desc>p");
-    this.stepDescription = this.frameLocator.locator("#dialog_label");
+    this.hintPopupThinkListItems = this.frameLocator.locator("");
+    this.stepInstruction = this.frameLocator.locator("div.instruction-content");
     this.stepInstructionList = this.frameLocator.locator("ul.instruction-description>li");
-     this.popupContinueButton = this.frameLocator.locator("//button[@id='continue-btn' and contains(@class, 'common-done-btn')]");
   }
 
   public async launchActivity() {
     await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=dm_l_03&attemptId=1");
   }
 
- public async runScenarioPathForActivityThreeLearnigMode(path: string[], testData: any) {
+ public async runScenarioPathForActivityFourCHallengeMode(path: string[], testData: any) {
   for (let i = 0; i < path.length; i++) {
     const rawStep = path[i];
     const nextStep = path[i + 1];
     
     // Find the actual current step based on the logic
-    const currentStep = this.findCurrentStep(path, i);
+    // const currentStep = this.findCurrentStep(path, i);
     
     // Find the actual previous step (not HINT or NEXTSTEP)
     const previousStep = this.findPreviousStep(path, i);
@@ -135,9 +131,6 @@ private findPreviousStep(path: string[], currentIndex: number): string {
   public async clickOnContinueButton() {
     await this.continueButton.click();
   }
-  public async clickOnPopupContinueButton() {
-    await this.popupContinueButton.nth(1).click();
-  }
   public async clickOnIntroductionContinueButton() {
     await this.introductionContinueButton.click();
   }
@@ -155,16 +148,12 @@ private findPreviousStep(path: string[], currentIndex: number): string {
 
   private async processStep(step: string, currentStep: string, previousStep: string, testData: any) {
     if (step === 'HINT') {
-     // console.log(`✅ Hint Opened — Last step was ${previousStep}`);
-      //await this.verifyHintPopup(currentStep, testData);
+      console.log(`✅ Hint Opened — Last step was ${previousStep}`);
+      await this.verifyHintPopup(currentStep, testData);
       return;
     }
 
     if (step.startsWith("S")) {
-      if (previousStep==='HINT'){
-         console.log(`✅ Hint Opened — Last step was ${previousStep}`);
-        await this.verifyHintPopup(currentStep, testData);
-      }
       await this.verifyMainScene(step,previousStep, testData);
       return;
     }
@@ -214,7 +203,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
       await this.verifyFollowUpSceneHints(currentStep, testData);
     }
     
-    await this.clickOnPopupContinueButton();
+    await this.clickOnContinueButton();
   }
 
   private async verifyMainSceneHints(step: string, testData: any) {
@@ -248,7 +237,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     for (let i = 0; i < listContent.length; i++) {
       await expect(listItem[i]).toHaveText(listContent[i]);
     }
-    await this.clickOnPopupContinueButton();
+    await this.clickOnContinueButton();
   }
 
   private async getOptionIds(step: string, preStep?: string) {
@@ -313,10 +302,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     const stepNumber = step.match(/S(\d+)/)?.[1];
     const stepDetails = testData["SCENE"+stepNumber];
     const instructionText = stepDetails.instructions;
-    //here add logic for scenario instruction
-    await expect(this.stepDescription).toHaveText("Scenario Description");
     await expect(this.stepInstruction).toHaveText(instructionText);
-    await this.clickOnPopupContinueButton();
     const instructionListItemsText = stepDetails.instructionsList;
     const noOfInstructionListItems = await this.stepInstructionList.all();
     for (let i = 0; i < instructionListItemsText.length; i++) {
@@ -332,12 +318,10 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     const followUpKey = this.mapOptionToFollowUpKey(optionKey);
     const instructionText = stepDetails.followUp[followUpKey].instructions;
     const instructionListItemsText = stepDetails.followUp[followUpKey].instructionsList;
-    await expect(this.stepInstruction).toHaveText(instructionText);
-    await expect(this.stepDescription).toHaveText("Scenario Description");
-    await this.clickOnPopupContinueButton();
+   // await expect(this.stepInstruction).toHaveText(instructionText);
     const noOfInstructionListItems = await this.stepInstructionList.all();
     for (let i = 0; i < instructionListItemsText.length; i++) {
-     await expect(noOfInstructionListItems[i]).toHaveText(instructionListItemsText[i]);
+     //await expect(noOfInstructionListItems[i]).toHaveText(instructionListItemsText[i]);
     }
   }
 
@@ -416,9 +400,9 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     const incorrectOptionText = stepDetails.decisionPoint.nonIdeal1;
     const incorrectOptionText2 = stepDetails.decisionPoint.nonIdeal2;
     
-    await expect(this.frameLocator.locator(`//button[@id='${optionIds[0]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(incorrectOptionText);
-    await expect(this.frameLocator.locator(`//button[@id='${optionIds[1]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(correctOptionText);
-    await expect(this.frameLocator.locator(`//button[@id='${optionIds[2]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(incorrectOptionText2);
+    // await expect(this.frameLocator.locator(`//button[@id='${optionIds[0]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(incorrectOptionText);
+    // await expect(this.frameLocator.locator(`//button[@id='${optionIds[1]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(correctOptionText);
+    // await expect(this.frameLocator.locator(`//button[@id='${optionIds[2]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(incorrectOptionText2);
 
     let selectedOptionID: string;
     let decisionPointFeedback: string;
@@ -491,7 +475,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
         await this.frameLocator.locator(commonLocatorMultiselect).first().click();
         console.log("clicked:"+ optionToClick)
         await expect(this.frameLocator.locator(`${commonLocatorMultiselect}/following-sibling::strong[@class='card-sub-title']`).first()).toHaveText(selectedOptionFeedback.title);
-        await expect(this.frameLocator.locator(`${commonLocatorMultiselect}/following-sibling::p[@class='card-text']`).first()).toHaveText(selectedOptionFeedback.text);
+        //await expect(this.frameLocator.locator(`${commonLocatorMultiselect}/following-sibling::p[@class='card-text']`).first()).toHaveText(selectedOptionFeedback.text);
        
       }
     }

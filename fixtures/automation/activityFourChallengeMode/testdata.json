@@ -1,0 +1,300 @@
+{
+  "activity_metadata": {
+    "title": "Healthcare Ethics and Legal Decision Making",
+    "description": "Physical Therapy Assistant Ethics and Legal Compliance Training",
+    "total_steps": 5,
+    "challenge_mode": true,
+    "graded": true
+  },
+  "learning_objectives": {
+    "global": "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:\n\n- Identify the two (2) main types of laws affecting healthcare workers and in what forms these laws may be expressed.\n- Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.\n- Describe the concepts of patient rights and privileged communications and the legislation and procedures that are put into practice to ensure confidentiality of healthcare information.\n- Describe the professional regulations and standards that are in place to ensure that healthcare providers/facilities are acting in a legal and ethical manner."
+  },
+  "global_introduction": "You have just graduated from a physical therapy assistant program in Virginia and have been recently hired by Madison Valley Hospital in Wisconsin. One of your assignments is to ambulate Ms. Jones, in room 221, 100 feet as tolerated; at 1000 and 1400. She may use a walker as needed to assist with ambulation. You are running behind schedule for her morning appointment and arrive at her room at 1030.\n\nYou have been working with her for several days, so you know that she is motivated to walk, and you are eager to get started so that she stays on her planned ambulation schedule.\n\nActivity Overview:\n1. In this activity, you will face several scenarios that test your ability to make legal and ethical decisions.\n2. Your task is to make the most appropriate decision in each scenario.\n3. If you make a non-ideal decision, your grade will be reduced.\n\nChallenge Mode: This is a graded activity with a report generated at the end.",
+  "step_1": {
+    "type": "single_select",
+    "title": "Scheduled Ambulation - CPM Device Scenario",
+    "instruction": ["You enter Ms. Jones' room and notice she has a new CPM (Continuous Passive Motion) machine on her right leg. It looks similar to the ones you've used during your PTA training. While you haven't been trained on this specific model of CPM yet, you're signed up to take the in-service training and be checked off on its proper use by next week. You are proud of how quickly you are progressing with your required check-offs."],
+    "instructionList": [
+      "Choose your next course of action from the three options provided to you."
+    ],
+    "question": "Which of the following would be the most appropriate action for you to take?",
+    "INCORRECT_1": "You know it is important for Ms. Jones' recovery to ambulate multiple times per day, so you remove the device and ambulate her to stay on schedule.",
+    "INCORRECT_2": "You call your friend, who is also a PTA, to discuss the steps of removing the device to ensure that you do it properly. Then, you remove the device so you can ambulate Ms. Jones and stay on schedule.",
+    "CORRECT_1": "You contact the physical therapist and tell her that you are not trained to remove the device and ask if she will send another PTA to assist you. You also document the delay and the reason for not ambulating Ms. Jones.",
+    "INCORRECT_1_FEEDBACK": {
+      "title": "Not quite!",
+      "text": "The option you chose showed negligence, and a lack of understanding of your scope of practice and adherence to professional ethics."
+    },
+    "INCORRECT_2_FEEDBACK": {
+      "title": "Not quite!",
+      "text": "The option you chose showed negligence, and a lack of understanding of your scope of practice and adherence to professional ethics."
+    },
+    "CORRECT_1_FEEDBACK": {
+      "title": "Correct!",
+      "text": "The option you chose demonstrated professional ethics, and a good understanding of your scope of practice."
+    }
+  },
+  "step_2": {
+    "type": "single_select",
+    "title": "After Ambulation - Pain Management Scenario",
+    "instruction":["Ms. Jones ambulates 100 feet down the hall with a slow but steady gait, using her walker properly, and without experiencing any shortness of breath.", 
+                  "Upon returning to her room, she complains of leg pain and asks for some pain medication. She says it's been eight hours since her last medication.",
+                  "You don't find any nurses nearby. Ms. Jones mentions that she has some ibuprofen in her purse and pleads to take it, expressing that she's in too much pain to wait. You've worked with her for several days and don't want her to be uncomfortable."],
+    "instructionList": [
+      "Choose your next course of action from the three options provided to you."
+    ],
+    "question": "Which of the following actions would be the most helpful for Ms. Jones?",
+    "INCORRECT_1": "You tell her that it is okay to take her own medication and that you will leave a note for the nurse.",
+    "INCORRECT_2": "You assist her back into bed and elevate her leg. You also apply an ice pack to her knee to decrease the swelling.",
+    "CORRECT_1": "You let Ms. Jones' nurse know that she is done with her therapy and is requesting pain medication.",
+    "INCORRECT_1_FEEDBACK": {
+      "title": "Not quite!",
+      "text": "The option you chose showed a lack of understanding of your scope of practice and professional ethics, and also demonstrated negligence in providing patient care."
+    },
+    "INCORRECT_2_FEEDBACK": {
+      "title": "Not quite!",
+      "text": "The option you chose demonstrated professional ethics and care but showed negligence by working outside of your scope of practice."
+    },
+    "CORRECT_1_FEEDBACK": {
+      "title": "Correct!",
+      "text": "The option you chose demonstrated professional ethics, and a good understanding of your scope of practice."
+    }
+  },
+  "step_3": {
+    "type": "chat",
+    "title": "End-of-Shift Report (1 of 2)",
+    "base_instructions": "You decided to <insert description of option chosen from earlier challenge>",
+    "step_3_1": {
+      "condition": "step_2_option_1",
+      "instruction":["You decided to tell Ms. Jones that it is okay if she takes her own medication and that you would leave a note for the nurse. This was not the ideal choice. During the end-of-shift report, the PT confronts you about your decision."],
+      "instructionList": [
+        "Review the conversation initiated by the PT.",
+        "Choose the most appropriate response from the three options provided to you."
+      ],
+      "pt_message": "Ms. Jones wanted me to tell you that her pain is better since she took the medication that was in her purse. She said you were going to leave a note for her nurse that she had taken the ibuprofen. While I recognize that it may seem harmless to have her take an over-the-counter medication, it possibly could have serious ramifications for Ms. Jones' health.",
+      "question": "Which of the following options would you select as the best response to the physical therapist?",
+      "INCORRECT_1": "I don't understand. I didn't give her anything. The medicine was in her purse. It was her choice to take it. I did leave a note for the nurse so she would know.",
+      "INCORRECT_2": "I wanted her to have her medicine before the pain got to be too bad. You would've done the same thing if you were me. She was really hurting, and her nurse was busy, and you weren't here.",
+      "CORRECT_1": "It's really tough for me to see patients in pain, and I realize that my decision has placed both of us in a serious situation. I definitely won't make that mistake again.",
+      "INCORRECT_1_REPLY": "The PT is frowning at your response.",
+      "INCORRECT_2_REPLY": "The PT is shaking her head.",
+      "CORRECT_1_REPLY": "The PT looks at you sympathetically.",
+      "INCORRECT_1_FEEDBACK": {
+        "title": "Not quite!",
+        "text": "The option you chose showed a lack of accountability and lack of knowledge of legal and ethical concerns, including your scope of practice and professional ethics."
+      },
+      "INCORRECT_2_FEEDBACK": {
+        "title": "Not quite!",
+        "text": "The option you chose demonstrated poor judgment by justifying actions outside your scope of practice and showed a lack of knowledge of legal and ethical concerns."
+      },
+      "CORRECT_1_FEEDBACK": {
+        "title": "Correct!",
+        "text": "The option you chose reflected self-awareness, accountability, and a willingness to learn from a serious mistake, showing good professional ethics."
+      }
+    },
+    "step_3_2": {
+      "condition": "step_2_option_2",
+      "instruction":["You decided to assist Ms. Jones back into bed and elevated her leg. You also applied an ice pack to her knee to decrease the swelling. This was not the ideal choice. During the end-of-shift report, the PT confronts you about your decision."],
+  
+      "instructionList": [
+        "Review the conversation initiated by the PT.",
+        "Choose the most appropriate response from the three options provided to you."
+      ],
+      "pt_message": "Ms. Jones said her knee still hurt after her walk, and she really wanted to have some pain medication. It is beneficial to elevate her leg, but did you think that elevating her leg would be enough to decrease the discomfort from walking?",
+      "question": "Which of the following options would you select as the best response to the physical therapist?",
+      "INCORRECT_1": "I thought the ice would help decrease the swelling and numb the pain. I didn't realize that what I did would be harmful to Ms. Jones.",
+      "INCORRECT_2": "I know that wasn't the best, but I knew it couldn't hurt, and I figured if she thought it would help, then that alone would make her more comfortable.",
+      "CORRECT_1": "I'm glad that the ice and elevation helped. I should have taken the time to find her nurse and report Ms. Jones' pain.",
+      "INCORRECT_1_REPLY": "The PT is looking at you with concern.",
+      "INCORRECT_2_REPLY": "The PT sighs, looks down at the floor, and rubs her forehead as if deep in thought.",
+      "CORRECT_1_REPLY": "The PT looks at you, folds her arms, and nods.",
+      "INCORRECT_1_FEEDBACK": {
+        "title": "Not quite!",
+        "text": "The option you chose showed concern for the patient but lacked full awareness of your scope of practice and knowledge of legal and ethical concerns, including negligence."
+      },
+      "INCORRECT_2_FEEDBACK": {
+        "title": "Not quite!",
+        "text": "The option you chose showed a lack of knowledge of legal and ethical concerns, including negligence and working within your scope of practice."
+      },
+      "CORRECT_1_FEEDBACK": {
+        "title": "Correct!",
+        "text": "The option you chose reflected self-awareness, accountability, and a willingness to learn from a serious mistake, showing good professional ethics and understanding of your scope of practice."
+      }
+    },
+    "step_3_3": {
+      "condition": "step_2_option_3",
+      "instruction":["You decided to let Ms. Jones' nurse know that she is done with her therapy and is requesting pain medication. This was a good decision and the most appropriate and ethical way to approach this situation. During the end-of-shift report, the PT approaches you to discuss your decision."],
+  
+      "instructionList": [
+        "Review the conversation initiated by the PT.",
+        "Choose the most appropriate response from the three options provided to you."
+      ],
+      "pt_message": "I spoke with the nurse on duty for Ms. Jones and she shared with me that you communicated with her about Ms. Jones' pain and need for medication. That was exactly the right action to take in this situation. We are all part of the same team and always want to include the appropriate members. I appreciate your efforts in caring for our patients. Great job!",
+      "question": "Which of the following options would you select as the best response to the physical therapist?",
+      "INCORRECT_1": "Oh, it was nothing. Anyone in my position would have done the same.",
+      "INCORRECT_2": "It was just so obvious to me that Mrs. Jones needed her medicine, and I just knew if I didn't do something, I wouldn't be measuring up to my personal standards of excellence.",
+      "CORRECT_1": "Thank you! That means a lot coming from you. I work hard to do a good job.",
+      "INCORRECT_1_REPLY": "The PT gives you a small smile and pats you on the back.\nPT: \"Well, good job anyway.\"",
+      "INCORRECT_2_REPLY": "The PT looks at you, surprised, then clears her throat.\nPT: \"Yes, well, thank you for living up to your personal standards of excellence.\"",
+      "CORRECT_1_REPLY": "The PT looks at you and smiles broadly.\nPT: \"I'm glad. Thank you for being such a team player.\"",
+      "INCORRECT_1_FEEDBACK": {
+        "title": "Not quite!",
+        "text": "The option you chose could have demonstrated a sign of false modesty or lack of confidence in one's own skills."
+      },
+      "INCORRECT_2_FEEDBACK": {
+        "title": "Not quite!",
+        "text": "The option you chose came across as arrogant and self-validating which put too much importance on personal standards instead of teamwork and protocol."
+      },
+      "CORRECT_1_FEEDBACK": {
+        "title": "Correct!",
+        "text": "The option you chose showed respect for your mentor and acknowledged that you are willing to work hard to do a good job."
+      }
+    }
+  },
+  "step_4": {
+    "type": "multi_select",
+    "title": "End-of-Shift Report (2 of 2)",
+    "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
+    "step_4_1": {
+      "condition": "step_2_option_1_step_3_option_1",
+      "instruction": ["When confronted by the PT about your earlier decision, you denied giving the patient any medicine and tried to justify your actions. The PT frowned at your response. This was not the ideal choice."],
+      "instructionList": [
+        "Review your conversation with the PT.",
+        "Select all the options that could be the most likely reasons for such a reaction."
+      ],
+      "CORRECT_1": "You are acting defensive, unable to acknowledge a wrongdoing.",
+      "CORRECT_2": "You are revealing your lack of knowledge of legal and ethical concerns, including scope of practice and negligence.",
+      "CORRECT_3": "The PT doesn't believe you are telling the truth.",
+      "INCORRECT_1": "The PT is thinking she could be held liable and is looking for someone to blame."
+    },
+    "step_4_2": {
+      "condition": "step_2_option_1_step_3_option_2",
+      "instruction": ["When confronted by the PT about your earlier decision, you justified your decision by saying you didn't want Ms. Jones to be in more pain. You also commented that the PT would have done the same in your position. The PT started shaking her head. This was not the ideal choice."],
+      "instructionList": [
+        "Review your conversation with the PT.",
+        "Select all the options that could be the most likely reasons for such a reaction."
+      ],
+      "CORRECT_1": "While expressing empathy toward the patient, your tone is slightly accusatory toward your colleagues.",
+      "CORRECT_2": "You are revealing your lack of knowledge of legal and ethical concerns, including scope of practice and negligence.",
+      "CORRECT_3": "The PT does not agree with your decision.",
+      "INCORRECT_1": "The PT is about to get angry with you."
+    },
+    "step_4_3": {
+      "condition": "step_2_option_1_step_3_option_3",
+      "instruction": ["When confronted by the PT about your earlier decision, you admitted your mistake and promised to never make the mistake again. The PT looked at you sympathetically. This was a good decision and the most appropriate way to respond to the PT."],
+      "instructionList": [
+        "Review your conversation with the PT.",
+        "Select all the options that could be the most likely reasons for such a reaction."
+      ],
+      "CORRECT_1": "You have admitted your mistake, and the PT is acknowledging the difficult circumstances.",
+      "CORRECT_2": "The PT is showing concern for you since this decision includes a violation of scope of practice, potentially negligence, and could result in a reprimand, job loss, or legal action.",
+      "INCORRECT_1": "The PT wishes that she could take your place so you wouldn't have to deal with the possible ramifications of your actions.",
+      "INCORRECT_2": "The PT already knows what is about to happen and is about to share bad news with you."
+    },
+    "step_4_4": {
+      "condition": "step_2_option_2_step_3_option_1",
+      "instruction": ["When confronted by the PT about your earlier decision, you admitted your mistake and promised to never make the mistake again. The PT looked at you sympathetically. This was a good decision and the most appropriate way to respond to the PT."],
+      "instructionList": [
+        "Review your conversation with the PT.",
+        "Select all the options that could be the most likely reasons for such a reaction."
+      ],
+      "CORRECT_1": "You are not acknowledging the true issue. Not reporting Ms. Jones' pain could be considered negligence.",
+      "CORRECT_2": "You are revealing your lack of knowledge of legal and ethical concerns, including negligence.",
+      "CORRECT_3": "The PT is thinking that you need additional training.",
+      "INCORRECT_1": "The PT doesn't believe you are telling the truth."
+    },
+    "step_4_5": {
+      "condition": "step_2_option_2_step_3_option_2",
+      "instruction": ["When confronted by the PT about your earlier decision, you admitted your mistake and promised to never make the mistake again. The PT looked at you sympathetically. This was a good decision and the most appropriate way to respond to the PT."],
+      "instructionList": [
+        "Review your conversation with the PT.",
+        "Select all the options that could be the most likely reasons for such a reaction."
+      ],
+      "CORRECT_1": "You are about to be reprimanded.",
+      "CORRECT_2": "The PT is realizing that you have a lack of knowledge of legal and ethical concerns, including scope of practice and negligence.",
+      "CORRECT_3": "The PT is thinking that you need additional training.",
+      "INCORRECT_1": "The PT is about to share bad news with you about Ms. Jones' condition."
+    },
+    "step_4_6": {
+      "condition": "step_2_option_2_step_3_option_3",
+      "instruction": ["When confronted by the PT about your earlier decision, you admitted your mistake and promised to never make the mistake again. The PT looked at you sympathetically. This was a good decision and the most appropriate way to respond to the PT."],
+      "instructionList": [
+        "Review your conversation with the PT.",
+        "Select all the options that could be the most likely reasons for such a reaction."
+      ],
+      "CORRECT_1": "You have admitted your mistake, and the PT agrees with what you said, though the action you took was not ideal.",
+      "CORRECT_2": "The PT is thinking that while you appear to have knowledge of what is within your scope of practice and what may be considered negligent, you might require some refresher training.",
+      "INCORRECT_1": "The PT thinks that what you did was the right course of action.",
+      "INCORRECT_2": "The PT is about to commend you for your actions."
+    },
+    "step_4_7": {
+      "condition": "step_2_option_3_step_3_option_1",
+      "instruction": ["When confronted by the PT about your earlier decision, you admitted your mistake and promised to never make the mistake again. The PT looked at you sympathetically. This was a good decision and the most appropriate way to respond to the PT."],
+      "instructionList": [
+        "Review your conversation with the PT.",
+        "Select all the options that could be the most likely reasons for such a reaction."
+      ],
+      "CORRECT_1": "The PT agrees with what you have said.",
+      "CORRECT_2": "The PT is thinking that you are downplaying your efforts to seek additional praise.",
+      "CORRECT_3": "The PT has the impression that you lack confidence in your own skills.",
+      "INCORRECT_1": "The PT is thinking about a way to reward you for your efforts."
+    },
+    "step_4_8": {
+      "condition": "step_2_option_3_step_3_option_2",
+      "instruction": ["When confronted by the PT about your earlier decision, you admitted your mistake and promised to never make the mistake again. The PT looked at you sympathetically. This was a good decision and the most appropriate way to respond to the PT."],
+      "instructionList": [
+        "Review your conversation with the PT.",
+        "Select all the options that could be the most likely reasons for such a reaction."
+      ],
+      "CORRECT_1": "The PT did not expect you to have such high standards in your position.",
+      "CORRECT_2": "The PT is taken aback by your noticeable demonstration of self-praise.",
+      "INCORRECT_1": "The PT is impressed by your high standards.",
+      "INCORRECT_2": "The PT is thinking about recommending you for a promotion."
+    },
+    "step_4_9": {
+      "condition": "step_2_option_3_step_3_option_3",
+      "instructionList": [
+        "Review your conversation with the PT.",
+        "Select all the options that could be the most likely reasons for such a reaction."
+      ],
+      "CORRECT_1": "The PT feels respected and flattered by your praise of her mentorship.",
+      "CORRECT_2": "The PT is glad to have you as part of the team.",
+      "CORRECT_3": "The PT wants to continue working with you.",
+      "INCORRECT_1": "The PT is thinking about recommending you for a promotion."
+    },
+    "CORRECT_FEEDBACK": {
+      "title": "Correct!",
+      "text": "You have selected all of the most likely reasons for the PT's reaction to your response."
+    },
+    "INCORRECT_FEEDBACK": {
+      "title": "Not quite!",
+      "text": "You didn't select all of the most likely reasons for the PT's reaction to your response."
+    }
+  },
+  "step_5": {
+    "type": "single_select",
+    "title": "Lunch Meeting - Confidentiality Scenario",
+    "instruction": ["When confronted by the PT about your earlier decision, you admitted your mistake and promised to never make the mistake again. The PT looked at you sympathetically. This was a good decision and the most appropriate way to respond to the PT."],
+    "instructionList": [
+      "Review the PT's question.",
+      "Choose the most appropriate response from the three options provided to you."
+    ],
+    "speech_bubble": "Would you like to brief me further about Ms. Jones' condition?",
+    "question": "How would you respond to the PT's query based on the information that is presented to you?",
+    "INCORRECT_1": "I was not aware that they spoke with you. Can you tell me if they had concerns?",
+    "INCORRECT_2": "Should we schedule a time to meet with the family at your office?",
+    "CORRECT_1": "I am not sure if I feel comfortable talking about this here. Do you mind if we take this conversation back to your office after lunch?",
+    "INCORRECT_1_FEEDBACK": {
+      "title": "Not quite!",
+      "text": "The option you chose shows a willingness to understand patient concerns, but discussing patient matters in a public setting may compromise confidentiality, violating professional ethics."
+    },
+    "INCORRECT_2_FEEDBACK": {
+      "title": "Not quite!",
+      "text": "The option you chose demonstrated professional ethics but failed to take account of your scope of practice and maintain privacy while discussing patient matters."
+    },
+    "CORRECT_1_FEEDBACK": {
+      "title": "Correct!",
+      "text": "The option you chose demonstrated professional ethics and upheld patient confidentiality, showing a good understanding of your scope of practice."
+    }
+  }
+}

@@ -16,7 +16,7 @@ Feature: Launch Activity
     Then Verify the scenario score "<scenario>"
 
     Examples:
-      | scenario |
+      # | scenario |
       # | S1       |
       # | S2       |
       # | S3       |
@@ -29,7 +29,7 @@ Feature: Launch Activity
       # | S10      |
       # | S11      |
       # | S12      |
-      | S13      |
+      # | S13      |
       # | S14      |
       # # | S15      |
       # # | S16      |

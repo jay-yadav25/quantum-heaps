@@ -1,19 +1,20 @@
 import { ChallengeMode } from '../../pages/challengeMode/challengeMode.page';
 import { LearningObjectivePage } from '../../pages/challengeMode/learningObjective.page';
 import { SummaryReport } from '../../pages/commonPages/summaryReport.page';
+import { SummaryReportActivityTwo } from '../../pages/commonPages/summaryReportActivityTwo.page';
 import { LearningMode } from '../../pages/learningMode/learningMode.page';
 import { createBddCustom } from '../common/createBddCustom';
 
 const { Given, When, Then, Before } = createBddCustom();
 let challengeMode: ChallengeMode;
 let learningMode: LearningMode;
-let summaryReport: SummaryReport;
+let summaryReportActivityTwo: SummaryReportActivityTwo;
 let learningObjectivePage: LearningObjectivePage;
 
 Before({ tags: '@dho' }, async ({ page }) => {
   challengeMode = new ChallengeMode(page);
    learningMode = new LearningMode(page);
-  summaryReport = new SummaryReport(page);
+  summaryReportActivityTwo = new SummaryReportActivityTwo(page);
   learningObjectivePage = new LearningObjectivePage(page);
 
 });
@@ -137,7 +138,7 @@ When('the user clicks the Start button on the learning objectives', async functi
 
 // 1. Missing step definition for "features\learningMode.feature:26:5"
 Given('the user has launched the activity {int} on the web', async function ({}, activityNumber: number)  {
-  await challengeMode.launchActivity(activityNumber);
+  await learningMode.launchActivity();
 });
 
 
@@ -153,4 +154,8 @@ When('the user selects the response option in chat section for learning mode {st
 When('the user enters a name and clicks the Done button', async function ({ }) {
   await learningMode.typeInInputText("jay");
   await learningMode.clickOnAvatarSelectionDone();
+});
+Then('Verify the scenario report for activity two {string}', async function ({ loginData, testData }, scenarioNumber: string) {
+  const scenarioPath = loginData[scenarioNumber];
+  await summaryReportActivityTwo.verifyFinalScore(scenarioPath, testData);
 });

@@ -207,7 +207,7 @@ export class ActivityFiveChallengeMode {
     const actionKey = actionMap[rawAction.toUpperCase()];
     const actionDetails = testData[level];
     const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
-    const feedbackPopupFirstText = "You’ve reached the end of your attempts, and the conversation did not lead to a successful resolution.  " + attemptEndingText;
+    const feedbackPopupFirstText = "You've reached the end of your attempts, and the conversation did not lead to a successful resolution.  " + attemptEndingText;
     const feedbackPopupSecondText = "Select the Submit button to end the scenario and submit your results to your teacher.";
 
     // Verify text on popup for last incorrect attempt
@@ -233,7 +233,7 @@ export class ActivityFiveChallengeMode {
     const actionKey = actionMap[rawAction.toUpperCase()];
     const actionDetails = testData[level];
     const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
-    const feedbackPopupFirstText = "The conversation path you took didn’t reach a positive resolution.  " + attemptEndingText;
+    const feedbackPopupFirstText = "The conversation path you took didn't reach a positive resolution.  " + attemptEndingText;
     const feedbackPopupSecondText = "Continue practicing your problem solving and communication skills by retrying the scenario once again or select the Submit button to end the scenario and submit your results to your teacher.";
 
     // Verify text on popup for incorrect attempt
@@ -283,7 +283,7 @@ export class ActivityFiveChallengeMode {
     const actionKey = actionMap[rawAction.toUpperCase()];
     const actionDetails = testData[level];
     const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
-    const feedbackPopupFirstText = "The conversation path you took didn’t reach a positive resolution.  " + attemptEndingText;
+    const feedbackPopupFirstText = "The conversation path you took didn't reach a positive resolution.  " + attemptEndingText;
     const feedbackPopupSecondText = "Continue practicing your problem solving and communication skills by retrying the scenario once again or select the Submit button to end the scenario and submit your results to your teacher.";
 
     // Verify text on popup for incorrect attempt

@@ -42,13 +42,14 @@ Feature: Launch Activity
     And the report content should match the performed "<scenario>" for Activity Three - Learning Mode
 
     Examples:
-      # | scenario |
+      | scenario |
       # | S1       |
       # | S2       |
       # | S3       |
       # | S4       |
       # | S5       |
       # | S6       |
-# | S7       |
-# | S8       |
-# | S9       |
+      # | S7       |
+    # | S8       |
+    # | S9       |
+    #  | S10      |

@@ -1,12 +1,15 @@
 
 import { ActivityThree } from '../../pages/activityThreeLearningMode/activityThreeLearningMode.page';
+import { SummaryReportActivityThree } from '../../pages/commonPages/summaryReportActivityThree.page';
 import { createBddCustom } from '../common/createBddCustom';
 
 const { Given, When, Then, Before } = createBddCustom();
 let activityThree: ActivityThree;
+let summaryReportActivityThree: SummaryReportActivityThree;
 
 Before({ tags: '@dho' }, async ({ page }) => {
   activityThree = new ActivityThree(page);
+  summaryReportActivityThree=new SummaryReportActivityThree(page);
 });
 
 
@@ -52,6 +55,7 @@ Then('the Report page of Activity Three - Learning Mode should be visible', asyn
   
 });
 
-Then('the report content should match the performed {string} for Activity Three - Learning Mode', async function ({}, arg: string) {
-  
+Then('the report content should match the performed {string} for Activity Three - Learning Mode', async function ({testData,loginData}, scenarioNumber: string) {
+  const scenario = loginData[scenarioNumber];
+  await summaryReportActivityThree.runScenarioPathForActivityThreeLearnigMode(scenario,testData);
 });
