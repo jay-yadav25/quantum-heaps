@@ -4,7 +4,7 @@ export class SummaryReportActivityThree {
     readonly page: Page;
     readonly finalScore: Locator;
     readonly firstAction: Locator;
-    readonly secondAction: Locator;
+    readonly noOfHintUsed: Locator;
     private readonly frameLocator: FrameLocator;
 
    constructor(page: Page, iframeName: string = 'ext_012345678_1') {
@@ -17,7 +17,7 @@ export class SummaryReportActivityThree {
     
     // Initialize action locators - adjust selectors as needed
     this.firstAction = page.frameLocator('iframe[name="ext_012345678_1"]').locator('[data-testid="first-action"]');
-    this.secondAction = page.frameLocator('iframe[name="ext_012345678_1"]').locator('[data-testid="second-action"]');
+    this.noOfHintUsed = page.frameLocator('iframe[name="ext_012345678_1"]').locator('strong.hint-value');
     }
 
     /**
@@ -36,6 +36,11 @@ export class SummaryReportActivityThree {
             console.log(`Processing step ${i + 1}/${path.length}: ${step}`);
             await this.processStep(step, nextStep, previousStep, testData);
         }
+        const hintUsed= this.countHintsUsed(path,testData);
+        console.log("Actual no of Hint-"+ this.noOfHintUsed.innerText());
+        console.log("Expected no of Hint-"+hintUsed.totalHintsUsed);
+        await expect(this.noOfHintUsed).toHaveText(hintUsed.totalHintsUsed);
+        await this.page.pause();
     }
 
     /**
@@ -123,6 +128,7 @@ export class SummaryReportActivityThree {
         const stepNumber = this.extractStepNumber(step);
         const stepDetails = testData[`SCENE${stepNumber}`]
         const actualStepNumber = Number(stepNumber) * 2 - 1; 
+        console.log("Started step:" +actualStepNumber);
         const instructionText = stepDetails.instructions;
         const questionText = stepDetails.decisionPoint.question;
         const dropdownNumber = actualStepNumber ? actualStepNumber - 1 : 1;
@@ -152,6 +158,7 @@ export class SummaryReportActivityThree {
         const instructionText = followUpData.instructions;
         const questionText = followUpData.question;
         const actualStepNumber = stepNumber ? parseInt(stepNumber, 10) * 2 : null;
+        console.log("Started step:" +actualStepNumber);
         const dropdownNumber = actualStepNumber ? actualStepNumber - 1 : 1;
         if (dropdownNumber>0){
             await this.frameLocator.locator(`button#step-dropdown-arrow-button-${dropdownNumber}`).click();
@@ -159,7 +166,7 @@ export class SummaryReportActivityThree {
         const instructionHeadingLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-heading`
         const instructionLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-text`
         const questionTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-question`
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionHeadingLocator).first()).toHaveText("User Action Details");
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionHeadingLocator).first()).toHaveText("Description");
        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionLocator).first()).toHaveText(instructionText);
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(questionTextLocator).first()).toHaveText(questionText);
     }
@@ -219,73 +226,6 @@ export class SummaryReportActivityThree {
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextLocator).first()).toHaveText(rational);
         
     }
-
-    /**
-     * Verifies user action details based on previous step
-     */
-    // private async verifyUserActionDetails(
-    //     step: string, 
-    //     previousStep: string, 
-    //     testData: any
-    // ){const stepNumber = this.extractStepNumber(step);
-    //     const stepDetails = testData[`SCENE${stepNumber}`];
-    //     const actualStepNumber = Number(stepNumber) * 2 - 1; 
-    //     const correctOptionText = stepDetails.decisionPoint.ideal;
-    // const incorrectOptionText = stepDetails.decisionPoint.nonIdeal1;
-    // const incorrectOptionText2 = stepDetails.decisionPoint.nonIdeal2;
-    // // Calculate the dropdown number based on actualStepNumber
-    //     const dropdownNumber = actualStepNumber ? actualStepNumber - 1 : 1;
-      
-    //         if (previousStep === "HINT") {
-    //             const hintActionPosition = 1;
-    //             const actionPosition = 2;
-    //             const userActionLocator = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${hintActionPosition})>.action-icon-text-container>.action-text`;
-    //     const userActionTextLocator = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${actionPosition})>.action-description`;
-        
-    //             await expect(this.frameLocator.locator(userActionLocator)).toHaveText("Selected Hint");
-                
-    // if (step.includes('_CORRECT')) {
-
-    //      const userActionLocator1 = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${actionPosition})>.action-icon-text-container>.action-text`;
-    //     const userActionTextLocator1 = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${actionPosition})>.action-description`;
-        
-    //     await expect(this.frameLocator.locator(userActionLocator1)).toHaveText("Selected Correct");
-    //    await expect(this.frameLocator.locator(userActionTextLocator1)).toHaveText(correctOptionText);
-    // } else if (step.includes('_INCORRECT_1')) {
-    //      const userActionLocator1 = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${actionPosition})>.action-icon-text-container>.action-text`;
-    //     const userActionTextLocator1 = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${actionPosition})>.action-description`;
-        
-    //     await expect(this.frameLocator.locator(userActionLocator1)).toHaveText("Selected Correct");
-    //    await expect(this.frameLocator.locator(userActionTextLocator1)).toHaveText(incorrectOptionText);
-    // } else if (step.includes('_INCORRECT_2')) {
-    //      const userActionLocator1 = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${actionPosition})>.action-icon-text-container>.action-text`;
-    //     const userActionTextLocator1 = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${actionPosition})>.action-description`;
-        
-    //     await expect(this.frameLocator.locator(userActionLocator1)).toHaveText("Selected Correct");
-    //    await expect(this.frameLocator.locator(userActionTextLocator1)).toHaveText(incorrectOptionText2);
-    // } else {
-    //   throw new Error(`Unknown step format: ${step}`);
-    // }
-
-    //         } else {
-    //             const actionPosition = 1;
-    //             const userActionLocator = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${actionPosition})>.action-icon-text-container>.action-text`;
-    //     const userActionTextLocator = `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper:nth-child(${actionPosition})>.action-description`;
-    //             if (step.includes('_CORRECT')) {
-    //                await expect(this.frameLocator.locator(userActionLocator)).toHaveText("Selected Correct");
-    //    await expect(this.frameLocator.locator(userActionTextLocator)).toHaveText(correctOptionText);
-    // } else if (step.includes('_INCORRECT_1')) {
-    //     await expect(this.frameLocator.locator(userActionLocator)).toHaveText("Selected Correct");
-    //    await expect(this.frameLocator.locator(userActionTextLocator)).toHaveText(incorrectOptionText);
-    // } else if (step.includes('_INCORRECT_2')) {
-    //    await expect(this.frameLocator.locator(userActionLocator)).toHaveText("Selected Correct");
-    //    await expect(this.frameLocator.locator(userActionTextLocator)).toHaveText(incorrectOptionText2);
-    // } else {
-    //   throw new Error(`Unknown step format: ${step}`);
-    // }
-    //         }
-    //     } 
-    
 
   private async verifyUserActionDetails(
     step: string, 
@@ -394,6 +334,61 @@ export class SummaryReportActivityThree {
             await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText("Selected Hint");
         }
     }
+}
+
+private countHintsUsed(path: string[], testData: Record<string, Record<string, string[]>>): { 
+  mainPathHints: string; 
+  fsHintsUsed: string; 
+  totalHintsUsed: string; 
+} {
+  let mainHintCount = 0;
+  let fsHintsCount = 0;
+
+  // Helper to count grouped/consecutive HINTs as one
+  const countGroupedHints = (array: string[]): number => {
+    let count = 0;
+    let previousWasHint = false;
+
+    for (let item of array) {
+      if (item === "HINT") {
+        if (!previousWasHint) {
+          count++;
+          previousWasHint = true;
+        }
+      } else {
+        previousWasHint = false;
+      }
+    }
+
+    return count;
+  };
+
+  // Count grouped HINTs in the main path
+  mainHintCount = countGroupedHints(path);
+
+  // Loop through the path to check FS steps and their hint usage
+  for (let step of path) {
+    if (step.startsWith("FS")) {
+      const fsNumber = step.match(/FS(\d+)/)?.[1];
+      if (fsNumber) {
+        const stepDetails = testData['SCENE' + fsNumber];
+        const stepData = stepDetails?.[step];
+
+        if (Array.isArray(stepData)) {
+          fsHintsCount += countGroupedHints(stepData);
+        }
+      }
+    }
+  }
+
+  // Format counts as two-digit strings
+  const formatCount = (count: number): string => count.toString().padStart(2, '0');
+
+  return {
+    mainPathHints: formatCount(mainHintCount),
+    fsHintsUsed: formatCount(fsHintsCount),
+    totalHintsUsed: formatCount(mainHintCount + fsHintsCount)
+  };
 }
 
   

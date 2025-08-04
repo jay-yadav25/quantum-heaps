@@ -17,6 +17,7 @@ export class ActivityThree {
    readonly stepDescription:Locator;
   readonly stepInstructionList:Locator;
   readonly popupContinueButton:Locator;
+  readonly totalTimeTaken:Locator;
   private scenarioStartTime: number = 0;
 
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
@@ -34,10 +35,11 @@ export class ActivityThree {
     this.hintPopupThinkListItems = this.frameLocator.locator("ul.think-about-list>li");
     this.stepInstruction = this.frameLocator.locator("#dialog_desc>p");
     this.stepDescription = this.frameLocator.locator("#dialog_label");
+    this.totalTimeTaken = this.frameLocator.locator("strong.time-value");
     this.stepInstructionList = this.frameLocator.locator("ul.instruction-description>li");
      this.popupContinueButton = this.frameLocator.locator("//button[@id='continue-btn' and contains(@class, 'common-done-btn')]");
   }
-
+  //private scenarioStartTime: number = 0;
   public async launchActivity() {
     await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=dm_l_03&attemptId=1");
   }
@@ -55,6 +57,17 @@ export class ActivityThree {
     
     await this.processStep(rawStep,currentStep,previousStep, testData);
   }
+  const actualTimeTaken = performance.now() - this.scenarioStartTime;
+    const displayedTime = await this.totalTimeTaken.innerText();
+    const expectedSeconds = Math.round(actualTimeTaken / 1000);
+
+    console.log(`Total scenario time: ${actualTimeTaken}ms (${expectedSeconds}s)`);
+    console.log(`Displayed time: ${displayedTime}`);
+    const displayedSeconds = this.parseDisplayedTime(displayedTime);
+
+    //Verify timing matches (with tolerance of ±2 seconds for UI delays)
+    expect(displayedSeconds).toBeGreaterThanOrEqual(expectedSeconds - 2);
+    expect(displayedSeconds).toBeLessThanOrEqual(expectedSeconds + 2);
 }
 
 private findCurrentStep(path: string[], currentIndex: number): string {
@@ -140,6 +153,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
   }
   public async clickOnIntroductionContinueButton() {
     await this.introductionContinueButton.click();
+    this.scenarioStartTime = performance.now();
   }
 
   public async verifyFirstStepIsVisible() {
@@ -313,7 +327,6 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     const stepNumber = step.match(/S(\d+)/)?.[1];
     const stepDetails = testData["SCENE"+stepNumber];
     const instructionText = stepDetails.instructions;
-    //here add logic for scenario instruction
     await expect(this.stepDescription).toHaveText("Scenario Description");
     await expect(this.stepInstruction).toHaveText(instructionText);
     await this.clickOnPopupContinueButton();
@@ -380,7 +393,6 @@ private findPreviousStep(path: string[], currentIndex: number): string {
       const followUpKey = this.mapOptionToFollowUpKey(optionKey);
       questionText = stepDetails.followUp?.[followUpKey]?.question;
       console.log(followUpKey);
-      //stepID="mlt_step_"+ parseInt(sceneCode.match(/\d+/)?.[0] || '0', 10) * 2;
       stepID = `mlt_step_${(parseInt(sceneCode.match(/\d+/)?.[0] || '0', 10) * 2)}`;
 
       stepType="multi"
@@ -442,7 +454,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
 
     await this.frameLocator.locator(`//button[@id='${selectedOptionID}']`).first().click();
     await expect(this.frameLocator.locator(`//button[@id='${selectedOptionID}']//following-sibling::p[@class='card-text']`).nth(1)).toHaveText(decisionPointFeedback);
-    await expect(this.frameLocator.locator(`//button[@id='${selectedOptionID}']//following-sibling::p[@class='card-text']/preceding-sibling::h3`)).toHaveText(decisionPointFeedbackTitle);
+    await expect(this.frameLocator.locator(`//button[@id='${selectedOptionID}']//following-sibling::p[@class='card-text']/preceding-sibling::strong`)).toHaveText(decisionPointFeedbackTitle);
 
   }
 
@@ -491,9 +503,11 @@ private findPreviousStep(path: string[], currentIndex: number): string {
         await this.frameLocator.locator(commonLocatorMultiselect).first().click();
         console.log("clicked:"+ optionToClick)
         await expect(this.frameLocator.locator(`${commonLocatorMultiselect}/following-sibling::strong[@class='card-sub-title']`).first()).toHaveText(selectedOptionFeedback.title);
-        await expect(this.frameLocator.locator(`${commonLocatorMultiselect}/following-sibling::p[@class='card-text']`).first()).toHaveText(selectedOptionFeedback.text);
+        await expect(this.frameLocator.locator(`${commonLocatorMultiselect}/following-sibling::p[contains(@class,'card-text')]`).first()).toHaveText(selectedOptionFeedback.text);
        
       }
     }
   }
+
+  
 }

@@ -298,8 +298,8 @@ const suffix: string = getOrdinalSuffix(restartNumber);
     const displayedSeconds = this.parseDisplayedTime(displayedTime);
 
     //Verify timing matches (with tolerance of ±2 seconds for UI delays)
-    // expect(displayedSeconds).toBeGreaterThanOrEqual(expectedSeconds - 2);
-    // expect(displayedSeconds).toBeLessThanOrEqual(expectedSeconds + 2);
+    expect(displayedSeconds).toBeGreaterThanOrEqual(expectedSeconds - 2);
+    expect(displayedSeconds).toBeLessThanOrEqual(expectedSeconds + 2);
 
     // Path analysis  
     const pathAnalysis = this.analyzePath(path);
