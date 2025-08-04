@@ -383,8 +383,8 @@
     ],
     "decisionPoint": {
       "question": "What information should you share with your classmates?",
-      "nonIdeal1": "You take out your phone and share the photos. You don't see harm in sharing this information because it isn't being posted, and it will help illustrate examples of medical photos to the other students.",
-      "nonIdeal2": "You don't show the medical photos but share “off the record” that you believe Garcia will be cut from the team. ",
+      "nonIdeal1": "You take out your phone and share the photos. You don’t see harm in sharing this information because it isn’t being posted, and it will help illustrate examples of medical photos to the other students.",
+      "nonIdeal2": "You don’t show the medical photos but share “off the record” that you believe Garcia will be cut from the team.",
       "ideal": "You share that you responded to an emergency incident involving one of the players and had the opportunity to obtain hands-on experience working alongside the head athletic trainer."
     },
     "decisionPointFeedback": {
@@ -412,7 +412,7 @@
         ],
         "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
       },"idealFollowUp": {
-        "instructions": "You decided to share, 'off the record' that you believe Garcia would be cut from the team with your classmates, but you didn't share the medical photos with them. You felt safe doing so, as you didn't share any information officially with them. This was not the ideal choice.",
+        "instructions": "You decided to share, that you had responded to an emergency incident involving one of the players and had the opportunity to obtain hands-on experience working alongside the head athletic trainer. You shared your experience without revealing or sharing any private information of anyone. This was a good decision and the most appropriate and ethical way to approach this situation.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that were violated.",
           "Refer to the hint if you need guidance."
@@ -420,7 +420,7 @@
         "question": "Which of the following legal and ethical issues could you have potentially violated if you chose to share either the photos or the information you heard? (Select all that apply.)"
       },
       "nonIdealFollowUp2": {
-        "instructions": "You decided to share, that you had responded to an emergency incident involving one of the players and had the opportunity to obtain hands-on experience working alongside the head athletic trainer. You shared your experience without revealing or sharing any private information of anyone. This was a good decision and the most appropriate and ethical way to approach this situation.",
+        "instructions": "You decided to share, 'off the record' that you believe Garcia would be cut from the team with your classmates, but you didn't share the medical photos with them. You felt safe doing so, as you didn't share any information officially with them. This was not the ideal choice.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that could have been violated by sharing information or photos.",
           "Refer to the hint if you need guidance."
