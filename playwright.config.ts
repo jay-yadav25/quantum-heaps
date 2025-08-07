@@ -63,7 +63,7 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   // Limit the number of workers on CI, use default locally
-  workers: "90%",
+  workers: "50%",
   /* Run tests(scenarios) in files(features) as well in parallel, 
    * By default only features run parallelly, Scenarios in a single feature run in order 
    */
