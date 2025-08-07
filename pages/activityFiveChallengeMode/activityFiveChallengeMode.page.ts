@@ -40,9 +40,9 @@ export class ActivityFiveChallengeMode {
   }
 
   public async launchActivity(activityNumber: number) {
-    if (activityNumber == 1) {
+    if (activityNumber == 5) {
       //await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_c_01&attemptId=1");
-      await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_c_01&attemptId=0");
+      await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_c_05&attemptId=1");
     } else if (activityNumber == 2) {
       await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_l_02&attemptId=0");
 
@@ -136,7 +136,7 @@ export class ActivityFiveChallengeMode {
     await this.frameLocator
       .locator(`//button[@id='${selectedOptionID}']`).first()
       .click();
-    if (selectedOptionID == "ch_01_12_opt_1") {
+    if (selectedOptionID === "ch_01_opt_2" || selectedOptionID === "ch_01_11_opt_2" || selectedOptionID === "ch_01_12_opt_2"|| selectedOptionID === "ch_03_opt_2" ||selectedOptionID === "ch_04_opt_3"||selectedOptionID === "ch_04_opt_1"||selectedOptionID === "ch_05_opt_1"||selectedOptionID === "ch_05_opt_2"||selectedOptionID === "ch_05_opt_3") {
       //for C1-C,C1.1-C,C1.2-C,C3-C,C4-D,C4-I,C5CID
       const replierName = actionDetails[actionKey + "_replier_name"];
       const replyMood = actionDetails[actionKey + "_reply_mood"];
@@ -163,7 +163,7 @@ export class ActivityFiveChallengeMode {
       await expect(this.frameLocator.locator(replyMoodSelector3)).toHaveText("[" + replyMood3 + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID3}']`)).toHaveText(replyText3);
 
-    } else if (selectedOptionID == "ch_02_11_opt_1") {
+    } else if (selectedOptionID == "ch_02_opt_2" || selectedOptionID === "ch_02_21_opt_2") {
       //for C2-C and C2.1-C
       const replierName = actionDetails[actionKey + "_replier_name"];
       const replyMood = actionDetails[actionKey + "_reply_mood"];
@@ -185,7 +185,6 @@ export class ActivityFiveChallengeMode {
       const replyMood = actionDetails[actionKey + "_reply_mood"];
       const replyText = actionDetails[actionKey + "_reply"];
       const replyTextID = `${selectedOptionID}_rep_1`;
-
       const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
       const replierNameLocator = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-name")]`;
       await expect(this.frameLocator.locator(replierNameLocator)).toHaveText(replierName + "");
@@ -193,7 +192,7 @@ export class ActivityFiveChallengeMode {
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
     }
   }
-
+  //termination at 3rd attempt only submit options
   private async verifyFailedScenario(previousStep: any, testData: any) {
     await expect(this.chatEndMessage1).toHaveText("This conversation has ended without a positive resolution.");
     await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
@@ -216,7 +215,7 @@ export class ActivityFiveChallengeMode {
     await this.clickOnSubmitButton();
     await this.page.pause();
   }
-
+//retry popup
   private async verifyFailedScenario2(previousStep: any, testData: any, attemptNumber: any) {
     // Verify text from chat section
     await expect(this.chatEndMessage1).toHaveText("This conversation has ended without a positive resolution.");
@@ -258,7 +257,7 @@ export class ActivityFiveChallengeMode {
 
     const actionKey = actionMap[rawAction.toUpperCase()];
     const actionDetails = testData[level];
-    const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
+    //const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
     const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with empathy and patience, and demonstrated effective use of communication and problem solving skills to reach a positive outcome!";
     const feedbackPopupSecondText = "Select the Restart button to retry the scenario again from the start or select the Submit button to finish the scenario and submit your results to your teacher.";
 

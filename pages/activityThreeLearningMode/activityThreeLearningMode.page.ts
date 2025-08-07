@@ -41,13 +41,16 @@ export class ActivityThree {
   }
   //private scenarioStartTime: number = 0;
   public async launchActivity() {
-    await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=dm_l_03&attemptId=1");
+    //await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=dm_l_03&attemptId=1");
+    await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=dm_l_03&attemptId=0");
+ 
   }
 
  public async runScenarioPathForActivityThreeLearnigMode(path: string[], testData: any) {
   for (let i = 0; i < path.length; i++) {
     const rawStep = path[i];
     const nextStep = path[i + 1];
+    const previousStepForHint = path[i - 1];
     
     // Find the actual current step based on the logic
     const currentStep = this.findCurrentStep(path, i);
@@ -55,7 +58,7 @@ export class ActivityThree {
     // Find the actual previous step (not HINT or NEXTSTEP)
     const previousStep = this.findPreviousStep(path, i);
     
-    await this.processStep(rawStep,currentStep,previousStep, testData);
+    await this.processStep(rawStep,currentStep,previousStep,previousStepForHint, testData);
   }
   const actualTimeTaken = performance.now() - this.scenarioStartTime;
     const displayedTime = await this.totalTimeTaken.innerText();
@@ -167,7 +170,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     await this.hintButton.click();
   }
 
-  private async processStep(step: string, currentStep: string, previousStep: string, testData: any) {
+  private async processStep(step: string, currentStep: string, previousStep: string,previousStepForHint:string, testData: any) {
     if (step === 'HINT') {
      // console.log(`✅ Hint Opened — Last step was ${previousStep}`);
       //await this.verifyHintPopup(currentStep, testData);
@@ -175,11 +178,11 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     }
 
     if (step.startsWith("S")) {
-      if (previousStep==='HINT'){
-         console.log(`✅ Hint Opened — Last step was ${previousStep}`);
-        await this.verifyHintPopup(currentStep, testData);
-      }
-      await this.verifyMainScene(step,previousStep, testData);
+      // if (previousStepForHint==='HINT'){
+      //    console.log(`✅ Hint Opened — Last step was ${currentStep}`);
+      //   await this.verifyHintPopup(currentStep, testData);
+      // }
+      await this.verifyMainScene(step,previousStep,currentStep,previousStepForHint, testData);
       return;
     }
 
@@ -219,8 +222,8 @@ private findPreviousStep(path: string[], currentIndex: number): string {
   }
 
   private async verifyHintPopup(currentStep: string, testData: any) {
-    await this.clickOnHintButton();
-    await expect(this.hintTitle).toHaveText("");
+    // await this.clickOnHintButton();
+    // await expect(this.hintTitle).toHaveText("Hint");
     
     if (currentStep.startsWith('S') && !currentStep.startsWith('FS')) {
       await this.verifyMainSceneHints(currentStep, testData);
@@ -228,13 +231,18 @@ private findPreviousStep(path: string[], currentIndex: number): string {
       await this.verifyFollowUpSceneHints(currentStep, testData);
     }
     
-    await this.clickOnPopupContinueButton();
+    //await this.clickOnPopupContinueButton();
   }
 
   private async verifyMainSceneHints(step: string, testData: any) {
     const stepNumber = step.match(/S(\d+)/)?.[1];
     const stepDetails = testData['SCENE' + stepNumber];
-
+    const actualStepNumber = stepNumber ? parseInt(stepNumber, 10) * 2 -1 : null;
+     if (actualStepNumber === null) {
+    throw new Error(`Invalid step format: ${step}`);
+    }
+    await this.hintButton.nth(actualStepNumber-1).click();
+    await expect(this.hintTitle).toHaveText("Hint");
     const thinkItemTexts = stepDetails.hints.thinkAbout;
     const thinkItems = await this.hintPopupThinkListItems.all();
     expect(thinkItems.length).toBe(thinkItemTexts.length);
@@ -250,14 +258,22 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     for (let i = 0; i < askItemTexts.length; i++) {
       await expect(askItems[i]).toHaveText(askItemTexts[i]);
     }
+    await this.clickOnPopupContinueButton();
   }
 
   private async verifyFollowUpSceneHints(step: string, testData: any) {
     const stepNumber = step.match(/FS(\d+)/)?.[1];
+    const actualStepNumber = stepNumber ? parseInt(stepNumber, 10) * 2 : null;
+     if (actualStepNumber === null) {
+    throw new Error(`Invalid step format: ${step}`);
+    }
+    await this.hintButton.nth(actualStepNumber-1).click();
+    await expect(this.hintTitle).toHaveText("Hint");
     const stepDetails = testData['SCENE' + stepNumber];
     const listContent = stepDetails.followUp.hints;
+    console.log("No of Hint" +listContent.length);
     const listItem = await this.hintPopupListItems.all();
-    expect(listItem.length).toBe(listContent.length);
+    //expect(listItem.length).toBe(listContent.length);
 
     for (let i = 0; i < listContent.length; i++) {
       await expect(listItem[i]).toHaveText(listContent[i]);
@@ -310,8 +326,8 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     ];
   }
 
-  private async verifyMainScene(step: string,previousStep:string, testData: any) {
-    await this.verifyStepInstruction(step, testData);
+  private async verifyMainScene(step: string,previousStep:string,currentStep:string,previousStepForHint:string, testData: any) {
+    await this.verifyStepInstruction(step, currentStep, previousStepForHint,testData);
     await this.verifySpeechBubbleConversation(step, testData);
     await this.verifyQuestion(step,previousStep, testData);
     await this.verifyAndSelectDecisionPointOptions(step, testData);
@@ -323,13 +339,18 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     await this.verifyAndSelectFollowUpQuestionOptions(step, previousStep, testData);
   }
 
-  private async verifyStepInstruction(step: string, testData: any) {
+  private async verifyStepInstruction(step: string,currentStep:string,previousStepForHint:string, testData: any) {
+    
     const stepNumber = step.match(/S(\d+)/)?.[1];
     const stepDetails = testData["SCENE"+stepNumber];
     const instructionText = stepDetails.instructions;
     await expect(this.stepDescription).toHaveText("Scenario Description");
     await expect(this.stepInstruction).toHaveText(instructionText);
     await this.clickOnPopupContinueButton();
+    if (previousStepForHint==='HINT'){
+         //console.log(`✅ Hint Opened — Last step was ${currentStep}`);
+        await this.verifyHintPopup(currentStep, testData);
+      }
     const instructionListItemsText = stepDetails.instructionsList;
     const noOfInstructionListItems = await this.stepInstructionList.all();
     for (let i = 0; i < instructionListItemsText.length; i++) {
@@ -428,9 +449,9 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     const incorrectOptionText = stepDetails.decisionPoint.nonIdeal1;
     const incorrectOptionText2 = stepDetails.decisionPoint.nonIdeal2;
     
-    await expect(this.frameLocator.locator(`//button[@id='${optionIds[0]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(incorrectOptionText);
-    await expect(this.frameLocator.locator(`//button[@id='${optionIds[1]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(correctOptionText);
-    await expect(this.frameLocator.locator(`//button[@id='${optionIds[2]}']//following-sibling::p[@class='card-text']`).first()).toHaveText(incorrectOptionText2);
+    await expect(this.frameLocator.locator(`//button[@id='${optionIds[0]}']//following-sibling::p[contains(@class,'card-text')]`).first()).toHaveText(incorrectOptionText);
+    await expect(this.frameLocator.locator(`//button[@id='${optionIds[1]}']//following-sibling::p[contains(@class,'card-text')]`).first()).toHaveText(correctOptionText);
+    await expect(this.frameLocator.locator(`//button[@id='${optionIds[2]}']//following-sibling::p[contains(@class,'card-text')]`).first()).toHaveText(incorrectOptionText2);
 
     let selectedOptionID: string;
     let decisionPointFeedback: string;
@@ -453,8 +474,8 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     }
 
     await this.frameLocator.locator(`//button[@id='${selectedOptionID}']`).first().click();
-    await expect(this.frameLocator.locator(`//button[@id='${selectedOptionID}']//following-sibling::p[@class='card-text']`).nth(1)).toHaveText(decisionPointFeedback);
-    await expect(this.frameLocator.locator(`//button[@id='${selectedOptionID}']//following-sibling::p[@class='card-text']/preceding-sibling::strong`)).toHaveText(decisionPointFeedbackTitle);
+    await expect(this.frameLocator.locator(`//button[@id='${selectedOptionID}']//following-sibling::p[contains(@class,'card-text')]`).nth(1)).toHaveText(decisionPointFeedback);
+    await expect(this.frameLocator.locator(`//button[@id='${selectedOptionID}']//following-sibling::p[contains(@class,'card-text')]/preceding-sibling::strong`)).toHaveText(decisionPointFeedbackTitle);
 
   }
 

@@ -1,6 +1,6 @@
 import { expect, Locator, type Page } from '@playwright/test';
 
-export class SummaryReport {
+export class SummaryReportActivityFive {
     readonly page: Page;
     readonly finalScore: Locator;
     
@@ -36,18 +36,13 @@ export class SummaryReport {
         }
 
         console.log(`\nTotal attempts found: ${attempts.length}`);
-
-        // Calculate score for each attempt with carry-forward logic
         const attemptScores: number[] = [];
         const allAttemptsData = [];
-        const highestLevelReached: Record<number, number> = {}; // attempt number -> highest level
-
-        // First pass to track highest level reached in each attempt
+        const highestLevelReached: Record<number, number> = {}; 
         for (let i = 0; i < attempts.length; i++) {
             const attempt = attempts[i];
             let highestLevel = 0;
 
-            // Process the current attempt to get highest level
             for (const step of attempt) {
                 const levelMatch = step.match(/C(\d+)/);
                 if (!levelMatch) continue;
@@ -61,7 +56,6 @@ export class SummaryReport {
             highestLevelReached[i + 1] = highestLevel;
         }
 
-        // Second pass to calculate scores for each attempt with carry-forward logic
         let cumulativeAttemptData: Record<string, { correct: number, totalChallenges: number }> = {};
 
         for (let i = 0; i < attempts.length; i++) {
@@ -69,7 +63,6 @@ export class SummaryReport {
             const currentAttemptNum = i + 1;
             const currentAttemptLevelData: Record<string, { correct: number, totalChallenges: number }> = {};
 
-            // Get level data for this specific attempt
             for (const step of attempt) {
                 const levelMatch = step.match(/C(\d+)/);
                 if (!levelMatch) continue;
@@ -87,7 +80,6 @@ export class SummaryReport {
                 }
             }
 
-            // Apply carry-forward logic: inherit previous level scores if not in current attempt
             const attemptWithCarryForward: Record<string, { correct: number, totalChallenges: number }> = {};
 
             // First copy all previous attempt data as our starting point
@@ -150,7 +142,7 @@ export class SummaryReport {
                 attemptAverageScore,
                 attemptNumber: currentAttemptNum,
                 levelScores,
-                rawScores // This will now always have at least MAX_CHALLENGE_LEVELS elements (padded with 0s)
+                rawScores 
             });
 
             attemptScores.push(attemptScore);
@@ -158,11 +150,11 @@ export class SummaryReport {
 
         for (const attemptData of allAttemptsData) {
             console.log(
-                attemptData.attempt, //steps in this attempt 
-                attemptData.rawScores,// all three challenge level scores (padded to MAX_CHALLENGE_LEVELS)
-                attemptData.attemptAverageScore,// attempt average score
-                attemptData.attemptNumber,//this is which attempt like1,2,3 
-                attempts  //all attempt data will be here[[],[],]
+                "Steps in this attempt" +attemptData.attempt, //steps in this attempt 
+               "All Five challenge level scores"+ attemptData.rawScores,// all three challenge level scores (padded to MAX_CHALLENGE_LEVELS)
+               "Attempt average score"+ attemptData.attemptAverageScore,// attempt average score
+               "Attempt No"+ attemptData.attemptNumber,//this is which attempt like1,2,3 
+               // attempts  //all attempt data will be here[[],[],]
             );
         }
 
@@ -294,7 +286,11 @@ export class SummaryReport {
                 challengeLevel,
                 responseNumber,
                 patientResponseData.patientResponse,
-                patientResponseData.patientMood
+                patientResponseData.patientMood,
+                patientResponseData.patientResponse2,
+                patientResponseData.patientMood2,
+                patientResponseData.actionType,
+                patientResponseData.level
             );
 
             // Report response should still be based on the current step
@@ -323,11 +319,13 @@ export class SummaryReport {
         challengeLevel: number,
         responseNumber: number,
         expectedResponse: string,
-        expectedMood: string
+        expectedMood: string,
+        expectedResponse2: string,
+        expectedMood2: string,
+        actionType:any,
+        level:any
     ) {
         console.log(`\n Verifying patient response for Attempt ${attemptNumber}, Level ${challengeLevel}, Response ${responseNumber}`);
-        console.log(`Expected response: ${expectedResponse}`);
-        console.log(`Expected mood: ${expectedMood}`);
         console.log(`==========================================================================================================`);
         const baseLocator = `//div[@class='attempt-title' and normalize-space(text())='Attempt ${attemptNumber}']//ancestor::h3/parent::div//following-sibling::section` +
             `/div[${challengeLevel}]` +
@@ -343,6 +341,14 @@ export class SummaryReport {
         // Verify patient mood text
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(moodLocator))
             .toHaveText("[" + expectedMood + "]");
+        if (actionType=="CORRECT"&& level =="C3"){
+             await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(responseLocator))
+            .toHaveText(expectedResponse2);
+
+        // Verify patient mood text
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(moodLocator))
+            .toHaveText("[" + expectedMood2 + "]");
+        }
     }
 
     private getPatientResponseAndMood(
@@ -378,7 +384,11 @@ export class SummaryReport {
         if (step.startsWith("C1")) {
             return {
                 patientResponse: testData["default_chat"]["Emily"],
-                patientMood: testData["default_chat"]["Emily_reply_mood"]
+                patientMood: testData["default_chat"]["Emily_reply_mood"],
+                patientResponse2: null,
+                patientMood2: null,
+                actionType:null,
+                level:null
             };
         }
         const lastCorrectResponse = this.findLastCorrectResponse(attemptNumber, allAttempts, testData);
@@ -409,33 +419,78 @@ export class SummaryReport {
         // Return default if no CORRECT action found
         return {
             patientResponse: testData["default_chat"]["Emily"],
-            patientMood: testData["default_chat"]["Emily_reply_mood"]
+            patientMood: testData["default_chat"]["Emily_reply_mood"],
+            patientResponse2: null,
+            patientMood2: null,
+            actionType:null,
+            level:null
         };
     }
 
     private getResponseDataForAction(actionType: string, level: string, testData: any) {
-        let patientResponse = null;
-        let patientMood = null;
+    let patientResponse = null;
+    let patientMood = null;
+    let patientResponse2 = null;
+    let patientMood2 = null;
 
-        switch (actionType) {
-            case "CORRECT":
+    // Check for special level conditions first
+    const isC1Level = level === "C1" || level === "C1.1" || level === "C1.2";
+    const isC3Level = level === "C3";
+    //console.log(level);
+    switch (actionType) {
+        case "CORRECT":
+            if (isC1Level) {
+                patientResponse = testData[level]?.["ideal_reply3"];
+                patientMood = testData[level]?.["ideal_reply_mood3"];
+            } else if (isC3Level) {
                 patientResponse = testData[level]?.["ideal_reply"];
                 patientMood = testData[level]?.["ideal_reply_mood"];
-                break;
-            case "INCORRECT":
-                patientResponse = testData[level]?.["incorrect_reply"];
-                patientMood = testData[level]?.["incorrect_reply_mood"];
-                break;
-            case "DISTRACTOR":
-                patientResponse = testData[level]?.["distractor_reply"];
-                patientMood = testData[level]?.["distractor_reply_mood"];
-                break;
-            default:
-                patientResponse = testData["default_chat"]["Emily"];
-                patientMood = testData["default_chat"]["Emily_reply_mood"];
-        }
-        return { patientResponse, patientMood };
+                patientResponse2 = testData[level]?.["ideal_reply3"];
+                patientMood2 = testData[level]?.["ideal_reply_mood3"];
+            } else {
+                patientResponse = testData[level]?.["ideal_reply"];
+                patientMood = testData[level]?.["ideal_reply_mood"];
+            }
+            break;
+        case "INCORRECT":
+            patientResponse = testData[level]?.["incorrect_reply"];
+            patientMood = testData[level]?.["incorrect_reply_mood"];
+            break;
+        case "DISTRACTOR":
+            patientResponse = testData[level]?.["distractor_reply"];
+            patientMood = testData[level]?.["distractor_reply_mood"];
+            
+            break;
+        default:
+            patientResponse = testData["default_chat"]["Ricardo_Gonzalez"];
+            patientMood = testData["default_chat"]["Ricardo_Gonzalez_reply_mood"];
     }
+    
+    return { patientResponse, patientMood,patientResponse2,patientMood2,actionType,level };
+}
+    // private getResponseDataForAction(actionType: string, level: string, testData: any) {
+    //     let patientResponse = null;
+    //     let patientMood = null;
+
+    //     switch (actionType) {
+    //         case "CORRECT":
+    //             patientResponse = testData[level]?.["ideal_reply"];
+    //             patientMood = testData[level]?.["ideal_reply_mood"];
+    //             break;
+    //         case "INCORRECT":
+    //             patientResponse = testData[level]?.["incorrect_reply"];
+    //             patientMood = testData[level]?.["incorrect_reply_mood"];
+    //             break;
+    //         case "DISTRACTOR":
+    //             patientResponse = testData[level]?.["distractor_reply"];
+    //             patientMood = testData[level]?.["distractor_reply_mood"];
+    //             break;
+    //         default:
+    //             patientResponse = testData["default_chat"]["Emily"];
+    //             patientMood = testData["default_chat"]["Emily_reply_mood"];
+    //     }
+    //     return { patientResponse, patientMood };
+    // }
 
     private formatScore(score: number): string {
         let formattedScore: string;
@@ -458,13 +513,8 @@ export class SummaryReport {
         const firstChallengeLevel = level.startsWith('C') ? parseInt(level.substring(1)) : 0;
         
         const lastStep = attempt[attempt.length - 1];
-        console.log(lastStep);
         const [level1, rawAction1] = lastStep.split("_");
         const lastChallengeLevel = level1.startsWith('C') ? parseInt(level1.substring(1)) : 0;
-        
-        // Check if first challenge level is greater than 1
-        console.log("first " + firstChallengeLevel);
-        console.log("last " + lastChallengeLevel);
         
         if (firstChallengeLevel > 1) {
             // Loop from 1 to firstChallengeLevel-1
