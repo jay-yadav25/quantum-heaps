@@ -19,7 +19,7 @@ export class SummaryReportActivityFive {
         for (let i = 0; i < path.length; i++) {
             const step = path[i];
 
-            if (step.startsWith('SUBMIT') || step.startsWith('RESTART') || step.startsWith('REATTEMPT') || step === 'FAILED' || step === 'COMPLETE') {
+            if (step.startsWith('SUBMIT') || step.startsWith('RESTART') || step.startsWith('REATTEMPT') || step === 'FAILED' || step.startsWith('COMPLETE')) {
                 if (currentAttempt.length > 0) {
                     attempts.push([...currentAttempt]);
                     currentAttempt = [];
