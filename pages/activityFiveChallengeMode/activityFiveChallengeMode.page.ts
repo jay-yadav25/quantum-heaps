@@ -297,7 +297,7 @@ export class ActivityFiveChallengeMode {
     await this.clickOnDoneButton();
 
     // Verify text on popup
-    const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with enthusiasm, patience, and responsibility, and demonstrated effective use of communication and problem solving skills to reach a positive outcome!";
+    const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with enthusiasm, patience, and responsibility, and demonstrated effective use of communication and problem-solving skills to reach a positive outcome!";
     const feedbackPopupSecondText = "Select the Submit button to end the scenario and submit your results to your teacher.";
 
     // Verify text on popup for successful scenario
