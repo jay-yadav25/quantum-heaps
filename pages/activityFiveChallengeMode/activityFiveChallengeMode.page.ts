@@ -158,7 +158,7 @@ export class ActivityFiveChallengeMode {
       const replyTextID3 = `${selectedOptionID}_rep_3`;
 
       const replyMoodSelector3 = `//div[@id='${replyTextID3}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
-      const replierNameLocator3 = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-name")]`;
+      const replierNameLocator3 = `//div[@id='${replyTextID3}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-name")]`;
       await expect(this.frameLocator.locator(replierNameLocator3)).toHaveText(replierName3 + "");
       await expect(this.frameLocator.locator(replyMoodSelector3)).toHaveText("[" + replyMood3 + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID3}']`)).toHaveText(replyText3);
@@ -297,7 +297,7 @@ export class ActivityFiveChallengeMode {
     await this.clickOnDoneButton();
 
     // Verify text on popup
-    const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with empathy and patience, and demonstrated effective use of communication and problem solving skills to reach a positive outcome!";
+    const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with enthusiasm, patience, and responsibility, and demonstrated effective use of communication and problem solving skills to reach a positive outcome!";
     const feedbackPopupSecondText = "Select the Submit button to end the scenario and submit your results to your teacher.";
 
     // Verify text on popup for successful scenario
@@ -335,32 +335,39 @@ export class ActivityFiveChallengeMode {
   }
 
   private async getOptionIds(level: string) {
-    // Remove the "C" prefix and split by "."
-    const parts = level.replace("C", "").split(".");
+  // Remove the "C" prefix and split by "."
+  const parts = level.replace("C", "").split(".");
 
-    let base: string;
+  let base: string;
 
-    // Handle different level depths
-    if (parts.length === 1) {
-      // Level 1 (e.g., "C1" → "ch_01_opt_X")
-      const mainSection = parts[0].padStart(2, "0");
-      base = `ch_${mainSection}`;
-    } else if (parts.length === 2) {
-      // Level 2 (e.g., "C1.1" → "ch_01_11_opt_X", "C1.2" → "ch_01_12_opt_X")
-      const mainSection = parts[0].padStart(2, "0");
-      base = `ch_${mainSection}_1${parts[1]}`;
-    } else if (parts.length === 3) {
-      // Level 3 (e.g., "C1.1.1" → "ch_01_21_opt_X")
-      const mainSection = parts[0].padStart(2, "0");
-      base = `ch_${mainSection}_21`;
-    } else {
-      throw new Error(`Unsupported level format: ${level}`);
-    }
-
+  // Special case: C2.1 → ch_02_21_opt_2
+  if (level === "C2.1") {
+    base = `ch_02_21`;
     return {
       distractorOptionID: `${base}_opt_1`,
       correctOptionID: `${base}_opt_2`,
       incorrectOptionID: `${base}_opt_3`
     };
   }
+
+  // Handle different level depths
+  if (parts.length === 1) {
+    // Level 1 (e.g., "C1" → "ch_01_opt_X")
+    const mainSection = parts[0].padStart(2, "0");
+    base = `ch_${mainSection}`;
+  } else if (parts.length === 2) {
+    // Level 2 (e.g., "C1.1" → "ch_01_11_opt_X")
+    const mainSection = parts[0].padStart(2, "0");
+    base = `ch_${mainSection}_1${parts[1]}`;
+  } else {
+    throw new Error(`Unsupported level format: ${level}`);
+  }
+
+  return {
+    distractorOptionID: `${base}_opt_1`,
+    correctOptionID: `${base}_opt_2`,
+    incorrectOptionID: `${base}_opt_3`
+  };
+}
+
 }

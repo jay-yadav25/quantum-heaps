@@ -288,12 +288,10 @@ export class SummaryReportActivityFive {
                 patientResponseData.patientResponse,
                 patientResponseData.patientMood,
                 patientResponseData.patientResponse2,
-                patientResponseData.patientMood2,
+                patientResponseData.patientName,
                 patientResponseData.actionType,
                 patientResponseData.level
             );
-
-            // Report response should still be based on the current step
             let reportResponse = null;
 
             // Map the current raw action to the corresponding option
@@ -321,7 +319,7 @@ export class SummaryReportActivityFive {
         expectedResponse: string,
         expectedMood: string,
         expectedResponse2: string,
-        expectedMood2: string,
+        patientName:string,
         actionType:any,
         level:any
     ) {
@@ -333,6 +331,8 @@ export class SummaryReportActivityFive {
 
         const responseLocator = `${baseLocator}//div[contains(@class, 'patient-response-text')]`;
         const moodLocator = `${baseLocator}//div[contains(@class, 'patient-reaction')]`;
+        const nameLocator = `${baseLocator}//div[contains(@class, 'patient-name')]`;
+        const responseLocator2 = `${baseLocator}//div[contains(@class, 'patient-action-text')]`;
 
         // Verify patient response text
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(responseLocator))
@@ -341,13 +341,11 @@ export class SummaryReportActivityFive {
         // Verify patient mood text
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(moodLocator))
             .toHaveText("[" + expectedMood + "]");
-        if (actionType=="CORRECT"&& level =="C3"){
-             await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(responseLocator))
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(nameLocator))
+            .toHaveText(patientName);
+        if (actionType=="CORRECT"&& (level =="C2" ||level =="C2.1" )){
+             await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(responseLocator2))
             .toHaveText(expectedResponse2);
-
-        // Verify patient mood text
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(moodLocator))
-            .toHaveText("[" + expectedMood2 + "]");
         }
     }
 
@@ -385,8 +383,8 @@ export class SummaryReportActivityFive {
             return {
                 patientResponse: testData["default_chat"]["Emily"],
                 patientMood: testData["default_chat"]["Emily_reply_mood"],
+                patientName: testData["default_chat"]["replier_name"],
                 patientResponse2: null,
-                patientMood2: null,
                 actionType:null,
                 level:null
             };
@@ -420,8 +418,8 @@ export class SummaryReportActivityFive {
         return {
             patientResponse: testData["default_chat"]["Emily"],
             patientMood: testData["default_chat"]["Emily_reply_mood"],
+            patientName: testData["default_chat"]["replier_name"],
             patientResponse2: null,
-            patientMood2: null,
             actionType:null,
             level:null
         };
@@ -430,67 +428,54 @@ export class SummaryReportActivityFive {
     private getResponseDataForAction(actionType: string, level: string, testData: any) {
     let patientResponse = null;
     let patientMood = null;
+    let patientName = null;
     let patientResponse2 = null;
-    let patientMood2 = null;
-
+   
     // Check for special level conditions first
     const isC1Level = level === "C1" || level === "C1.1" || level === "C1.2";
-    const isC3Level = level === "C3";
+    const isC2Level = level === "C2" || level === "C2.1" ;
+    const isC3Level = level === "C3"  ;
     //console.log(level);
     switch (actionType) {
         case "CORRECT":
             if (isC1Level) {
                 patientResponse = testData[level]?.["ideal_reply3"];
                 patientMood = testData[level]?.["ideal_reply_mood3"];
-            } else if (isC3Level) {
+                patientName= testData[level]?.["ideal_replier_name3"];
+            } else if (isC2Level) {
                 patientResponse = testData[level]?.["ideal_reply"];
                 patientMood = testData[level]?.["ideal_reply_mood"];
-                patientResponse2 = testData[level]?.["ideal_reply3"];
-                patientMood2 = testData[level]?.["ideal_reply_mood3"];
+                 patientName= testData[level]?.["ideal_replier_name"];
+                patientResponse2 = testData[level]?.["ideal_reply2"];
+            }else if (isC3Level) {
+                patientResponse = testData[level]?.["ideal_reply3"];
+                patientMood = testData[level]?.["ideal_reply_mood3"];
+                 patientName= testData[level]?.["ideal_replier_name3"];
             } else {
                 patientResponse = testData[level]?.["ideal_reply"];
                 patientMood = testData[level]?.["ideal_reply_mood"];
+                 patientName= testData[level]?.["ideal_replier_name"];
             }
             break;
         case "INCORRECT":
             patientResponse = testData[level]?.["incorrect_reply"];
             patientMood = testData[level]?.["incorrect_reply_mood"];
+             patientName= testData[level]?.["ideal_replier_name"];
             break;
         case "DISTRACTOR":
             patientResponse = testData[level]?.["distractor_reply"];
             patientMood = testData[level]?.["distractor_reply_mood"];
+             patientName= testData[level]?.["ideal_replier_name"];
             
             break;
         default:
             patientResponse = testData["default_chat"]["Ricardo_Gonzalez"];
             patientMood = testData["default_chat"]["Ricardo_Gonzalez_reply_mood"];
+             patientName= testData["default_chat"]["replier_name"]
     }
     
-    return { patientResponse, patientMood,patientResponse2,patientMood2,actionType,level };
+    return { patientResponse, patientMood,patientResponse2,patientName,actionType,level };
 }
-    // private getResponseDataForAction(actionType: string, level: string, testData: any) {
-    //     let patientResponse = null;
-    //     let patientMood = null;
-
-    //     switch (actionType) {
-    //         case "CORRECT":
-    //             patientResponse = testData[level]?.["ideal_reply"];
-    //             patientMood = testData[level]?.["ideal_reply_mood"];
-    //             break;
-    //         case "INCORRECT":
-    //             patientResponse = testData[level]?.["incorrect_reply"];
-    //             patientMood = testData[level]?.["incorrect_reply_mood"];
-    //             break;
-    //         case "DISTRACTOR":
-    //             patientResponse = testData[level]?.["distractor_reply"];
-    //             patientMood = testData[level]?.["distractor_reply_mood"];
-    //             break;
-    //         default:
-    //             patientResponse = testData["default_chat"]["Emily"];
-    //             patientMood = testData["default_chat"]["Emily_reply_mood"];
-    //     }
-    //     return { patientResponse, patientMood };
-    // }
 
     private formatScore(score: number): string {
         let formattedScore: string;
