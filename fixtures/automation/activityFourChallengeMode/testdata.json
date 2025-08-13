@@ -10,7 +10,7 @@
     "global": "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:\n\n- Identify the two (2) main types of laws affecting healthcare workers and in what forms these laws may be expressed.\n- Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.\n- Describe the concepts of patient rights and privileged communications and the legislation and procedures that are put into practice to ensure confidentiality of healthcare information.\n- Describe the professional regulations and standards that are in place to ensure that healthcare providers/facilities are acting in a legal and ethical manner."
   },
   "global_introduction": "You have just graduated from a physical therapy assistant program in Virginia and have been recently hired by Madison Valley Hospital in Wisconsin. One of your assignments is to ambulate Ms. Jones, in room 221, 100 feet as tolerated; at 1000 and 1400. She may use a walker as needed to assist with ambulation. You are running behind schedule for her morning appointment and arrive at her room at 1030.\n\nYou have been working with her for several days, so you know that she is motivated to walk, and you are eager to get started so that she stays on her planned ambulation schedule.\n\nActivity Overview:\n1. In this activity, you will face several scenarios that test your ability to make legal and ethical decisions.\n2. Your task is to make the most appropriate decision in each scenario.\n3. If you make a non-ideal decision, your grade will be reduced.\n\nChallenge Mode: This is a graded activity with a report generated at the end.",
-  "step_1": {
+  "STEP_1": {
     "type": "single_select",
     "title": "Scheduled Ambulation - CPM Device Scenario",
     "instruction": ["You enter Ms. Jones' room and notice she has a new CPM (Continuous Passive Motion) machine on her right leg. It looks similar to the ones you've used during your PTA training. While you haven't been trained on this specific model of CPM yet, you're signed up to take the in-service training and be checked off on its proper use by next week. You are proud of how quickly you are progressing with your required check-offs."],
@@ -34,7 +34,7 @@
       "text": "The option you chose demonstrated professional ethics, and a good understanding of your scope of practice."
     }
   },
-  "step_2": {
+  "STEP_2": {
     "type": "single_select",
     "title": "After Ambulation - Pain Management Scenario",
     "instruction":["Ms. Jones ambulates 100 feet down the hall with a slow but steady gait, using her walker properly, and without experiencing any shortness of breath.", 
@@ -60,11 +60,11 @@
       "text": "The option you chose demonstrated professional ethics, and a good understanding of your scope of practice."
     }
   },
-  "step_3": {
+  "STEP_3": {
     "type": "chat",
     "title": "End-of-Shift Report (1 of 2)",
     "base_instructions": "You decided to <insert description of option chosen from earlier challenge>",
-    "step_3_1": {
+    "STEP_3_1": {
       "condition": "step_2_option_1",
       "instruction":["You decided to tell Ms. Jones that it is okay if she takes her own medication and that you would leave a note for the nurse. This was not the ideal choice. During the end-of-shift report, the PT confronts you about your decision."],
       "instructionList": [
@@ -92,7 +92,7 @@
         "text": "The option you chose reflected self-awareness, accountability, and a willingness to learn from a serious mistake, showing good professional ethics."
       }
     },
-    "step_3_2": {
+    "STEP_3_2": {
       "condition": "step_2_option_2",
       "instruction":["You decided to assist Ms. Jones back into bed and elevated her leg. You also applied an ice pack to her knee to decrease the swelling. This was not the ideal choice. During the end-of-shift report, the PT confronts you about your decision."],
   
@@ -151,7 +151,7 @@
       }
     }
   },
-  "step_4": {
+  "STEP_4": {
     "type": "multi_select",
     "title": "End-of-Shift Report (2 of 2)",
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
@@ -271,7 +271,7 @@
       "text": "You didn't select all of the most likely reasons for the PT's reaction to your response."
     }
   },
-  "step_5": {
+  "STEP_5": {
     "type": "single_select",
     "title": "Lunch Meeting - Confidentiality Scenario",
     "instruction": ["When confronted by the PT about your earlier decision, you admitted your mistake and promised to never make the mistake again. The PT looked at you sympathetically. This was a good decision and the most appropriate way to respond to the PT."],
@@ -279,7 +279,11 @@
       "Review the PT's question.",
       "Choose the most appropriate response from the three options provided to you."
     ],
-    "speech_bubble": "Would you like to brief me further about Ms. Jones' condition?",
+    "conversation": [
+      {
+        "title": "Team Coach",
+        "text": "Would you like to brief me further about Ms. Jones' condition?"
+      }],
     "question": "How would you respond to the PT's query based on the information that is presented to you?",
     "INCORRECT_1": "I was not aware that they spoke with you. Can you tell me if they had concerns?",
     "INCORRECT_2": "Should we schedule a time to meet with the family at your office?",
