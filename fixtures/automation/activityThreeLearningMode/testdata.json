@@ -13,7 +13,7 @@
   },
   "SCENE1": {
     "sceneTitle": "Manny's Secret (1 of 2)",
-    "instructions": "You just finished a stretching and ice bath treatment on Manny Garcia, one of the team players.  As you are writing up the documentation of his treatment, you overhear Manny talking to one of the team's coaches.",
+    "instructions": "You just finished a stretching and ice bath treatment on Manny Garcia, one of the team players. As you are writing up the documentation of his treatment, you overhear Manny talking to one of the team's coaches.",
     "instructionsList": [
       "Review the conversation between Manny and the team coach.",
       "To listen to the conversation, select the audio button beneath the chat bubbles.",
@@ -32,8 +32,8 @@
     ],
     "decisionPoint": {
       "question": "What should you do with the information you just overheard?",
-      "nonIdeal1": "You take out your phone and send a text to your best friend that  you just heard that Garcia is about to be cut or retire from the team. You feel safe doing so since you are not posting the information to a public site.",
-      "ideal": "You decide, in the moment, to not share the information you have heard.  Relevant information will be shared by officials when the time is right.",
+      "nonIdeal1": "You take out your phone and send a text to your best friend that you just heard that Garcia is about to be cut or retire from the team. You feel safe doing so since you are not posting the information to a public site.",
+      "ideal": "You decide, in the moment, to not share the information you have heard. Relevant information will be shared by officials when the time is right.",
       "nonIdeal2": "You make a mental note to share this information with your best friend later in private. You are confident that you and your best friend can keep this information safe from the public."
     },
     "decisionPointFeedback": {
@@ -54,7 +54,7 @@
     },
     "followUp": {
       "nonIdealFollowUp1": {
-        "instructions": "After overhearing the conversation between Manny and the team coach, you chose to send a text to your best friend sharing that Manny is about to be cut or will retire from the team. You felt safe doing so since you didn't post this information to a public site. This was not the ideal choice.",
+        "instructions": "After overhearing the conversation between Manny and the team coach you chose to send a text to your best friend sharing that Manny is about to be cut or will retire from the team. You felt safe doing so since you didn't post this information to a public site. This was not the ideal choice.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that were violated.",
           "Refer to the hint if you need guidance."
@@ -62,7 +62,7 @@
         "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
       },
       "idealFollowUp": {
-        "instructions": "After overhearing the conversation between Manny and the team coach, you chose not to share the information you had overheard. You concluded that relevant information will be shared by officials when the time is right. This was a good decision and the most appropriate and ethical way to approach this situation.",
+        "instructions": "After overhearing the conversation between Manny and the team coach you chose not to share the information you had overheard. You concluded that relevant information will be shared by officials when the time is right. This was a good decision and the most appropriate and ethical way to approach this situation.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that could have been violated by sharing this information.",
           "Refer to the hint if you need guidance."
@@ -70,7 +70,7 @@
         "question": "Which of the following legal and ethical issues could you have potentially violated if you chose to share information with others? (Select all that apply.)"
       },
       "nonIdealFollowUp2": {
-        "instructions": "After overhearing the conversation between Manny and the team coach, you chose to make a mental note to share this information with your best friend later in private. You felt confident that you and your best friend would keep this information safe from the public. This was not the ideal choice.",
+        "instructions": "After overhearing the conversation between Manny and the team coach you chose to make a mental note to share this information with your best friend later in private. You felt confident that you and your best friend would keep this information safe from the public. This was not the ideal choice.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that were violated.",
           "Refer to the hint if you need guidance."
@@ -148,7 +148,7 @@
     "conversation": [
       {
         "title": "Ryan Nolan",
-        "text": "Am I going to be alright?  My vision is blurry, and I am in so much pain."
+        "text": "Am I going to be alright? My vision is blurry, and I am in so much pain."
       }
     ],
     "decisionPoint": {
@@ -175,7 +175,7 @@
     },
     "followUp": {
       "nonIdealFollowUp1": {
-        "instructions": "You chose to, reassure Nathan by sharing your opinion that his injury wasn't that bad and he would be back on the field in no time. This was not the ideal choice.",
+        "instructions": "You chose to reassure Nathan by sharing your opinion that his injury wasn't that bad and he would be back on the field in no time. This was not the ideal choice.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that were violated.",
           "Refer to the hint if you need guidance."
@@ -183,7 +183,7 @@
         "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
       },
       "idealFollowUp": {
-        "instructions": "You chose to, reassure Nathan by replying that he would be treated well for his injury. Your response was empathetic and did not provide any additional information or opinions that you were not permitted to share. This was a good decision and the most appropriate and ethical way to approach this situation.",
+        "instructions": "You chose to reassure Nathan by replying that he would be treated well for his injury. Your response was empathetic and did not provide any additional information or opinions that you were not permitted to share. This was a good decision and the most appropriate and ethical way to approach this situation.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that could have been violated by sharing your opinions on the injury.",
           "Refer to the hint if you need guidance."
@@ -191,7 +191,7 @@
         "question": "Which of the following legal and ethical issues could you have potentially violated if you chose to share your thoughts and opinions about what was wrong with the patient? (Select all that apply.)"
       },
       "nonIdealFollowUp2": {
-        "instructions": "You chose to, respond to Nathan with honesty, admitting that it looked like he had a fractured eye socket, but there was no cause for worry, as you could stop the bleeding and prescribe some pain medications to him. This was not the ideal choice.",
+        "instructions": "You chose to respond to Nathan with honesty, admitting that it looked like he had a fractured eye socket, but there was no cause for worry, as you could stop the bleeding and prescribe some pain medications to him. This was not the ideal choice.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that were violated.",
           "Refer to the hint if you need guidance."
@@ -261,7 +261,7 @@
   },
   "SCENE3": {
     "sceneTitle": "Nolan's Injury",
-    "instructions": "While you are at the field and the others are busy, you consider taking a couple of photos of the injury, thinking they would be useful for your reflection journal for class.  You take care to stand back and not distract others or get in their way as they administer medical attention to the player.",
+    "instructions": "While you are at the field and the others are busy, you consider taking a couple of photos of the injury, thinking they would be useful for your reflection journal for class. You take care to stand back and not distract others or get in their way as they administer medical attention to the player.",
     "instructionsList": [
       "Evaluate the situation and choose the most appropriate course of action from the three options provided at the bottom of the screen.",
       "Refer to the hint if you need guidance."
@@ -270,7 +270,7 @@
       "question": "What is the best practice for you to follow?",
       "nonIdeal1": "Since only your teacher and classmates will read your reflection, you take photos of the injury and include them in your reflection journal along with the player's name and his stated fears about his condition.",
       "ideal": "You decide to hold off on taking photos for your reflection journal. You will write up your report without the photos or ask for permission to take photos later, after the incident.",
-      "nonIdeal2": "You take photos of the injury and include them in your reflection journal but don't mention the player's name.  Once you finish writing the report in your journal, you share a photo of your work on Snapchat with your friend group.  The friend group includes some of your classmates."
+      "nonIdeal2": "You take photos of the injury and include them in your reflection journal but don't mention the player's name. Once you finish writing the report in your journal, you share a photo of your work on your social media account with your friend group. The friend group includes some of your classmates."
     },
     "decisionPointFeedback": {
        "nonIdeal": { "title": "Not quite!",
@@ -290,25 +290,25 @@
     },
     "followUp": {
       "nonIdealFollowUp1": {
-        "instructions": "You decided to, take photos of the injury and include them in your reflection journal along with the player's name and his stated fears about his condition. You felt confident doing so, as you figured only your teacher and classmates will be reading your reflection. This was not the ideal choice.",
+        "instructions": "You decided to take photos of the injury and include them in your reflection journal along with the player's name and his stated fears about his condition. You felt confident doing so, as you figured only your teacher and classmates will be reading your reflection. This was not the ideal choice.",
         "instructionsList": [
-          "Consider what you know about legal and ethical issues.  Select all the options that were violated.",
+          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
           "Refer to the hint if you need guidance."
         ],
         "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
       },
       "idealFollowUp": {
-        "instructions": "You decided to, hold off on taking photos of the injury for your reflection journal. You figure you will either write up your report without the photos or ask for permission to take photos later, after the incident. This was a good decision and the most appropriate and ethical way to approach this situation.",
+        "instructions": "You decided to hold off on taking photos of the injury for your reflection journal. You figure you will either write up your report without the photos or ask for permission to take photos later, after the incident. This was a good decision and the most appropriate and ethical way to approach this situation.",
         "instructionsList": [
-          "Consider what you know about legal and ethical issues.  Select all the options that could have been violated.",
+          "Consider what you know about legal and ethical issues. Select all the options that could have been violated.",
           "Refer to the hint if you need guidance."
         ],
         "question": "Which of the following legal and ethical issues could you have potentially violated if you chose to take photos? (Select all that apply.)"
       },
       "nonIdealFollowUp2": {
-        "instructions": "You decided to, take photos of the injury and included them in your reflection journal without mentioning the player's name. After you finished writing your report, you shared a photo of your work on Snapchat with your friend group that also included some of your classmates. This was not the ideal choice.",
+        "instructions": "You decided to take photos of the injury and included them in your reflection journal without mentioning the player's name. After you finished writing your report, you share a photo of your work on your social media account with your friend group that also included some of your classmates. This was not the ideal choice.",
         "instructionsList": [
-          "Consider what you know about legal and ethical issues.  Select all the options that were violated.",
+          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
           "Refer to the hint if you need guidance."
         ],
         "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
@@ -376,7 +376,7 @@
   },
   "SCENE4": {
     "sceneTitle": "Classroom Discussion",
-    "instructions": "The next day, you are in your athletic training class. Your teacher hasn't arrived yet, and your classmates are sharing information about their internships.  You consider sharing the information you overheard and the incident you witnessed at the field.",
+    "instructions": "The next day, you are in your athletic training class. Your teacher hasn't arrived yet, and your classmates are sharing information about their internships. You consider sharing the information you overheard and the incident you witnessed at the field.",
     "instructionsList": [
       "Evaluate the situation and choose the most appropriate course of action from the three options provided at the bottom of the screen.",
       "Refer to the hint if you need guidance."
@@ -405,14 +405,14 @@
     },
     "followUp": {
       "nonIdealFollowUp1": {
-        "instructions": "You decided to share, the photos with your classmates on your phone. You felt there was no harm in sharing this as the information wasn't being posted, and this would help illustrate examples of medical photos to other students. This was not the ideal choice.  Another student snapped a photo of your phone to capture the information as part of a project she was working on for the class.",
+        "instructions": "You decided to share the photos with your classmates on your phone. You felt there was no harm in sharing this as the information wasn't being posted, and this would help illustrate examples of medical photos to other students. This was not the ideal choice. Another student snapped a photo of your phone to capture the information as part of a project she was working on for the class.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that were violated.",
           "Refer to the hint if you need guidance."
         ],
         "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
       },"idealFollowUp": {
-        "instructions": "You decided to share, that you had responded to an emergency incident involving one of the players and had the opportunity to obtain hands-on experience working alongside the head athletic trainer. You shared your experience without revealing or sharing any private information of anyone. This was a good decision and the most appropriate and ethical way to approach this situation.",
+        "instructions": "You decided to share that you had responded to an emergency incident involving one of the players and had the opportunity to obtain hands-on experience working alongside the head athletic trainer. You shared your experience without revealing or sharing any private information of anyone. This was a good decision and the most appropriate and ethical way to approach this situation.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that could have been violated by sharing information or photos.",
           "Refer to the hint if you need guidance."
@@ -420,7 +420,7 @@
         "question": "Which of the following legal and ethical issues could you have potentially violated if you chose to share either the photos or the information you heard? (Select all that apply.)"
       },
       "nonIdealFollowUp2": {
-        "instructions": "You decided to share, \"off the record\" that you believe Garcia would be cut from the team with your classmates, but you didn't share the medical photos with them. You felt safe doing so, as you didn't share any information officially with them. This was not the ideal choice.",
+        "instructions": "You decided to share \"off the record\" that you believe Garcia would be cut from the team with your classmates, but you didn't share the medical photos with them. You felt safe doing so, as you didn't share any information officially with them. This was not the ideal choice.",
         "instructionsList": [
           "Consider what you know about legal and ethical issues. Select all the options that were violated.",
           "Refer to the hint if you need guidance."
