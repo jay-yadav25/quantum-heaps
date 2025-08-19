@@ -2,7 +2,7 @@
 Feature: Launch Activity
 
   Scenario Outline: Verify chat section functionality for golden scenario <scenario>
-    Given the user has launched the activity on the web
+    Given the user has launched the activity 1 on the web
     And the learning objectives are displayed
     When the user clicks the Start button on the learning objectives page
     Then the step introduction popup should appear
@@ -16,8 +16,8 @@ Feature: Launch Activity
     Then Verify the scenario score "<scenario>"
 
     Examples:
-      # | scenario |
-      # | S1       |
+      | scenario |
+      | S1       |
       # | S2       |
       # | S3       |
       # | S4       |
@@ -66,7 +66,7 @@ Feature: Launch Activity
       # | S48      |
 
   Scenario Outline: Verify chat section functionality for scenario <scenario>
-    Given the user has launched the activity on the web
+    Given the user has launched the activity 1 on the web
     And the learning objectives are displayed
     When the user clicks the Start button on the learning objectives page
     Then the step introduction popup should appear

@@ -4,7 +4,7 @@ import * as path from 'path';
 
 export const test = base.extend<{ testData: any, loginData: any }>({
     testData: async ({ page }: any, use: (arg0: any) => any, testInfo: any) => {
-        const environment = env["ENVIRONMENT"] || "automation";
+        const environment = "automation";
         const featureFileName = path.basename(testInfo.file, '.js');
         const feature = featureFileName.split('.')[0];
         const dataPath = `../../fixtures/${environment}/${feature}/testdata.json`;
@@ -12,7 +12,7 @@ export const test = base.extend<{ testData: any, loginData: any }>({
         await use(testdata);
     },
     loginData: async ({ page }: any, use: (arg0: any) => any, testInfo: any) => {
-        const environment = env["ENVIRONMENT"] || "automation";
+        const environment = "automation";
         const featureFileName = path.basename(testInfo.file, '.js');
         const feature = featureFileName.split('.')[0];
         const dataPath = `../../fixtures/${environment}/${feature}/loginData.json`;

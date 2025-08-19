@@ -136,10 +136,7 @@ When('the user clicks the Start button on the learning objectives', async functi
 // });
 
 
-// 1. Missing step definition for "features\learningMode.feature:26:5"
-Given('the user has launched the activity {int} on the web', async function ({}, activityNumber: number)  {
-  await learningMode.launchActivity();
-});
+
 
 
 Then('then the instrcution from jeremy should be displayed', async function ({})  {

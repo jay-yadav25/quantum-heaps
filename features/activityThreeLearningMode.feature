@@ -2,7 +2,7 @@
 Feature: Launch Activity
 
   Scenario Outline: Verify chat section functionality for golden scenario <scenario>
-    Given the user has launched the activity 2 on the web
+    Given the user has launched the activity 3 on the web
     And the learning objectives screen should be displayed
     Then the activity name and learning objectives should be same as as per design
     When the user clicks the Start button on the learning objectives
@@ -26,7 +26,7 @@ Feature: Launch Activity
 
   Scenario Outline: Verify all step functionalities for the golden path in Activity Three - Learning Mode "<scenario>"
 
-    Given the user has launched Activity Three - Learning Mode on the web
+    Given the user has launched the activity 3 on the web
     Then the Learning Objectives page of Activity Three - Learning Mode should be displayed
     And the activity title and learning objectives should match the content matrix of Activity Three - Learning Mode
 
@@ -43,19 +43,19 @@ Feature: Launch Activity
 
     Examples:
       | scenario |
-      # | S1       |
+      | S1       |
       # | S2       |
       # | S3       |
       # | S4       |
       # | S5       |
       # | S6       |
-# | S7       |
-# | S8       |
-# | S9       |
-# | S10      |
-# | S11      |
-# | S12      |
-# | S13      |
+      # | S7       |
+      # | S8       |
+      # | S9       |
+      # | S10      |
+      # | S11      |
+      # | S12      |
+      # | S13      |
 
 
 

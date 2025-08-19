@@ -53,16 +53,22 @@ export class LearningObjectivePage {
         this.frameLocator = page.frameLocator(`iframe[name="${iframeName}"]`);
 
         // Learning Objectives Page
-        this.learningObjectiveTitle = this.frameLocator.locator("div.info-title");
-        this.learningObjectiveDetails = this.frameLocator.locator("ul.info-details li");
+        this.learningObjectiveTitle = this.frameLocator.locator("h2.info-title");
+        
+        this.learningObjectiveDetails = this.frameLocator.locator(".ul-wrapper>ul li");
+        
         this.activityTitleStartPage = this.frameLocator.locator("#start-page-title");
         this.startButton = this.frameLocator.locator("#start-btn");
 
         // Introduction Popup
         this.introductionPopUpTitle = this.frameLocator.locator("h2.popup-title");
-        this.introPopupText = this.frameLocator.locator("div.popup-details");
-         this.activityOverviewTitle = this.frameLocator.locator("div.overview-title");
+        
+        this.introPopupText = this.frameLocator.locator("div.popup-details>p");
+       
+         this.activityOverviewTitle = this.frameLocator.locator("h3.overview-title");
+         
         this.activityOverviewDetails = this.frameLocator.locator("ul.overview-text  li");
+       
         this.intrductionPopupContinueButton = this.frameLocator.locator(".continue-button");
 
         // Avatar Selection Page

@@ -41,8 +41,8 @@ export class ActivityThree {
   }
   //private scenarioStartTime: number = 0;
   public async launchActivity() {
-    //await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=dm_l_03&attemptId=1");
-    await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=dm_l_03&attemptId=0");
+    await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=dm_l_03&attemptId=1");
+    //await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=dm_l_03&attemptId=0");
  
   }
 
@@ -383,7 +383,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     if (speechBubbleTexts && Array.isArray(speechBubbleTexts) && speechBubbleTexts.length > 0) {
       for (let i = 0; i < speechBubbleTexts.length; i++) {
         const characterName=speechBubbleTexts[i].title;
-        await expect(this.frameLocator.locator(`//h3[@class='name-title' and normalize-space()='${characterName}']/following-sibling::span[1]`).first()).toHaveText(speechBubbleTexts[i].text);
+        await expect(this.frameLocator.locator(`//strong[@class='name-title' and normalize-space()='${characterName}']/following-sibling::span[1]`).first()).toHaveText(speechBubbleTexts[i].text);
       }
     }
   }
