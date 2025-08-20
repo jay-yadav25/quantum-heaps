@@ -19,9 +19,6 @@ Before({ tags: '@dho' }, async ({ page }) => {
 
 });
 
-// Given('the user has launched the activity on the web', async function ({ }) {
-//   await challengeMode.launchActivity();
-// });
 
 // Given('the learning objectives are displayed', async function ({ }) {
 //   // await challengeMode.

@@ -15,9 +15,6 @@ Before({ tags: '@dho' }, async ({ page }) => {
 
 });
 
-Given('the user has launched the activity five on the web', async function ({ }) {
-  await activityFiveChallengeMode.launchActivity(5);
-});
 
 Given('the learning objectives of activity five are displayed', async function ({ }) {
   // await challengeMode.

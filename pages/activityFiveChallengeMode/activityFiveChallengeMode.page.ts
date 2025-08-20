@@ -39,15 +39,7 @@ export class ActivityFiveChallengeMode {
     this.noOfAttemptChatPopup = this.frameLocator.locator("//div[@class='popup-header']/span");
   }
 
-  public async launchActivity(activityNumber: number) {
-    if (activityNumber == 5) {
-      //await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_c_05&attemptId=0");
-      await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_c_05&attemptId=1");
-    } else if (activityNumber == 2) {
-      await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_l_02&attemptId=0");
-
-    }
-  }
+  
 
   public async runScenarioPath(path: string[], testData: any) {
     let previousStep: string | null = null;

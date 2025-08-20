@@ -31,10 +31,11 @@ export class SummaryReportActivityThree {
         for (let i = 0; i < path.length; i++) {
             const step = path[i];
             const nextStep = i < path.length - 1 ? path[i + 1] : null;
-            const previousStep = path[i - 2] ;
+            const previousStep = path[i-2] ;
+            const previousStepForHint = path[i-1] ;
             
             console.log(`Processing step ${i + 1}/${path.length}: ${step}`);
-            await this.processStep(step, nextStep, previousStep, testData);
+            await this.processStep(step, nextStep, previousStep, testData,previousStepForHint);
         }
         const hintUsed= this.countHintsUsed(path,testData);
         console.log("Actual no of Hint-"+ this.noOfHintUsed.innerText());
@@ -50,7 +51,8 @@ export class SummaryReportActivityThree {
         step: string, 
         nextStep: string | null, 
         previousStep: string, 
-        testData: any
+        testData: any,
+        previousStepForHint:string
     ): Promise<void> {
         // Skip hint steps
         if (step === 'HINT') {
@@ -66,7 +68,7 @@ export class SummaryReportActivityThree {
 
         // Handle main scene steps
         if (this.isMainSceneStep(step)) {
-            await this.verifyMainSceneReport(step, previousStep, testData);
+            await this.verifyMainSceneReport(step, previousStep, testData,previousStepForHint);
             return;
         }
 
@@ -97,11 +99,12 @@ export class SummaryReportActivityThree {
     private async verifyMainSceneReport(
         step: string, 
         previousStep: string, 
-        testData: any
+        testData: any,
+        previousStepForHint:string
     ){
         await this.verifyInstruction(step, testData);
         await this.verifySupportingRationals(step, testData);
-        await this.verifyUserActionDetails(step, previousStep, testData);
+        await this.verifyUserActionDetails(step, previousStepForHint, testData);
     }
 
     /**
@@ -243,16 +246,16 @@ export class SummaryReportActivityThree {
     const dropdownNumber = actualStepNumber ? actualStepNumber - 1 : 1;
     
     // Helper function to create locators
-    const createLocators = (actionPosition: number) => ({
+    const createLocators = () => ({
         userActionLocator: `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-icon-text-container>.action-text`,
         userActionTextLocator: `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-description`
     });
     
     // Helper function to verify action expectations
     const verifyAction = async (actionPosition: number, expectedText: string, expectedDescription: string) => {
-        const { userActionLocator, userActionTextLocator } = createLocators(actionPosition);
-        await expect(this.frameLocator.locator(userActionLocator)).toHaveText(expectedText);
-        await expect(this.frameLocator.locator(userActionTextLocator)).toHaveText(expectedDescription);
+        const { userActionLocator, userActionTextLocator } = createLocators();
+        await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText(expectedText);
+        await expect(this.frameLocator.locator(userActionTextLocator).first()).toHaveText(expectedDescription);
     };
     
     // Helper function to get option text and expected action text based on step
@@ -279,15 +282,17 @@ export class SummaryReportActivityThree {
     
     if (previousStep === "HINT") {
         // Verify hint action first
-        await verifyAction(1, "Selected Hint", "");
+        const { userActionLocator, userActionTextLocator } = createLocators();
+        //await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText(expectedText);
+        await expect(this.frameLocator.locator(userActionLocator).first()).toHaveText("Selected Hint");
         
         // Verify the actual selection action
         const { optionText, actionText } = getStepDetails(step);
-        await verifyAction(2, actionText, optionText);
+        await verifyAction(1, actionText, optionText);
     } else {
         // Verify the selection action directly
         const { optionText, actionText } = getStepDetails(step);
-        await verifyAction(1, actionText, optionText);
+        await verifyAction(0, actionText, optionText);
     }
 }
 

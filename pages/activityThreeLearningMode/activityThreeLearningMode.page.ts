@@ -39,12 +39,6 @@ export class ActivityThree {
     this.stepInstructionList = this.frameLocator.locator("ul.instruction-description>li");
      this.popupContinueButton = this.frameLocator.locator("//button[@id='continue-btn' and contains(@class, 'common-done-btn')]");
   }
-  //private scenarioStartTime: number = 0;
-  public async launchActivity() {
-    await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=dm_l_03&attemptId=1");
-    //await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=dm_l_03&attemptId=0");
- 
-  }
 
  public async runScenarioPathForActivityThreeLearnigMode(path: string[], testData: any) {
   for (let i = 0; i < path.length; i++) {
@@ -267,6 +261,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
      if (actualStepNumber === null) {
     throw new Error(`Invalid step format: ${step}`);
     }
+    await expect(this.hintButton.nth(actualStepNumber-1)).toBeEnabled();
     await this.hintButton.nth(actualStepNumber-1).click();
     await expect(this.hintTitle).toHaveText("Hint");
     const stepDetails = testData['SCENE' + stepNumber];

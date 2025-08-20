@@ -93,12 +93,7 @@ export class LearningObjectivePage {
         this.feedbackPopupText2 = this.frameLocator.locator("div.popup-content p:nth-child(2)");
     }
 
-    /**
-     * Launch the learning activity
-     */
-    public async launchActivity() {
-        await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherpages/cengage_dho_launcher.html?dho=dho1&attemptId=1&lang=en");
-    }
+    
 
     /**
      * Verify the learning objectives page content

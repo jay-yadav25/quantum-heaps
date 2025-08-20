@@ -18,6 +18,7 @@ export class ActivityFour {
   readonly stepInstructionList:Locator;
   readonly popupContinueButton:Locator;
   readonly totalTimeTaken:Locator;
+  readonly loader:Locator;
   private scenarioStartTime: number = 0;
    // Learning Objectives Page
     readonly learningObjectiveTitle: Locator;
@@ -85,6 +86,7 @@ export class ActivityFour {
     this.moreOptionsButton = this.frameLocator.locator('//button[@aria-label="More Options"]');
     this.moreOptionLearnignObjectiveButton = this.frameLocator.locator('//li[@aria-label="Learning Objectives"]');
     this.moreOptionIntroductionButton = this.frameLocator.locator('//li[@aria-label="Introduction"]');
+    this.loader = this.frameLocator.locator('div.circular-loader');
   }
   public async launchActivity(environment:string,activityNo: number) {
     console.log(environment);
@@ -103,10 +105,28 @@ export class ActivityFour {
   };
 
   const dhoCode = activityMap[activityNo];
-  console.log(baseUrl);
     const url = `${baseUrl}?launchType=1&dho=${dhoCode}&attemptId=1`;
-    console.log(url);
     await this.page.goto(url);
+    const timeout = 4 * 60 * 1000; // 4 minutes
+    const interval = 2000; // 2 seconds
+    const startTime = Date.now();
+
+  while (Date.now() - startTime < timeout) {
+    try {
+      // Check if loader is visible
+      if (await this.loader.isVisible()) {
+        await this.page.waitForTimeout(interval);
+        continue;
+      }
+      if (await this.startButton.isVisible() && await this.startButton.isEnabled()) {
+        return;
+      }
+
+    } catch (err) {
+    }
+    await this.page.waitForTimeout(interval);
+  }
+  throw new Error("Loader did not disappear or button not clickable within 4 minutes");
   }
 
  public async runScenarioPathForActivityFourChallengeMode(path: string[], testData: any) {

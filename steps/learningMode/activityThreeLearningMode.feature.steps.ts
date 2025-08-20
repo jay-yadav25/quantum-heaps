@@ -13,9 +13,6 @@ Before({ tags: '@dho' }, async ({ page }) => {
 });
 
 
-Given('the user has launched Activity Three - Learning Mode on the web',async function ({ testData }) {
-  await activityThree.launchActivity();
-});
 
 Then('the Learning Objectives page of Activity Three - Learning Mode should be displayed',async function ({ testData }) {
   await activityThree.verifyLearningObjectivePageIsVisible();

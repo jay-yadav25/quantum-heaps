@@ -39,12 +39,6 @@ export class ChallengeMode {
     this.noOfAttemptChatPopup = this.frameLocator.locator("//div[@class='popup-header']/span");
   }
 
-  public async launchActivity() {
-
-      await this.page.goto("https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html?launchType=1&dho=cs_c_01&attemptId=1");
-      //await this.page.goto("https://cengage-dho.zeuslearning.com/index.html?launchType=1&dho=cs_c_01&attemptId=0");
-    
-  }
 
   public async runScenarioPath(path: string[], testData: any) {
     let previousStep: string | null = null;
