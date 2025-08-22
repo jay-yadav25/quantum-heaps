@@ -5,8 +5,9 @@ export class SummaryReportActivityFour {
     readonly finalScore: Locator;
     readonly attemptTwo: Locator;
     readonly attemptOne: Locator;
-    readonly noOfHintUsed: Locator;
+    readonly overallScore: Locator;
     private readonly frameLocator: FrameLocator;
+    readonly attemptScore:Locator;
     
     // Array to store scores for each attempt
     private scoresArray: number[][] = [];
@@ -27,7 +28,8 @@ export class SummaryReportActivityFour {
     this.attemptTwo = page.frameLocator('iframe[name="ext_012345678_1"]').locator('#attempt-dropdown-arrow-button-1');
     this.attemptOne = page.frameLocator('iframe[name="ext_012345678_1"]').locator('#attempt-dropdown-arrow-button-0');
     
-    this.noOfHintUsed = page.frameLocator('iframe[name="ext_012345678_1"]').locator('strong.hint-value');
+    this.overallScore = page.frameLocator('iframe[name="ext_012345678_1"]').locator('strong.score-value');
+    this.attemptScore = page.frameLocator('iframe[name="ext_012345678_1"]').locator('div.score-value');
     }
 
     /**
@@ -51,17 +53,16 @@ export class SummaryReportActivityFour {
                 continue;
             }
             if (step === 'SUBMIT') {
-                console.log('Skipping NEXTSTEP marker');
+                console.log('Skipping SUBMIT marker');
                 continue;
             }
    
-            if (step === 'REATTEMPT') {
+            if (step === 'RESTART') {
                 console.log('REATTEMPT detected - storing current attempt scores');
                 await this.attemptOne.click();
                 await this.attemptTwo.click();
                 attemptNumber=1;
                 await this.handleReattempt();
-
                 continue;
             }
             
@@ -79,6 +80,15 @@ export class SummaryReportActivityFour {
         
         console.log('Final scores array:', this.scoresArray);
         console.log('Attempt averages:', this.attemptAverages);
+         const avgScores = this.attemptAverages;
+         const overallSocre = this.highestAttemptAverage;
+          //const  overallSocre1 =overallSocre[0];
+         const firstEntry = avgScores[0];
+        const secondEntry = avgScores[1];
+        await expect((this.attemptScore).nth(0)).toHaveText(": "+firstEntry.toString()+"%");
+        await expect((this.attemptScore).nth(1)).toHaveText(": "+secondEntry.toString()+"%");
+        await expect((this.overallScore)).toHaveText(overallSocre.toString()+"%");
+
         console.log('Highest attempt average:', this.highestAttemptAverage);
     }
 
@@ -103,7 +113,7 @@ export class SummaryReportActivityFour {
         for (let i = 0; i < this.scoresArray.length; i++) {
             const attempt = this.scoresArray[i];
             if (attempt.length > 0) {
-                const average = attempt.reduce((sum, score) => sum + score, 0) / attempt.length;
+                const average = (attempt.reduce((sum, score) => sum + score, 0) / attempt.length)*100;
                 this.attemptAverages.push(average);
                 
                 if (average > this.highestAttemptAverage) {
@@ -284,12 +294,15 @@ export class SummaryReportActivityFour {
         }
     }
        await this.verifyInstruction(step,StepsInvolved,actualStepNumber,sceneLevel, testData,attemptNumber);
-    //    await this.verifySupportingRationals(step,StepsInvolved,actualStepNumber,sceneLevel, testData);
-    //    if (step.startsWith('M')){
-    //          await this.verifyUserActionDetailsMultiSelect(StepsInvolved,actualStepNumber,sceneLevel, testData);
-    //    }else{
-    //          await this.verifyUserActionDetails(StepsInvolved,actualStepNumber,sceneLevel, testData);
-    //    }
+      // await this.verifySupportingRationals(step,StepsInvolved,actualStepNumber,sceneLevel, testData);
+       if (step.startsWith('M')){
+            // await this.verifyUserActionDetailsMultiSelect(StepsInvolved,actualStepNumber,sceneLevel, testData);
+             await this.verifySupportingRationalsForMultiselect(step,StepsInvolved,actualStepNumber,sceneLevel, testData,attemptNumber,score);
+      
+       }else{
+            // await this.verifyUserActionDetails(StepsInvolved,actualStepNumber,sceneLevel, testData);
+              await this.verifySupportingRationals(step,StepsInvolved,actualStepNumber,sceneLevel, testData,attemptNumber,score);
+       }
       
     }
 
@@ -304,36 +317,87 @@ export class SummaryReportActivityFour {
         if (dropdownNumber>0){
             await this.frameLocator.locator(`button#step-dropdown-arrow-button-${dropdownNumber}`).nth(attemptNumber).click();
         }
-        await this.page.pause();
+        //await this.page.pause();
         const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
-        //*[@id='attempt-dropdown-arrow-button-0']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section[@id='step-dropdown-0']
         const instructionHeadingLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'description-container')]/*[contains(@class,'description-heading')]`;
         const instructionLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'description-container')]/*[contains(@class,'description-text')]`;
          const questionTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'description-container')]/*[contains(@class,'description-question')]`;
         
-       // const instructionLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-text`
-       // const questionTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-question`
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionHeadingLocator).nth(attemptNumber)).toHaveText("Description");
+         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionHeadingLocator)).toHaveText("Description");
         const noOfInstructionItems = await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionLocator).all();
         for (let i = 0; i < instructionText.length; i++) {
             await expect(noOfInstructionItems[i]).toHaveText(instructionText[i]);
         } 
-        //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionLocator).first()).toHaveText(instructionText);
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(questionTextLocator).nth(attemptNumber)).toHaveText(questionText);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(questionTextLocator)).toHaveText(questionText);
     }
 
 
     
-    private async verifySupportingRationals(step: string,StepsInvolved:string[],actualStepNumber:number,sceneLevel:string, testData: any) {
-       // Need to look into it 
+    private async verifySupportingRationals(step: string,StepsInvolved:string[],actualStepNumber:number,sceneLevel:string, testData: any,attemptNumber:number,score:number) {
+       let feedbackText='';
+       let feedbackTextTitle=''
         const stepDetails = testData[`STEP_${sceneLevel}`];
         const lastStep = StepsInvolved[StepsInvolved.length - 1];
-        const feedback = stepDetails.rationalForReportMainScene;
+        const CORRECT_FEEDBACK = stepDetails.CORRECT_FEEDBACK;
+        const INCORRECT_1_FEEDBACK = stepDetails.INCORRECT_1_FEEDBACK;
+        const INCORRECT_2_FEEDBACK = stepDetails.INCORRECT_2_FEEDBACK;
         const dropdownNumber =actualStepNumber - 1;
         const supportingRationalHeadingLocator=`section#step-dropdown-${dropdownNumber}>div>div.supporting-rationale-container>.supporting-rationale-heading`
-        const supportingRationalTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.score-area >div>div>div>div.score-msg`
+        //const supportingRationalTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.score-area >div>div>div>div.score-msg`
+        const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
+        const supportingRationalTextTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div//div[contains(@class,'score-msg')]`;
+        const stepScoretLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]`;
+        
+        //*[@id='step-dropdown-0']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]
         //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalHeadingLocator).first()).toHaveText("Supporting Rationale");
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextLocator).first()).toHaveText(feedback);
+        //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextLocator).first()).toHaveText(feedback);
+        
+            if (lastStep=="CORRECT") {
+            feedbackTextTitle=CORRECT_FEEDBACK.title;
+            feedbackText =CORRECT_FEEDBACK.text;
+
+            } else if (lastStep.includes("INCORRECT_1")) {
+            feedbackTextTitle=INCORRECT_1_FEEDBACK.title;
+             feedbackText=INCORRECT_1_FEEDBACK.text;
+            } else if (lastStep.includes("INCORRECT_2")) {
+             feedbackTextTitle=INCORRECT_2_FEEDBACK.title;
+            feedbackText=INCORRECT_2_FEEDBACK.text;
+            } 
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator).first()).toHaveText(feedbackTextTitle);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator).nth(1)).toHaveText(feedbackText);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(stepScoretLocator)).toHaveText(": "+ score.toString());
+        
+    }
+    private async verifySupportingRationalsForMultiselect(step: string,StepsInvolved:string[],actualStepNumber:number,sceneLevel:string, testData: any,attemptNumber:number,score:number) {
+       let feedbackText='';
+       let feedbackTextTitle=''
+        const stepDetails = testData[`STEP_${sceneLevel}`];
+        const lastStep = StepsInvolved[StepsInvolved.length - 1];
+        const CORRECT_FEEDBACK = stepDetails.CORRECT_FEEDBACK;
+        const INCORRECT_FEEDBACK = stepDetails.INCORRECT_1_FEEDBACK;
+        //const INCORRECT_2_FEEDBACK = stepDetails.INCORRECT_2_FEEDBACK;
+        const dropdownNumber =actualStepNumber - 1;
+        const supportingRationalHeadingLocator=`section#step-dropdown-${dropdownNumber}>div>div.supporting-rationale-container>.supporting-rationale-heading`
+        //const supportingRationalTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.score-area >div>div>div>div.score-msg`
+        const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
+        const supportingRationalTextTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div//div[contains(@class,'score-msg')]`;
+        const stepScoretLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]`;
+        
+        //*[@id='step-dropdown-0']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]
+        //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalHeadingLocator).first()).toHaveText("Supporting Rationale");
+        //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextLocator).first()).toHaveText(feedback);
+        
+            if (lastStep=="CORRECT") {
+            feedbackTextTitle=CORRECT_FEEDBACK.title;
+            feedbackText =CORRECT_FEEDBACK.text;
+
+            } else {
+            feedbackTextTitle=INCORRECT_FEEDBACK.title;
+             feedbackText=INCORRECT_FEEDBACK.text;
+            } 
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator).first()).toHaveText(feedbackTextTitle);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator).nth(1)).toHaveText(feedbackText);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(stepScoretLocator)).toHaveText(": "+ score.toString());
         
     }
 

@@ -294,12 +294,13 @@ private findNextValidStep(path: string[], currentIndex: number): string {
       await this.verifyFailedScenarioInbeweenSubmit();
       return;
     }
-    if (step === 'RESTATR') {
+    if (step === 'RESTART') {
       await this.verifyRestartPopup();
       return;
     }
   }
   private async verifyRestartPopup() {
+    //await this.page.pause();
     await this.restartButton.click();
     await this.clickOnIntroductionContinueButton();
   }
@@ -326,7 +327,7 @@ private findNextValidStep(path: string[], currentIndex: number): string {
     // await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
     //await this.clickOnContinueButton();
     await this.clickOnSubmitButton();
-    await this.page.pause();
+    //await this.page.pause();
   }
   private parseDisplayedTime(displayedTime: string): number {
     if (!displayedTime) return 0;

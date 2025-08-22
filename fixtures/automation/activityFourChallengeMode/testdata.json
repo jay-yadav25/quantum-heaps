@@ -73,7 +73,11 @@
       "title": "Correct!",
       "text": "This is the appropriate action for you to take."
     },
-    "INCORRECT_FEEDBACK": {
+    "INCORRECT_1_FEEDBACK": {
+      "title": "Not quite!",
+      "text": "The option you chose showed a lack of understanding of your scope of practice and professional ethics, and also demonstrated negligence in providing patient care."
+    },
+    "INCORRECT_2_FEEDBACK": {
       "title": "Not quite!",
       "text": "The option you chose demonstrated professional ethics and care but showed negligence by working outside of your scope of practice."
     },
@@ -524,7 +528,7 @@
       "title": "Not quite!",
       "text": "The option you chose demonstrated professional ethics but failed to take account of your scope of practice and maintain privacy while discussing patient matters."
     },
-    "CORRECT_1_FEEDBACK": {
+    "CORRECT_FEEDBACK": {
       "title": "Correct!",
       "text": "The option you chose demonstrated professional ethics and upheld patient confidentiality, showing a good understanding of your scope of practice."
     }
