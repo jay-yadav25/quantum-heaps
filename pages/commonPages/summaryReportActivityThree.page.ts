@@ -311,9 +311,6 @@ export class SummaryReportActivityThree {
     for (let i = 0; i < stepData.length; i++) {
         let optionToClick: any;
         
-        // Calculate the dropdown number based on actualStepNumber
-        
-        // Calculate the action wrapper position (1-based index)
         const actionPosition = i;
         
         // Dynamic locators

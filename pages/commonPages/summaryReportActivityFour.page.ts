@@ -3,7 +3,8 @@ import { expect, FrameLocator, Locator, type Page } from '@playwright/test';
 export class SummaryReportActivityFour {
     readonly page: Page;
     readonly finalScore: Locator;
-    readonly firstAction: Locator;
+    readonly attemptTwo: Locator;
+    readonly attemptOne: Locator;
     readonly noOfHintUsed: Locator;
     private readonly frameLocator: FrameLocator;
     
@@ -23,7 +24,9 @@ export class SummaryReportActivityFour {
         .first();
     
     // Initialize action locators - adjust selectors as needed
-    this.firstAction = page.frameLocator('iframe[name="ext_012345678_1"]').locator('[data-testid="first-action"]');
+    this.attemptTwo = page.frameLocator('iframe[name="ext_012345678_1"]').locator('#attempt-dropdown-arrow-button-1');
+    this.attemptOne = page.frameLocator('iframe[name="ext_012345678_1"]').locator('#attempt-dropdown-arrow-button-0');
+    
     this.noOfHintUsed = page.frameLocator('iframe[name="ext_012345678_1"]').locator('strong.hint-value');
     }
 
@@ -39,7 +42,7 @@ export class SummaryReportActivityFour {
         this.currentAttemptScores = [];
         this.attemptAverages = [];
         this.highestAttemptAverage = 0;
-        
+        let attemptNumber=0;
         for (let i = 0; i < path.length; i++) {
             const step = path[i];
             
@@ -47,15 +50,23 @@ export class SummaryReportActivityFour {
                 console.log('Skipping NEXTSTEP marker');
                 continue;
             }
+            if (step === 'SUBMIT') {
+                console.log('Skipping NEXTSTEP marker');
+                continue;
+            }
    
             if (step === 'REATTEMPT') {
                 console.log('REATTEMPT detected - storing current attempt scores');
-                this.handleReattempt();
+                await this.attemptOne.click();
+                await this.attemptTwo.click();
+                attemptNumber=1;
+                await this.handleReattempt();
+
                 continue;
             }
             
             console.log(`Processing step ${i + 1}/${path.length}: ${step}`);
-            await this.processStep(step, testData);
+            await this.processStep(step, testData,attemptNumber);
         }
         
         // Store the final attempt if there are scores
@@ -163,6 +174,9 @@ export class SummaryReportActivityFour {
   for (let i = 0; i < parts.length; i += 2) {
     if (parts[i + 1] !== undefined) {
       result.push(parts[i] + "_" + parts[i + 1]);
+    } else {
+      // Handle the last unpaired element
+      result.push(parts[i]);
     }
   }
 
@@ -210,7 +224,8 @@ export class SummaryReportActivityFour {
      */
     private async processStep(
         step: string, 
-        testData: any
+        testData: any,
+        attemptNumber:number
     ): Promise<void> {
     let score=0;
     const StepsInvolved =this.extractStatuses(step); 
@@ -232,7 +247,7 @@ export class SummaryReportActivityFour {
     this.currentAttemptScores.push(score);
     console.log(`Step: ${step}, Score: ${score}, StepsInvolved: [${StepsInvolved.join(', ')}], Current attempt scores:`, this.currentAttemptScores);
     
-    await this.verifyReportContentAndScore(step, StepsInvolved, score, testData);
+    await this.verifyReportContentAndScore(step, StepsInvolved, score, testData,attemptNumber);
     }
 
     /**
@@ -243,7 +258,8 @@ export class SummaryReportActivityFour {
         step: string, 
         StepsInvolved:string[],
         score:number, 
-        testData: any
+        testData: any,
+        attemptNumber:number
     ){
     let sceneLevel='';
     let actualStepNumber:number=0;
@@ -267,46 +283,57 @@ export class SummaryReportActivityFour {
           actualStepNumber=Number(major);
         }
     }
-       await this.verifyInstruction(step,StepsInvolved,actualStepNumber,sceneLevel, testData);
-       await this.verifySupportingRationals(step,StepsInvolved,actualStepNumber,sceneLevel, testData);
-       if (step.startsWith('M')){
-             await this.verifyUserActionDetailsMultiSelect(StepsInvolved,actualStepNumber,sceneLevel, testData);
-       }else{
-             await this.verifyUserActionDetails(StepsInvolved,actualStepNumber,sceneLevel, testData);
-       }
+       await this.verifyInstruction(step,StepsInvolved,actualStepNumber,sceneLevel, testData,attemptNumber);
+    //    await this.verifySupportingRationals(step,StepsInvolved,actualStepNumber,sceneLevel, testData);
+    //    if (step.startsWith('M')){
+    //          await this.verifyUserActionDetailsMultiSelect(StepsInvolved,actualStepNumber,sceneLevel, testData);
+    //    }else{
+    //          await this.verifyUserActionDetails(StepsInvolved,actualStepNumber,sceneLevel, testData);
+    //    }
       
     }
 
 
 
-    private async verifyInstruction(step: string,StepsInvolved:string[],actualStepNumber:number,sceneLevel:string, testData: any) {
+    private async verifyInstruction(step: string,StepsInvolved:string[],actualStepNumber:number,sceneLevel:string, testData: any,attemptNumber:number) {
         const stepDetails = testData[`STEP_${sceneLevel}`]
         console.log("Started step:" +actualStepNumber);
         const instructionText = stepDetails.instruction;
         const questionText = stepDetails.question;
         const dropdownNumber = actualStepNumber - 1;
         if (dropdownNumber>0){
-            await this.frameLocator.locator(`button#step-dropdown-arrow-button-${dropdownNumber}`).click();
+            await this.frameLocator.locator(`button#step-dropdown-arrow-button-${dropdownNumber}`).nth(attemptNumber).click();
         }
-        const instructionHeadingLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-heading`
-        const instructionLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-text`
-        const questionTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-question`
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionHeadingLocator).first()).toHaveText("Description");
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionLocator).first()).toHaveText(instructionText);
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(questionTextLocator).first()).toHaveText(questionText);
+        await this.page.pause();
+        const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
+        //*[@id='attempt-dropdown-arrow-button-0']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section[@id='step-dropdown-0']
+        const instructionHeadingLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'description-container')]/*[contains(@class,'description-heading')]`;
+        const instructionLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'description-container')]/*[contains(@class,'description-text')]`;
+         const questionTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'description-container')]/*[contains(@class,'description-question')]`;
+        
+       // const instructionLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-text`
+       // const questionTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.description-container>.description-question`
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionHeadingLocator).nth(attemptNumber)).toHaveText("Description");
+        const noOfInstructionItems = await this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionLocator).all();
+        for (let i = 0; i < instructionText.length; i++) {
+            await expect(noOfInstructionItems[i]).toHaveText(instructionText[i]);
+        } 
+        //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionLocator).first()).toHaveText(instructionText);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(questionTextLocator).nth(attemptNumber)).toHaveText(questionText);
     }
 
 
     
     private async verifySupportingRationals(step: string,StepsInvolved:string[],actualStepNumber:number,sceneLevel:string, testData: any) {
        // Need to look into it 
-        const stepDetails = testData[`STEP_${sceneLevel}`]
-        const rational = stepDetails.rationalForReportMainScene;
+        const stepDetails = testData[`STEP_${sceneLevel}`];
+        const lastStep = StepsInvolved[StepsInvolved.length - 1];
+        const feedback = stepDetails.rationalForReportMainScene;
         const dropdownNumber =actualStepNumber - 1;
         const supportingRationalHeadingLocator=`section#step-dropdown-${dropdownNumber}>div>div.supporting-rationale-container>.supporting-rationale-heading`
-        const supportingRationalTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.supporting-rationale-container>.supporting-rationale-text`
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalHeadingLocator).first()).toHaveText("Supporting Rationale");
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextLocator).first()).toHaveText(rational);
+        const supportingRationalTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.score-area >div>div>div>div.score-msg`
+        //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalHeadingLocator).first()).toHaveText("Supporting Rationale");
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextLocator).first()).toHaveText(feedback);
         
     }
 

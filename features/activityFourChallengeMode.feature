@@ -18,7 +18,7 @@ Feature: Launch Activity
     When the user click on the Learning Objective button in more options menue items
     Then the Learning Objectives popup should be visible and content should be as per content matrix
     Examples:
-  # | scenario |
+  | scenario |
   # |   S1     |
 
 
@@ -39,9 +39,9 @@ Feature: Launch Activity
 
     Examples:
       | scenario |
-      | S55       |
+      # | S55       |
       # | S56      |
-      # | S3       |
+      | S3       |
       # | S4       |
       # | S5       |
       # | S6       |

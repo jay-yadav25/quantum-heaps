@@ -35,11 +35,15 @@
     "CORRECT": "You contact the physical therapist and tell her that you are not trained to remove the device and ask if she will send another PTA to assist you. You also document the delay and the reason for not ambulating Ms. Jones.",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "This is not the correct action for you to take."
+      "text": "This is not the appropriate action for you to take."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct action has been highlighted for you."
+      "text": "The appropriate action has been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "This is the appropriate action for you to take."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -62,8 +66,12 @@
     "INCORRECT_2": "You assist her back into bed and elevate her leg. You also apply an ice pack to her knee to decrease the swelling.",
     "CORRECT": "You let Ms. Jones' nurse know that she is done with her therapy and is requesting pain medication.",
     "attemptOneFeedback":{
-      "title": "",
-      "text": ""
+      "title": "Not quite!",
+      "text": "The appropriate action has been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "This is the appropriate action for you to take."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -86,8 +94,12 @@
     "INCORRECT_2": "I wanted her to have her medicine before the pain got to be too bad. You would've done the same thing if you were me. She was really hurting, and her nurse was busy, and you weren't here.",
     "CORRECT": "It's really tough for me to see patients in pain, and I realize that my decision has placed both of us in a serious situation. I definitely won't make that mistake again.",
     "attemptOneFeedback":{
-      "title": "",
-      "text": ""
+      "title": "Not quite!",
+      "text": "The ideal response has been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "This is the ideal response to the PT's statement."
     },
     "INCORRECT_1_REPLY": "The PT is frowning at your response.",
     "INCORRECT_2_REPLY": "The PT is shaking her head.",
@@ -117,8 +129,12 @@
     "INCORRECT_2": "I know that wasn't the best, but I knew it couldn't hurt, and I figured if she thought it would help, then that alone would make her more comfortable.",
     "CORRECT": "I'm glad that the ice and elevation helped. I should have taken the time to find her nurse and report Ms. Jones' pain.",
     "attemptOneFeedback":{
-      "title": "",
-      "text": ""
+      "title": "Not quite!",
+      "text": "The ideal response has been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "This is the ideal response to the PT's statement."
     },
     "INCORRECT_1_REPLY": "The PT is looking at you with concern.",
     "INCORRECT_2_REPLY": "The PT sighs, looks down at the floor, and rubs her forehead as if deep in thought.",
@@ -150,8 +166,12 @@
     "INCORRECT_2": "It was just so obvious to me that Mrs. Jones needed her medicine, and I just knew if I didn't do something, I wouldn't be measuring up to my personal standards of excellence.",
     "CORRECT": "Thank you! That means a lot coming from you. I work hard to do a good job.",
     "attemptOneFeedback":{
-      "title": "",
-      "text": ""
+      "title": "Not quite!",
+      "text": "The ideal response has been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "This is the ideal response to the PT's statement."
     },
     "INCORRECT_1_REPLY": "The PT gives you a small smile and pats you on the back.\nPT: \"Well, good job anyway.\"",
     "INCORRECT_2_REPLY": "The PT looks at you, surprised, then clears her throat.\nPT: \"Yes, well, thank you for living up to your personal standards of excellence.\"",
@@ -179,15 +199,19 @@
     "correctAnswers": [ "You are acting defensive, unable to acknowledge a wrongdoing.", 
                         "You are revealing your lack of knowledge of legal and ethical concerns, including scope of practice and negligence."],
     "incorrectAnswers": ["The PT is thinking she could be held liable and is looking for someone to blame.", 
-                          "The PT doesn’t believe you are telling the truth."],
+                          "The PT doesn't believe you are telling the truth."],
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "You haven't selected the correct reasons for the PT's reaction."
+      "text": "You haven't selected the appropriate reasons for the PT's reaction."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct reasons have been highlighted for you."
+      "text": "The appropriate reasons for the PT's reaction have been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "You have selected the appropriate reasons for the PT's reaction."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -212,11 +236,15 @@
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "You haven't selected the correct reasons for the PT's reaction."
+      "text": "You haven't selected the appropriate reasons for the PT's reaction."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct reasons have been highlighted for you."
+      "text": "The appropriate reasons for the PT's reaction have been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "You have selected the appropriate reasons for the PT's reaction."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -236,16 +264,20 @@
     ],
     "correctAnswers": ["You have admitted your mistake, and the PT is acknowledging the difficult circumstances.", 
                         "The PT is showing concern for you since this decision includes a violation of scope of practice, potentially negligence, and could result in a reprimand, job loss, or legal action."],
-    "incorrectAnswers": ["The PT wishes that she could take your place so you wouldn’t have to deal with the possible ramifications of your actions.", 
+    "incorrectAnswers": ["The PT wishes that she could take your place so you wouldn't have to deal with the possible ramifications of your actions.", 
                           "The PT already knows what is about to happen and is about to share bad news with you."],
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "You haven't selected the correct reasons for the PT's reaction."
+      "text": "You haven't selected the appropriate reasons for the PT's reaction."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct reasons have been highlighted for you."
+      "text": "The appropriate reasons for the PT's reaction have been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "You have selected the appropriate reasons for the PT's reaction."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -263,18 +295,22 @@
       "Select all the options that could be the most likely reasons for such a reaction.", 
       "You have 2 attempts to make the correct selections."
     ],
-    "correctAnswers": [ "You are not acknowledging the true issue. Not reporting Ms. Jones’ pain could be considered negligence.", 
+    "correctAnswers": [ "You are not acknowledging the true issue. Not reporting Ms. Jones' pain could be considered negligence.", 
                         "You are revealing your lack of knowledge of legal and ethical concerns, including negligence.",  
                         "The PT is thinking that you need additional training."],
-    "incorrectAnswers": ["The PT doesn’t believe you are telling the truth."],
+    "incorrectAnswers": ["The PT doesn't believe you are telling the truth."],
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "You haven't selected the correct reasons for the PT's reaction."
+      "text": "You haven't selected the appropriate reasons for the PT's reaction."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct reasons have been highlighted for you."
+      "text": "The appropriate reasons for the PT's reaction have been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "You have selected the appropriate reasons for the PT's reaction."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -295,15 +331,19 @@
     "correctAnswers": ["The PT is realizing that you have a lack of knowledge of legal and ethical concerns, including scope of practice and negligence.",  
                       "The PT is thinking that you need additional training."],
     "incorrectAnswers": ["You are about to be reprimanded.",
-                          "The PT is about to share bad news with you about Ms. Jones’ condition."],
+                          "The PT is about to share bad news with you about Ms. Jones' condition."],
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "You haven't selected the correct reasons for the PT's reaction."
+      "text": "You haven't selected the appropriate reasons for the PT's reaction."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct reasons have been highlighted for you."
+      "text": "The appropriate reasons for the PT's reaction have been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "You have selected the appropriate reasons for the PT's reaction."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -328,11 +368,15 @@
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "You haven't selected the correct reasons for the PT's reaction."
+      "text": "You haven't selected the appropriate reasons for the PT's reaction."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct reasons have been highlighted for you."
+      "text": "The appropriate reasons for the PT's reaction have been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "You have selected the appropriate reasons for the PT's reaction."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -357,11 +401,15 @@
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "You haven't selected the correct reasons for the PT's reaction."
+      "text": "You haven't selected the appropriate reasons for the PT's reaction."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct reasons have been highlighted for you."
+      "text": "The appropriate reasons for the PT's reaction have been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "You have selected the appropriate reasons for the PT's reaction."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -386,11 +434,15 @@
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "You haven't selected the correct reasons for the PT's reaction."
+      "text": "You haven't selected the appropriate reasons for the PT's reaction."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct reasons have been highlighted for you."
+      "text": "The appropriate reasons for the PT's reaction have been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "You have selected the appropriate reasons for the PT's reaction."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -415,11 +467,15 @@
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "You haven't selected the correct reasons for the PT's reaction."
+      "text": "You haven't selected the appropriate reasons for the PT's reaction."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct reasons have been highlighted for you."
+      "text": "The appropriate reasons for the PT's reaction have been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "You have selected the appropriate reasons for the PT's reaction."
     },
     "INCORRECT_FEEDBACK": {
       "title": "Not quite!",
@@ -432,27 +488,33 @@
   },
   "STEP_5": {
     "title": "Lunch Meeting - Confidentiality Scenario",
-    "instruction": ["When confronted by the PT about your earlier decision, you admitted your mistake and promised to never make the mistake again. The PT looked at you sympathetically. This was a good decision and the most appropriate way to respond to the PT."],
+    "instruction": ["The PT invites you to grab a quick lunch in-between shifts at a local café adjacent to the hospital. It is a nice day, so you both decide to sit outside on the patio of the café. It's noon and the only other customers seated outside appear to be engrossed in conversation.",
+                    "After you place your orders and the waiter has left, the PT tells you that a complaint was filed by Ms. Jones' family about the care that you provided yesterday. The PT then asks you a question."],
     "instructionsList": [
       "Review the PT's question.",
-      "Choose the most appropriate response from the three options provided to you."
+      "Choose the most appropriate response from the three options provided to you.",
+      "You have 2 attempts to make the correct selection."
     ],
     "conversation": [
       {
-        "title": "Team Coach",
+        "title": "Physical Therapist (PT)",
         "text": "Would you like to brief me further about Ms. Jones' condition?"
       }],
     "question": "How would you respond to the PT's query based on the information that is presented to you?",
-    "INCORRECT_1": "I was not aware that they spoke with you. Can you tell me if they had concerns?",
+    "INCORRECT_1": "I was not aware that they spoke with you.  Can you tell me if they had concerns?",
     "INCORRECT_2": "Should we schedule a time to meet with the family at your office?",
-    "CORRECT_1": "I am not sure if I feel comfortable talking about this here. Do you mind if we take this conversation back to your office after lunch?",
+    "CORRECT": "I am not sure if I feel comfortable talking about this here. Do you mind if we take this conversation back to your office after lunch?",
     "attemptOneFeedback":{
       "title": "Not quite!",
-      "text": "This is not the correct way to respond to the PT's query."
+      "text": "This is not the ideal way to respond to the PT's query."
     },
     "attemptTwoFeedback":{
       "title": "Not quite!",
-      "text": "The correct response has been highlighted for you."
+      "text": "The ideal response has been highlighted for you."
+    },
+    "correctPopupFeedback":{
+      "title": "Correct!",
+      "text": "This is the ideal response to the PT's query."
     },
     "INCORRECT_1_FEEDBACK": {
       "title": "Not quite!",

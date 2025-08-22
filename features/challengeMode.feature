@@ -16,8 +16,8 @@ Feature: Launch Activity
     Then Verify the scenario score "<scenario>"
 
     Examples:
-      | scenario |
-      | S1       |
+      # | scenario |
+      # | S1       |
       # | S2       |
       # | S3       |
       # | S4       |

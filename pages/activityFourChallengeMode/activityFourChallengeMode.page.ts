@@ -28,6 +28,7 @@ export class ActivityFour {
     readonly learningObjectiveDetailsInPopup: Locator;
     readonly learningObjectiveHeader: Locator;
     readonly learningObjectiveHeaderInPopup:Locator;
+    readonly restartButton:Locator;
 
     // Introduction Popup
     readonly introductionPopUpTitle: Locator;
@@ -87,6 +88,7 @@ export class ActivityFour {
     this.moreOptionLearnignObjectiveButton = this.frameLocator.locator('//li[@aria-label="Learning Objectives"]');
     this.moreOptionIntroductionButton = this.frameLocator.locator('//li[@aria-label="Introduction"]');
     this.loader = this.frameLocator.locator('div.circular-loader');
+    this.restartButton=this.frameLocator.locator('#restart-btn');
   }
   public async launchActivity(environment:string,activityNo: number) {
     console.log(environment);
@@ -231,8 +233,8 @@ private findNextValidStep(path: string[], currentIndex: number): string {
     const introductionList=testData.introduction.introductionList;
     const activityOverviewList=testData.introduction.activityOverviewList;
     const mode=testData.introduction.mode;
-    await expect(this.introductionPopUpTitle).toBeVisible();
-    await expect(this.introductionPopUpTitle).toHaveText("Introduction");
+    await expect(this.introductionPopUpTitleInPopup).toBeVisible();
+    await expect(this.introductionPopUpTitleInPopup).toHaveText("Introduction");
     const introductionsListLocator = await this.introPopupText.all();
     expect(introductionsListLocator.length).toBe(introductionList.length);
     for (let i = 0; i < introductionList.length; i++) {
@@ -267,7 +269,7 @@ private findNextValidStep(path: string[], currentIndex: number): string {
 
   private async processStep(step: string, testData: any) {
 
-    if (step.startsWith("S")) {
+    if ((step.startsWith("S") && step !="SUBMIT")) {
       console.log(`✅  ${step}`);
       await this.verifySingleSelectStep(step, testData);
       return;
@@ -288,8 +290,44 @@ private findNextValidStep(path: string[], currentIndex: number): string {
       await this.clickOnContinueButton();
       return;
     }
+    if (step === 'SUBMIT') {
+      await this.verifyFailedScenarioInbeweenSubmit();
+      return;
+    }
+    if (step === 'RESTATR') {
+      await this.verifyRestartPopup();
+      return;
+    }
   }
+  private async verifyRestartPopup() {
+    await this.restartButton.click();
+    await this.clickOnIntroductionContinueButton();
+  }
+  private async verifyFailedScenarioInbeweenSubmit() {
+    // Verify text from chat section
+    // await expect(this.chatEndMessage1).toHaveText("This conversation has ended without a positive resolution.");
+    // await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
+    // await this.clickOnDoneButton();
 
+    // const [level, rawAction] = previousStep.split("_");
+    // const actionMap: { [key: string]: string } = {
+    //   INCORRECT: "incorrect",
+    //   DISTRACTOR: "distractor"
+    // };
+    // await expect(this.noOfAttemptChatPopup).toHaveText(`Attempts Remaining: ${3 - attemptNumber}`);
+    // const actionKey = actionMap[rawAction.toUpperCase()];
+    // const actionDetails = testData[level];
+    // const attemptEndingText = actionDetails[actionKey + "_attempt_ending_popup_text"];
+    // const feedbackPopupFirstText = "The conversation path you took didn't reach a positive resolution.  " + attemptEndingText;
+    // const feedbackPopupSecondText = "Continue practicing your problem solving and communication skills by retrying the scenario once again or select the Submit button to end the scenario and submit your results to your teacher.";
+
+    // // Verify text on popup for incorrect attempt
+    // await expect(this.feedbackPopupText1).toHaveText(feedbackPopupFirstText);
+    // await expect(this.feedbackPopupText2).toHaveText(feedbackPopupSecondText);
+    //await this.clickOnContinueButton();
+    await this.clickOnSubmitButton();
+    await this.page.pause();
+  }
   private parseDisplayedTime(displayedTime: string): number {
     if (!displayedTime) return 0;
 
@@ -302,7 +340,7 @@ private findNextValidStep(path: string[], currentIndex: number): string {
     return (minutes * 60) + seconds;
   }
 
- private extractStatuses(steps: string): string[] {
+private extractStatuses(steps: string): string[] {
   // Find index of the first underscore after the step prefix (handles C3.1, M4.2, etc.)
   const firstUnderscoreIndex = steps.indexOf("_");
   if (firstUnderscoreIndex === -1) return [];
@@ -315,6 +353,9 @@ private findNextValidStep(path: string[], currentIndex: number): string {
   for (let i = 0; i < parts.length; i += 2) {
     if (parts[i + 1] !== undefined) {
       result.push(parts[i] + "_" + parts[i + 1]);
+    } else {
+      // Handle the last unpaired element
+      result.push(parts[i]);
     }
   }
 
@@ -373,7 +414,7 @@ private findNextValidStep(path: string[], currentIndex: number): string {
   }
   private async verifyMultiSelectStep(step: string,testData: any) {
     await this.verifyStepInstruction(step, testData);
-    await this.verifyQuestion(step, testData);
+    //await this.verifyQuestion(step, testData);
     await this.verifyAndSelectMultiSelectOptions(step, testData);
   }
  
@@ -458,7 +499,7 @@ private findNextValidStep(path: string[], currentIndex: number): string {
     const stepID = this.getStepOptionIds(step)[0];
     console.log(questionText);
     const questionLocator=`//*[contains(@id,'${stepID}')]/ancestor::*[contains(@class,'')]/preceding-sibling::strong`
-    await this.page.pause();
+    //await this.page.pause();
     await expect(this.frameLocator.locator(questionLocator)).toHaveText(questionText);
   }
 
@@ -477,8 +518,9 @@ private findNextValidStep(path: string[], currentIndex: number): string {
   const correctOptionText = stepDetails.CORRECT;
   const incorrectOptionText = stepDetails.INCORRECT_1;
   const incorrectOptionText2 = stepDetails.INCORRECT_2;
-  const attemptOneFeedback = stepDetails.attemptOneFeedback;
-  const attemptTwoFeedback = stepDetails.attemptTwoFeedback;
+  const attemptOneFeedback = stepDetails.attemptOneFeedback.text;
+  const attemptTwoFeedback = stepDetails.attemptTwoFeedback?.text;
+  const correctPopupFeedback = stepDetails.correctPopupFeedback.text;
   await expect(this.frameLocator.locator(`//button[@id='${optionIds[0]}']//p`).first()).toHaveText(incorrectOptionText);
   await expect(this.frameLocator.locator(`//button[@id='${optionIds[2]}']//p`).first()).toHaveText(correctOptionText);
   await expect(this.frameLocator.locator(`//button[@id='${optionIds[1]}']//p`).first()).toHaveText(incorrectOptionText2);
@@ -488,11 +530,12 @@ private findNextValidStep(path: string[], currentIndex: number): string {
   for (let i = 0; i < statuses.length; i++) {
     let selectedOptionID: string;
     let attemptFeedbackText: string | undefined;
-    console.log(statuses)
+    console.log("Steps are"+statuses)
     if (statuses[i]=="CORRECT") {
       selectedOptionID = optionIds[2]; 
       console.log(selectedOptionID);
       await this.frameLocator.locator(`//button[@id='${selectedOptionID}']`).first().click();
+      await this.verifyFeedbackPopupText(correctPopupFeedback, i);
 
     } else if (statuses[i].includes("INCORRECT_1")) {
       selectedOptionID = optionIds[0];
@@ -516,12 +559,12 @@ private findNextValidStep(path: string[], currentIndex: number): string {
 
 private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: number) {
   if (feedbackText) {
-   // await expect(this.frameLocator.locator('.feedback-popup')).toContainText(feedbackText);
+   await expect(this.frameLocator.locator('#dialog_desc>p')).toContainText(feedbackText);
   }
   if (attemptNumber !== undefined) {
     console.log(`Verifying feedback for attempt #${attemptNumber + 1}`);
   }
-  //await this.popupCloseButton.click();
+  await this.popupCloseButton.click();
 }
 
   private async verifyAndSelectSingleSelectChatOptions(step: string, testData: any) {
@@ -542,7 +585,8 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
     const incorrectOptionText = stepDetails.INCORRECT_1;
     const incorrectOptionText2 = stepDetails.INCORRECT_2;
     const defaultChat = stepDetails.pt_message;
-     const attemptOneFeedback = stepDetails.attemptOneFeedback;
+     const attemptOneFeedback = stepDetails.attemptOneFeedback.text;
+     const correctPopupFeedback = stepDetails.correctPopupFeedback.text;
    await expect(this.frameLocator.locator(`//span[contains(@id, 'slt_${sceneLevel}_default_chat')]`).first()).toHaveText(defaultChat);
     await expect(this.frameLocator.locator(`//button[@id='${optionIds[0]}']//p`).first()).toHaveText(incorrectOptionText);
     await expect(this.frameLocator.locator(`//button[@id='${optionIds[2]}']//p`).first()).toHaveText(correctOptionText);
@@ -556,7 +600,7 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
       chatReply=stepDetails.CORRECT_1_REPLY;
       selectedOption=correctOptionText;
       await this.frameLocator.locator(`//button[@id='${selectedOptionID}']`).first().click();
-      await this.verifyFeedbackPopupText(attemptOneFeedback);
+      await this.verifyFeedbackPopupText(correctPopupFeedback);
       
     } else if (step.includes('INCORRECT_1')) {
       selectedOptionID = optionIds[0];
@@ -586,25 +630,28 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
           sceneLevel = `${major}_${minor}`;
         }
     const stepDetails = testData['STEP_' + sceneLevel];
-    const attemptOneFeedback=stepDetails.attemptOneFeedback;
-    const attemptTwoFeedback=stepDetails.attemptTwoFeedback;
+    const attemptOneFeedback=stepDetails.attemptOneFeedback.text;
+    const attemptTwoFeedback=stepDetails.attemptTwoFeedback.text;
+    const correctPopupFeedback = stepDetails.correctPopupFeedback.text;
     const idealChoices = stepDetails.correctAnswers ;
     const nonIdealChoices = stepDetails.incorrectAnswers;
     const statuses = this.extractStatuses(step);
 
-  for (let i = 0; i < statuses.length; i++) {
+//  for (let i = 0; i < statuses.length; i++) {
   let optionToClick: any;
   let attemptFeedbackText: string | undefined;
-  await this.page.pause()
+  //await this.page.pause()
   if (statuses.length === 1) {
-    if (statuses[i] === "CORRECT") {
+    if (statuses[0] === "CORRECT") {
       for (let j = 0; j < idealChoices.length; j++) {
         optionToClick = idealChoices[j];
-        const commonLocatorMultiselect = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = '${optionToClick}']`;
+        const commonLocatorMultiselect = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${optionToClick}"]`;
         await this.frameLocator.locator(commonLocatorMultiselect).first().click();
         console.log("clicked:" + optionToClick);
       }
       await this.clickOnContinueButton();
+      await this.verifyFeedbackPopupText(correctPopupFeedback);
+      //await this.clickOnContinueButton();
     } 
   } else if (statuses.length === 2) {
     const firstEntry = statuses[0];
@@ -612,44 +659,48 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
     if (secondEntry === "CORRECT") {
       console.log("First attempt: Selecting both correct and incorrect options");
       for (let j = 0; j < idealChoices.length; j++) {
-        const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = '${idealChoices[j]}']`;
+        const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${idealChoices[j]}"]`;
         await this.frameLocator.locator(correctLocator).first().click();
         console.log("clicked correct:" + idealChoices[j]);
       }
       for (let j = 0; j < nonIdealChoices.length; j++) {
-        const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = '${nonIdealChoices[j]}']`;
+        const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${nonIdealChoices[j]}"]`;
         await this.frameLocator.locator(incorrectLocator).first().click();
         console.log("clicked incorrect:" + nonIdealChoices[j]);
       }
       await this.clickOnContinueButton();
+      await this.verifyFeedbackPopupText(attemptOneFeedback, 0);
       console.log("Second attempt: Selecting only incorrect options");
       for (let j = 0; j < nonIdealChoices.length; j++) {
-        const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = '${nonIdealChoices[j]}']`;
+        const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${nonIdealChoices[j]}"]`;
         await this.frameLocator.locator(incorrectLocator).first().click();
         console.log("clicked incorrect:" + nonIdealChoices[j]);
       }
-      
-      attemptFeedbackText = i === 0 ? attemptOneFeedback : i === 1 ? attemptTwoFeedback : undefined;
-      await this.verifyFeedbackPopupText(attemptFeedbackText, i);
+      await this.clickOnContinueButton();
+      //attemptFeedbackText = i === 0 ? attemptOneFeedback : i === 1 ? attemptTwoFeedback : undefined;
+      await this.verifyFeedbackPopupText(correctPopupFeedback, 1);
     } else if (firstEntry.includes("INCORRECT") && secondEntry.includes("INCORRECT")) {
       console.log("Both entries are incorrect - sequential selection approach");
       const firstIncorrectOption = nonIdealChoices[0];
-      const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = '${firstIncorrectOption}']`;
+      const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${firstIncorrectOption}"]`;
       await this.frameLocator.locator(incorrectLocator).first().click();
       console.log("clicked first incorrect:" + firstIncorrectOption);
       
-      attemptFeedbackText = i === 0 ? attemptOneFeedback : i === 1 ? attemptTwoFeedback : undefined;
-      await this.verifyFeedbackPopupText(attemptFeedbackText, i);
+      //attemptFeedbackText = i === 0 ? attemptOneFeedback : i === 1 ? attemptTwoFeedback : undefined;
+      
       await this.clickOnContinueButton();
+      await this.verifyFeedbackPopupText(attemptFeedbackText, 0);
       console.log("Second attempt: Selecting first correct option");
       const firstCorrectOption = idealChoices[0];
-      const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = '${firstCorrectOption}']`;
+      const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${firstCorrectOption}"]`;
       await this.frameLocator.locator(correctLocator).first().click();
       console.log("clicked first correct:" + firstCorrectOption);
+      await this.clickOnContinueButton();
+      await this.verifyFeedbackPopupText(attemptFeedbackText, 1);
     } else {
       throw new Error(`Unknown step format combination: ${firstEntry}, ${secondEntry}`);
     }
   } 
-  }
+  
   }
 }

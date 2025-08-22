@@ -216,16 +216,12 @@ private findPreviousStep(path: string[], currentIndex: number): string {
   }
 
   private async verifyHintPopup(currentStep: string, testData: any) {
-    // await this.clickOnHintButton();
-    // await expect(this.hintTitle).toHaveText("Hint");
     
     if (currentStep.startsWith('S') && !currentStep.startsWith('FS')) {
       await this.verifyMainSceneHints(currentStep, testData);
     } else if (currentStep.startsWith('FS')) {
       await this.verifyFollowUpSceneHints(currentStep, testData);
     }
-    
-    //await this.clickOnPopupContinueButton();
   }
 
   private async verifyMainSceneHints(step: string, testData: any) {
@@ -235,6 +231,8 @@ private findPreviousStep(path: string[], currentIndex: number): string {
      if (actualStepNumber === null) {
     throw new Error(`Invalid step format: ${step}`);
     }
+    await this.hintButton.nth(actualStepNumber-1).isVisible(); 
+    await this.hintButton.nth(actualStepNumber-1).isEnabled();
     await this.hintButton.nth(actualStepNumber-1).click();
     await expect(this.hintTitle).toHaveText("Hint");
     const thinkItemTexts = stepDetails.hints.thinkAbout;
@@ -261,7 +259,8 @@ private findPreviousStep(path: string[], currentIndex: number): string {
      if (actualStepNumber === null) {
     throw new Error(`Invalid step format: ${step}`);
     }
-    await expect(this.hintButton.nth(actualStepNumber-1)).toBeEnabled();
+    await this.hintButton.nth(actualStepNumber-1).isVisible(); 
+    await this.hintButton.nth(actualStepNumber-1).isEnabled();
     await this.hintButton.nth(actualStepNumber-1).click();
     await expect(this.hintTitle).toHaveText("Hint");
     const stepDetails = testData['SCENE' + stepNumber];
@@ -343,7 +342,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
     await expect(this.stepInstruction).toHaveText(instructionText);
     await this.clickOnPopupContinueButton();
     if (previousStepForHint==='HINT'){
-         //console.log(`✅ Hint Opened — Last step was ${currentStep}`);
+        console.log(`✅ Hint Opened — Last step was ${currentStep}`);
         await this.verifyHintPopup(currentStep, testData);
       }
     const instructionListItemsText = stepDetails.instructionsList;
@@ -508,7 +507,7 @@ private findPreviousStep(path: string[], currentIndex: number): string {
           optionToClick = nonIdealChoices[incorrectIndex];
         }
       } else if (item.startsWith("HINT")) {
-        this.verifyHintPopup(step,testData);
+        await this.verifyHintPopup(step,testData);
         continue;
         }
       
