@@ -86,10 +86,13 @@ export class SummaryReportActivityFour {
          const firstEntry = avgScores[0];
         const secondEntry = avgScores[1];
         await expect((this.attemptScore).nth(0)).toHaveText(": "+firstEntry.toString()+"%");
-        await expect((this.attemptScore).nth(1)).toHaveText(": "+secondEntry.toString()+"%");
+        if(avgScores.length>1){
+             await expect((this.attemptScore).nth(1)).toHaveText(": "+secondEntry.toString()+"%");
+        }
         await expect((this.overallScore)).toHaveText(overallSocre.toString()+"%");
 
         console.log('Highest attempt average:', this.highestAttemptAverage);
+        await this.page.pause();
     }
 
     /**
@@ -345,8 +348,9 @@ export class SummaryReportActivityFour {
         const supportingRationalHeadingLocator=`section#step-dropdown-${dropdownNumber}>div>div.supporting-rationale-container>.supporting-rationale-heading`
         //const supportingRationalTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.score-area >div>div>div>div.score-msg`
         const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
-        const supportingRationalTextTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div//div[contains(@class,'score-msg')]`;
-        const stepScoretLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]`;
+        const supportingRationalTextTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'score-title-value-container')]//div[@class='score-msg']`;
+        const supportingRationalTitleLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'score-msg-title')]`;
+        const stepScoretLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'response-score-value')]`;
         
         //*[@id='step-dropdown-0']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]
         //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalHeadingLocator).first()).toHaveText("Supporting Rationale");
@@ -363,8 +367,8 @@ export class SummaryReportActivityFour {
              feedbackTextTitle=INCORRECT_2_FEEDBACK.title;
             feedbackText=INCORRECT_2_FEEDBACK.text;
             } 
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator).first()).toHaveText(feedbackTextTitle);
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator).nth(1)).toHaveText(feedbackText);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTitleLocator).first()).toHaveText(feedbackTextTitle);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator)).toHaveText(feedbackText);
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(stepScoretLocator)).toHaveText(": "+ score.toString());
         
     }
@@ -374,14 +378,15 @@ export class SummaryReportActivityFour {
         const stepDetails = testData[`STEP_${sceneLevel}`];
         const lastStep = StepsInvolved[StepsInvolved.length - 1];
         const CORRECT_FEEDBACK = stepDetails.CORRECT_FEEDBACK;
-        const INCORRECT_FEEDBACK = stepDetails.INCORRECT_1_FEEDBACK;
+        const INCORRECT_FEEDBACK = stepDetails.INCORRECT_FEEDBACK;
         //const INCORRECT_2_FEEDBACK = stepDetails.INCORRECT_2_FEEDBACK;
         const dropdownNumber =actualStepNumber - 1;
         const supportingRationalHeadingLocator=`section#step-dropdown-${dropdownNumber}>div>div.supporting-rationale-container>.supporting-rationale-heading`
         //const supportingRationalTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.score-area >div>div>div>div.score-msg`
         const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
-        const supportingRationalTextTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div//div[contains(@class,'score-msg')]`;
-        const stepScoretLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]`;
+        const supportingRationalTextTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'score-title-value-container')]//div[@class='score-msg']`;
+        const supportingRationalTitleLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'score-msg-title')]`;
+        const stepScoretLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'response-score-value')]`;
         
         //*[@id='step-dropdown-0']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]
         //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalHeadingLocator).first()).toHaveText("Supporting Rationale");
@@ -395,8 +400,8 @@ export class SummaryReportActivityFour {
             feedbackTextTitle=INCORRECT_FEEDBACK.title;
              feedbackText=INCORRECT_FEEDBACK.text;
             } 
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator).first()).toHaveText(feedbackTextTitle);
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator).nth(1)).toHaveText(feedbackText);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTitleLocator)).toHaveText(feedbackTextTitle);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextTextLocator)).toHaveText(feedbackText);
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(stepScoretLocator)).toHaveText(": "+ score.toString());
         
     }

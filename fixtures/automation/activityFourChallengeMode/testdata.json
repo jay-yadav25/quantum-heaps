@@ -45,7 +45,11 @@
       "title": "Correct!",
       "text": "This is the appropriate action for you to take."
     },
-    "INCORRECT_FEEDBACK": {
+    "INCORRECT_1_FEEDBACK": {
+      "title": "Not quite!",
+      "text": "The option you chose showed negligence, and a lack of understanding of your scope of practice and adherence to professional ethics."
+    },
+    "INCORRECT_2_FEEDBACK": {
       "title": "Not quite!",
       "text": "The option you chose showed negligence, and a lack of understanding of your scope of practice and adherence to professional ethics."
     },
