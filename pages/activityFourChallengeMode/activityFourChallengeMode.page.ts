@@ -1,5 +1,6 @@
-import { expect, Locator, FrameLocator, type Page } from '@playwright/test';
-
+import { expect, Locator, FrameLocator, type Page, Frame } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import { performAccessibilityScan } from '../../utils/accessibilityScan';
 export class ActivityFour {
   readonly page: Page;
   private readonly frameLocator: FrameLocator;
@@ -76,7 +77,7 @@ export class ActivityFour {
   
     this.introductionPopUpTitle = this.frameLocator.locator("h2.popup-title");
     this.introductionPopUpTitleInPopup = this.frameLocator.locator("h2#dialog_label");
-    this.introPopupText = this.frameLocator.locator("div.popup-details>p");
+    this.introPopupText = this.frameLocator.locator("#introduction_desc span");
     this.introPopupTextInPopup = this.frameLocator.locator("#dialog_desc>div.popup-details>p");
     this.activityOverviewTitle = this.frameLocator.locator("h3.overview-title");
     this.activityOverviewTitleInPopup = this.frameLocator.locator("#dialog_desc h3.overview-title");
@@ -90,6 +91,35 @@ export class ActivityFour {
     this.loader = this.frameLocator.locator('div.circular-loader');
     this.restartButton=this.frameLocator.locator('#restart-btn');
   }
+  
+  public async performAccessibilityScan(stepName: string, testInfo: any): Promise<any> {
+    try {
+      const scanResults = await new AxeBuilder({ page: this.page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze();
+
+      if (testInfo) {
+        await testInfo.attach(`accessibility-scan-${stepName}`, {
+          body: JSON.stringify(scanResults, null, 2),
+          contentType: 'application/json'
+        });
+        console.log(scanResults);
+      }
+      console.log(scanResults);
+      if (scanResults.violations.length > 0) {
+        console.log(`Accessibility violations found at ${stepName}:`,
+          scanResults.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description })));
+      }
+
+      expect(scanResults.violations).toEqual([]);
+      return scanResults;
+    } catch (error) {
+      console.error(`Error during accessibility scan at ${stepName}:`, error);
+      throw error;
+    }
+  }
+
+
   public async launchActivity(environment:string,activityNo: number) {
     console.log(environment);
   let baseUrl='';
@@ -103,7 +133,8 @@ export class ActivityFour {
     2: "cs_l_02",
     3: "dm_l_03",
     4: "dm_c_04",
-    5: "cs_c_05"
+    5: "cs_c_05",
+    6: "dm_l_06",
   };
 
   const dhoCode = activityMap[activityNo];
@@ -179,22 +210,44 @@ private findNextValidStep(path: string[], currentIndex: number): string {
     await this.page.waitForTimeout(5000);
     await this.startButton.isVisible();
   }
-  public async verifyTitleAndLearningObjectivesPage(testData:any) {
-    const activityTitle=testData.learningObjectiveItems.title;
-    const learningObjectiveHeader=testData.learningObjectiveItems.learningObjective;
-    const learningObjectivesList=testData.learningObjectiveItems.learningObjectivesList;
-    //await expect(this.activityTitleStartPage).toHaveText(activityTitle);
-    await expect(this.learningObjectiveTitle).toBeVisible();
-    await expect(this.learningObjectiveTitle).toHaveText("Learning Objectives");
-    await expect(this.learningObjectiveHeader).toHaveText(learningObjectiveHeader);
-    const objectiveItems = await this.learningObjectiveDetails.all();
-    expect(objectiveItems.length).toBe(learningObjectivesList.length);
-    for (let i = 0; i < objectiveItems.length; i++) {
-        await expect(objectiveItems[i]).toHaveText(learningObjectivesList[i]);
-    }
+  public async verifyTitleAndLearningObjectivesPage(testData: any, testInfo: any) {
+    const activityTitle = testData.learningObjectiveItems.title;
+  const learningObjectiveHeader = testData.learningObjectiveItems.learningObjective;
+  const learningObjectivesList = testData.learningObjectiveItems.learningObjectivesList;
+
+  // Check visibility and content
+  await expect(this.learningObjectiveTitle).toBeVisible();
+  await expect(this.learningObjectiveTitle).toHaveText("Learning Objectives");
+  await expect(this.learningObjectiveHeader).toHaveText(learningObjectiveHeader);
+
+  const objectiveItems = await this.learningObjectiveDetails.all();
+  expect(objectiveItems.length).toBe(learningObjectivesList.length);
+
+  for (let i = 0; i < objectiveItems.length; i++) {
+    await expect(objectiveItems[i]).toHaveText(learningObjectivesList[i]);
+  }
+await this.page.pause();
+//await this.performAccessibilityScan('after-learning-objectives-verification', testInfo);
+ // const iframe = page.frameLocator('//html/body/div[2]/div/iframe');
+  
+  // Test initial state
+  await performAccessibilityScan({
+  page: this.page,
+  testInfo,
+  scanType: 'iframe',
+  attachmentName: 'iframe-LO-Page-Accessibility'
+})
+
+await performAccessibilityScan({
+  page: this.page,
+  testInfo,
+  scanType: 'fullPage',
+  attachmentName: 'full-page-accessibility'
+})
+  
   }
 
-  public async verifyLearningObjectivesPopUp(testData:any) {
+  public async verifyLearningObjectivesPopUp(testData:any,testInfo:any) {
     const learningObjectiveHeader=testData.learningObjectiveItems.learningObjective;
     const learningObjectivesList=testData.learningObjectiveItems.learningObjectivesList;
     await expect(this.learningObjectiveTitleInPopup).toBeVisible();
@@ -205,6 +258,13 @@ private findNextValidStep(path: string[], currentIndex: number): string {
     for (let i = 0; i < objectiveItems.length; i++) {
         await expect(objectiveItems[i]).toHaveText(learningObjectivesList[i]);
     }
+     await performAccessibilityScan({
+  page: this.page,
+  testInfo,
+  scanType: 'element',
+  selector:'.wk_ex_iframe [role="dialog"]',
+  attachmentName: 'popup-LO-Page-Accessibility'
+})
     await this.continueButtonIntroAndLoPopup.click();
   }
   public async verifyIntroductionPageIsVisible() {
@@ -240,13 +300,13 @@ private findNextValidStep(path: string[], currentIndex: number): string {
     for (let i = 0; i < introductionList.length; i++) {
         await expect(introductionsListLocator[i]).toHaveText(introductionList[i]);
     }
-      await expect(this.activityOverviewTitle).toHaveText("Activity Overview");
-    const activityOverviewLocator = await this.activityOverviewDetails.all();
+      await expect(this.activityOverviewTitleInPopup).toHaveText("Activity Overview");
+    const activityOverviewLocator = await this.activityOverviewDetailsInPopup.all();
     expect(activityOverviewLocator.length).toBe(activityOverviewList.length);
     for (let i = 0; i < activityOverviewList.length; i++) {
         await expect(activityOverviewLocator[i]).toHaveText(activityOverviewList[i]);
     }
-    await expect(this.introductionActivityMode).toHaveText(mode);
+    await expect(this.introductionActivityModeInPopup).toHaveText(mode);
     await this.continueButtonIntroAndLoPopup.click();
   }
   public async clickOnContinueButton() {
@@ -341,7 +401,7 @@ private findNextValidStep(path: string[], currentIndex: number): string {
     return (minutes * 60) + seconds;
   }
 
-private extractStatuses(steps: string): string[] {
+  private extractStatuses(steps: string): string[] {
   // Find index of the first underscore after the step prefix (handles C3.1, M4.2, etc.)
   const firstUnderscoreIndex = steps.indexOf("_");
   if (firstUnderscoreIndex === -1) return [];
@@ -376,9 +436,9 @@ private extractStatuses(steps: string): string[] {
 
 
   if (step.startsWith('C')) {
-    const match = step.match(/^C(\d+)\.(\d+)/);
-    if (!match) return [];
-    const [_, major, minor] = match;
+  const match = step.match(/^C(\d+)\.(\d+)/);
+  if (!match) return [];
+  const [, major, minor] = match;
     return [
       `slt_step_${major}_${minor}_opt_1`,
       `slt_step_${major}_${minor}_opt_2`,
@@ -499,8 +559,7 @@ private extractStatuses(steps: string): string[] {
     questionText = stepDetails.question;
     const stepID = this.getStepOptionIds(step)[0];
     console.log(questionText);
-    const questionLocator=`//*[contains(@id,'${stepID}')]/ancestor::*[contains(@class,'')]/preceding-sibling::strong`
-    //await this.page.pause();
+    const questionLocator=`//*[contains(@id,'${stepID}')]/ancestor::*[contains(@class,'')]/preceding-sibling::h3`
     await expect(this.frameLocator.locator(questionLocator)).toHaveText(questionText);
   }
 
@@ -527,7 +586,6 @@ private extractStatuses(steps: string): string[] {
   await expect(this.frameLocator.locator(`//button[@id='${optionIds[1]}']//p`).first()).toHaveText(incorrectOptionText2);
 
   const statuses = this.extractStatuses(step);
-
   for (let i = 0; i < statuses.length; i++) {
     let selectedOptionID: string;
     let attemptFeedbackText: string | undefined;
@@ -588,7 +646,7 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
     const defaultChat = stepDetails.pt_message;
      const attemptOneFeedback = stepDetails.attemptOneFeedback.text;
      const correctPopupFeedback = stepDetails.correctPopupFeedback.text;
-   await expect(this.frameLocator.locator(`//span[contains(@id, 'slt_${sceneLevel}_default_chat')]`).first()).toHaveText(defaultChat);
+   await expect(this.frameLocator.locator(`//span[contains(@id, 'slt_3_1_default_chat')]`).first()).toHaveText(defaultChat);
     await expect(this.frameLocator.locator(`//button[@id='${optionIds[0]}']//p`).first()).toHaveText(incorrectOptionText);
     await expect(this.frameLocator.locator(`//button[@id='${optionIds[2]}']//p`).first()).toHaveText(correctOptionText);
     await expect(this.frameLocator.locator(`//button[@id='${optionIds[1]}']//p`).first()).toHaveText(incorrectOptionText2);
@@ -596,21 +654,26 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
     let selectedOptionID: string;
     let chatReply: string;
     let selectedOption: string;
-    if (step=='CORRECT') {
+    let selectedOptionNumber:number;
+    const statuses = this.extractStatuses(step);
+    if (statuses[0]==='CORRECT') {
       selectedOptionID = optionIds[2];
-      chatReply=stepDetails.CORRECT_1_REPLY;
+      selectedOptionNumber=3;
+      chatReply=stepDetails.CORRECT_REPLY;
       selectedOption=correctOptionText;
       await this.frameLocator.locator(`//button[@id='${selectedOptionID}']`).first().click();
       await this.verifyFeedbackPopupText(correctPopupFeedback);
       
-    } else if (step.includes('INCORRECT_1')) {
+    } else if (statuses[0]==='INCORRECT_1') {
       selectedOptionID = optionIds[0];
+      selectedOptionNumber=1;
       chatReply=stepDetails.INCORRECT_1_REPLY;
       selectedOption=incorrectOptionText;
       await this.frameLocator.locator(`//button[@id='${selectedOptionID}']`).first().click();
       await this.verifyFeedbackPopupText(attemptOneFeedback);
-    } else if (step.includes('INCORRECT_2')) {
+    } else if (statuses[0]==='INCORRECT_2') {
       selectedOptionID = optionIds[1];
+      selectedOptionNumber=2;
       chatReply=stepDetails.INCORRECT_2_REPLY;
       selectedOption=incorrectOptionText2;
       await this.frameLocator.locator(`//button[@id='${selectedOptionID}']`).first().click();
@@ -618,9 +681,11 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
     } else {
       throw new Error(`Unknown step format: ${step}`);
     }
-   await expect(this.frameLocator.locator(`//section[.//*[contains(@id, 'slt_${sceneLevel}_default_chat')]]//div[contains(@class, 'chat-message-reply')]`)).toHaveText(chatReply);
-   await expect(this.frameLocator.locator(`//section[.//*[contains(@id, 'slt_${sceneLevel}_default_chat')]]//div[contains(@class, 'message-bubble message-option')]/span`)).toHaveText(selectedOption);
-     
+    //await this.frameLocator.locator(`//section[.//*[contains(@id, 'slt_3_1_default_chat')]]//div[contains(@class, 'chat-message-reply')]`).waitFor({ state: 'visible' });
+   await this.page.waitForTimeout(4000);
+    await expect(this.frameLocator.locator(`.user-data-container span#slt_${sceneLevel}_default_chat_${selectedOptionNumber}_1`)).toHaveText(selectedOption);
+   await expect(this.frameLocator.locator(`span#slt_${sceneLevel}_default_chat_${selectedOptionNumber}_2`)).toHaveText(chatReply);
+   
   }
 
   private async verifyAndSelectMultiSelectOptions(step: string, testData: any) {
@@ -646,7 +711,7 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
     if (statuses[0] === "CORRECT") {
       for (let j = 0; j < idealChoices.length; j++) {
         optionToClick = idealChoices[j];
-        const commonLocatorMultiselect = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${optionToClick}"]`;
+        const commonLocatorMultiselect = `//button[contains(@id, 'slt_step_${sceneLevel}') and .//span[contains(@class, 'common-scrollbar') and normalize-space(text()) = "${optionToClick}"]]`;
         await this.frameLocator.locator(commonLocatorMultiselect).first().click();
         console.log("clicked:" + optionToClick);
       }
@@ -660,12 +725,16 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
     if (secondEntry === "CORRECT") {
       console.log("First attempt: Selecting both correct and incorrect options");
       for (let j = 0; j < idealChoices.length; j++) {
-        const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${idealChoices[j]}"]`;
+        const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and .//span[contains(@class, 'common-scrollbar') and normalize-space(text()) = "${idealChoices[j]}"]]`;
+        
+        //const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${idealChoices[j]}"]`;
         await this.frameLocator.locator(correctLocator).first().click();
         console.log("clicked correct:" + idealChoices[j]);
       }
       for (let j = 0; j < nonIdealChoices.length; j++) {
-        const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${nonIdealChoices[j]}"]`;
+        const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and .//span[contains(@class, 'common-scrollbar') and normalize-space(text()) = "${nonIdealChoices[j]}"]]`;
+        
+        //const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${nonIdealChoices[j]}"]`;
         await this.frameLocator.locator(incorrectLocator).first().click();
         console.log("clicked incorrect:" + nonIdealChoices[j]);
       }
@@ -673,7 +742,9 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
       await this.verifyFeedbackPopupText(attemptOneFeedback, 0);
       console.log("Second attempt: Selecting only incorrect options");
       for (let j = 0; j < nonIdealChoices.length; j++) {
-        const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${nonIdealChoices[j]}"]`;
+         const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and .//span[contains(@class, 'common-scrollbar') and normalize-space(text()) = "${nonIdealChoices[j]}"]]`;
+        
+        //const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${nonIdealChoices[j]}"]`;
         await this.frameLocator.locator(incorrectLocator).first().click();
         console.log("clicked incorrect:" + nonIdealChoices[j]);
       }
@@ -683,7 +754,9 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
     } else if (firstEntry.includes("INCORRECT") && secondEntry.includes("INCORRECT")) {
       console.log("Both entries are incorrect - sequential selection approach");
       const firstIncorrectOption = nonIdealChoices[0];
-      const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${firstIncorrectOption}"]`;
+       const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and .//span[contains(@class, 'common-scrollbar') and normalize-space(text()) = "${firstIncorrectOption}"]]`;
+        
+      //const incorrectLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${firstIncorrectOption}"]`;
       await this.frameLocator.locator(incorrectLocator).first().click();
       console.log("clicked first incorrect:" + firstIncorrectOption);
       
@@ -693,7 +766,9 @@ private async verifyFeedbackPopupText(feedbackText?: string, attemptNumber?: num
       await this.verifyFeedbackPopupText(attemptFeedbackText, 0);
       console.log("Second attempt: Selecting first correct option");
       const firstCorrectOption = idealChoices[0];
-      const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${firstCorrectOption}"]`;
+       const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and .//span[contains(@class, 'common-scrollbar') and normalize-space(text()) = "${firstCorrectOption}"]]`;
+        
+      //const correctLocator = `//button[contains(@id, 'slt_step_${sceneLevel}') and normalize-space(string(./text())) = "${firstCorrectOption}"]`;
       await this.frameLocator.locator(correctLocator).first().click();
       console.log("clicked first correct:" + firstCorrectOption);
       await this.clickOnContinueButton();

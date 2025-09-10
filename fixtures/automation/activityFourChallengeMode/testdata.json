@@ -181,9 +181,9 @@
       "title": "Correct!",
       "text": "This is the ideal response to the PT's statement."
     },
-    "INCORRECT_1_REPLY": "The PT gives you a small smile and pats you on the back.\nPT: \"Well, good job anyway.\"",
-    "INCORRECT_2_REPLY": "The PT looks at you, surprised, then clears her throat.\nPT: \"Yes, well, thank you for living up to your personal standards of excellence.\"",
-    "CORRECT_REPLY": "The PT looks at you and smiles broadly.\nPT: \"I'm glad. Thank you for being such a team player.\"",
+    "INCORRECT_1_REPLY": "The PT gives you a small smile and pats you on the back.",
+    "INCORRECT_2_REPLY": "The PT looks at you, surprised, then clears her throat.",
+    "CORRECT_REPLY": "The PT looks at you and smiles broadly.",
     "INCORRECT_1_FEEDBACK": {
       "title": "Not quite!",
       "text": "The option you chose could have demonstrated a sign of false modesty or lack of confidence in one's own skills."
@@ -238,8 +238,9 @@
       "You have 2 attempts to make the correct selections."
     ],
     "correctAnswers": ["While expressing empathy toward the patient, your tone is slightly accusatory toward your colleagues.", 
-                        "You are revealing your lack of knowledge of legal and ethical concerns, including scope of practice and negligence.",  
-                        "The PT does not agree with your decision."],
+                        "You are revealing your lack of knowledge of legal and ethical concerns, including scope of practice and negligence.",
+                        "The PT does not agree with your decision."
+                        ],
     "incorrectAnswers": ["The PT is about to get angry with you."],
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
@@ -304,8 +305,9 @@
       "You have 2 attempts to make the correct selections."
     ],
     "correctAnswers": [ "You are not acknowledging the true issue. Not reporting Ms. Jones' pain could be considered negligence.", 
-                        "You are revealing your lack of knowledge of legal and ethical concerns, including negligence.",  
-                        "The PT is thinking that you need additional training."],
+                        "The PT is thinking that you need additional training.",
+                        "You are revealing your lack of knowledge of legal and ethical concerns, including negligence." 
+                        ],
     "incorrectAnswers": ["The PT doesn't believe you are telling the truth."],
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
@@ -405,7 +407,7 @@
     "correctAnswers": ["The PT is thinking that you are downplaying your efforts to seek additional praise.",
                         "The PT has the impression that you lack confidence in your own skills."],
     "incorrectAnswers": ["The PT agrees with what you have said.",
-                          "The PT is thinking about a way to reward you for your efforts. "],
+                          "The PT is thinking about a way to reward you for your efforts."],
     "question": "What is most likely the reason for the PT's reaction? (Select all that apply.)",
     "attemptOneFeedback":{
       "title": "Not quite!",

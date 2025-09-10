@@ -448,9 +448,9 @@ export class SummaryReportActivityFive {
                  patientName= testData[level]?.["ideal_replier_name"];
                 patientResponse2 = testData[level]?.["ideal_reply2"];
             }else if (isC3Level) {
-                patientResponse = testData[level]?.["ideal_reply3"];
-                patientMood = testData[level]?.["ideal_reply_mood3"];
-                 patientName= testData[level]?.["ideal_replier_name3"];
+                patientResponse = testData[level]?.["ideal_reply4"];
+                patientMood = testData[level]?.["ideal_reply_mood4"];
+                 patientName= testData[level]?.["ideal_replier_name4"];
             } else {
                 patientResponse = testData[level]?.["ideal_reply"];
                 patientMood = testData[level]?.["ideal_reply_mood"];

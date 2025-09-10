@@ -14,6 +14,11 @@ Before({ tags: '@dho' }, async ({ page }) => {
   summaryReportActivityFour =new SummaryReportActivityFour (page);
 });
 
+// Before({ tags: '@dho' }, async ({ page }, testInfo) => {
+//   // Set testInfo once here - it will be available in all page methods
+//   activityFour = new ActivityFour(page, testInfo);
+//   summaryReportActivityFour = new SummaryReportActivityFour(page, testInfo);
+// });
 Given('the user has launched the activity {int} on the web', async function ({}, activityNumber: number)  {
   const environment = env["ENVIRONMENT"] || "STAGE";
   await activityFour .launchActivity(environment,activityNumber);
@@ -54,8 +59,8 @@ Then('the report content should match the performed {string} for Activity Four -
   await summaryReportActivityFour.runScenarioPathForActivityFourChallengeMode(scenario,testData);
 });
 
-Then('the activity title and learning objectives should match the content matrix of Activity Four - Challenge Mode', async function ({ testData }) {
-  await activityFour.verifyTitleAndLearningObjectivesPage(testData);
+Then('the activity title and learning objectives should match the content matrix of Activity Four - Challenge Mode', async function ({ testData ,page,$testInfo}) {
+  await activityFour.verifyTitleAndLearningObjectivesPage(testData,$testInfo);
 });
 
 Then('the introduction text should match the content matrix of Activity Four - Challenge Mode', async function ({ testData }) {
@@ -75,7 +80,7 @@ When('the user click on the Learning Objective button in more options menue item
   await activityFour.clickOnMoreOptionPopupLearningObjectiveButton();
 });
 
-Then('the Learning Objectives popup should be visible and content should be as per content matrix', async function ({ testData }) {
-  await activityFour.verifyLearningObjectivesPopUp(testData);
+Then('the Learning Objectives popup should be visible and content should be as per content matrix', async function ({ testData,$testInfo }) {
+  await activityFour.verifyLearningObjectivesPopUp(testData,$testInfo);
 });
 

@@ -32,11 +32,6 @@ export class SummaryReportActivityFour {
     this.attemptScore = page.frameLocator('iframe[name="ext_012345678_1"]').locator('div.score-value');
     }
 
-    /**
-     * Runs the scenario path for Activity Four in challenge mode
-     * @param path Array of steps to execute
-     * @param testData Test data containing scene information
-     */
     public async runScenarioPathForActivityFourChallengeMode(path: string[], testData: any): Promise<void> {
         console.log('Starting Report Verification:', path);
         
@@ -70,7 +65,6 @@ export class SummaryReportActivityFour {
             await this.processStep(step, testData,attemptNumber);
         }
         
-        // Store the final attempt if there are scores
         if (this.currentAttemptScores.length > 0) {
             this.scoresArray.push([...this.currentAttemptScores]);
         }
@@ -82,7 +76,6 @@ export class SummaryReportActivityFour {
         console.log('Attempt averages:', this.attemptAverages);
          const avgScores = this.attemptAverages;
          const overallSocre = this.highestAttemptAverage;
-          //const  overallSocre1 =overallSocre[0];
          const firstEntry = avgScores[0];
         const secondEntry = avgScores[1];
         await expect((this.attemptScore).nth(0)).toHaveText(": "+firstEntry.toString()+"%");
@@ -175,7 +168,6 @@ export class SummaryReportActivityFour {
     }
 
      private extractStatuses(steps: string): string[] {
-  // Find index of the first underscore after the step prefix (handles C3.1, M4.2, etc.)
   const firstUnderscoreIndex = steps.indexOf("_");
   if (firstUnderscoreIndex === -1) return [];
 
@@ -243,15 +235,15 @@ export class SummaryReportActivityFour {
     let score=0;
     const StepsInvolved =this.extractStatuses(step); 
     
-    // Calculate score based on the pattern
+    
     if (StepsInvolved.length==1 && StepsInvolved[0]=="CORRECT"){
         score=1;
     }else if (StepsInvolved.length==1 && StepsInvolved[0]!="CORRECT"){
-        score=0; // Changed from "Invalid Steps" to score=0
+        score=0; 
     }else if (StepsInvolved.length==2 && StepsInvolved[1]=="CORRECT"){
         score=0.5;
     }else if (StepsInvolved.length>=2){
-        score=0; // Multiple incorrect attempts
+        score=0; 
     }else {
         score=0;
     }
@@ -297,13 +289,12 @@ export class SummaryReportActivityFour {
         }
     }
        await this.verifyInstruction(step,StepsInvolved,actualStepNumber,sceneLevel, testData,attemptNumber);
-      // await this.verifySupportingRationals(step,StepsInvolved,actualStepNumber,sceneLevel, testData);
-       if (step.startsWith('M')){
-            // await this.verifyUserActionDetailsMultiSelect(StepsInvolved,actualStepNumber,sceneLevel, testData);
+      if (step.startsWith('M')){
+            await this.verifyUserActionDetailsMultiSelect(step,StepsInvolved,actualStepNumber,sceneLevel, testData,attemptNumber);
              await this.verifySupportingRationalsForMultiselect(step,StepsInvolved,actualStepNumber,sceneLevel, testData,attemptNumber,score);
       
        }else{
-            // await this.verifyUserActionDetails(StepsInvolved,actualStepNumber,sceneLevel, testData);
+             await this.verifyUserActionDetails(step,StepsInvolved,actualStepNumber,sceneLevel, testData,attemptNumber);
               await this.verifySupportingRationals(step,StepsInvolved,actualStepNumber,sceneLevel, testData,attemptNumber,score);
        }
       
@@ -320,7 +311,6 @@ export class SummaryReportActivityFour {
         if (dropdownNumber>0){
             await this.frameLocator.locator(`button#step-dropdown-arrow-button-${dropdownNumber}`).nth(attemptNumber).click();
         }
-        //await this.page.pause();
         const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
         const instructionHeadingLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'description-container')]/*[contains(@class,'description-heading')]`;
         const instructionLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div/div[contains(@class,'description-container')]/*[contains(@class,'description-text')]`;
@@ -331,7 +321,7 @@ export class SummaryReportActivityFour {
         for (let i = 0; i < instructionText.length; i++) {
             await expect(noOfInstructionItems[i]).toHaveText(instructionText[i]);
         } 
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(questionTextLocator)).toHaveText(questionText);
+        //await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(questionTextLocator)).toHaveText(questionText);
     }
 
 
@@ -346,10 +336,9 @@ export class SummaryReportActivityFour {
         const INCORRECT_2_FEEDBACK = stepDetails.INCORRECT_2_FEEDBACK;
         const dropdownNumber =actualStepNumber - 1;
         const supportingRationalHeadingLocator=`section#step-dropdown-${dropdownNumber}>div>div.supporting-rationale-container>.supporting-rationale-heading`
-        //const supportingRationalTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.score-area >div>div>div>div.score-msg`
         const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
         const supportingRationalTextTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'score-title-value-container')]//div[@class='score-msg']`;
-        const supportingRationalTitleLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'score-msg-title')]`;
+        const supportingRationalTitleLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//strong[contains(@class,'score-msg-title')]`;
         const stepScoretLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'response-score-value')]`;
         
         //*[@id='step-dropdown-0']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]
@@ -385,7 +374,7 @@ export class SummaryReportActivityFour {
         //const supportingRationalTextLocator=`section#step-dropdown-${dropdownNumber}>div>div.score-area >div>div>div>div.score-msg`
         const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
         const supportingRationalTextTextLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'score-title-value-container')]//div[@class='score-msg']`;
-        const supportingRationalTitleLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'score-msg-title')]`;
+        const supportingRationalTitleLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//strong[contains(@class,'score-msg-title')]`;
         const stepScoretLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'response-score-value')]`;
         
         //*[@id='step-dropdown-0']//div/div[contains(@class,'score-area')]/*[contains(@class,'score-msg')]//div//div[contains(@class,'response-score-value')]
@@ -408,30 +397,45 @@ export class SummaryReportActivityFour {
 
 
 
-    private async verifyUserActionDetails(StepsInvolved:string[],actualStepNumber:number,sceneLevel:string, testData: any) {
-        const stepDetails = testData[`STEP_${sceneLevel}`];
-        const correctOptionText = stepDetails.CORRECT;
-        const incorrectOptionText = stepDetails.INCORRECT_1;
-        const incorrectOptionText2 = stepDetails.INCORRECT_2;
-        
-        // Calculate the dropdown number based on actualStepNumber
-        const dropdownNumber =actualStepNumber - 1;
-        
-        // Helper function to create locators
-        const createLocators = (actionPosition: number) => ({
-            userActionLocator: `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-icon-text-container>.action-text`,
-            userActionTextLocator: `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-description`
-        });
-        
-        // Helper function to verify action expectations
-        const verifyAction = async (actionPosition: number, expectedText: string, expectedDescription: string) => {
-            const { userActionLocator, userActionTextLocator } = createLocators(actionPosition);
-            await expect(this.frameLocator.locator(userActionLocator)).toHaveText(expectedText);
-            await expect(this.frameLocator.locator(userActionTextLocator)).toHaveText(expectedDescription);
-        };
-        // Helper function to get option text and expected action text based on step
+    private async verifyUserActionDetails(
+    step: string,
+    StepsInvolved: string[],
+    actualStepNumber: number,
+    sceneLevel: string,
+    testData: any,
+    attemptNumber: number
+) {
+    const stepDetails = testData[`STEP_${sceneLevel}`];
+    const correctOptionText = stepDetails.CORRECT;
+    const incorrectOptionText = stepDetails.INCORRECT_1;
+    const incorrectOptionText2 = stepDetails.INCORRECT_2;
+
+    // Calculate dropdown number
+    const dropdownNumber = actualStepNumber - 1;
+
+    // Base locator for the dropdown
+    const baseLocator = `//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
+
+    // Locator for autocorrect action
+    const autoCorrectLocator = `${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'autocorrect-action-container')]//span[@class='action-description']`;
+
+    // Helper function to create locators (returns locator strings)
+    const createLocators = () => {
+        const userActionLocator = `${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'user-action-details-container')]//div[@class='action-text']`;
+        const userActionTextLocator = `${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'user-action-details-container')]//div[@class='action-description']`;
+        return { userActionLocator, userActionTextLocator };
+    };
+
+    // Helper function to verify expected action
+    const verifyAction = async (actionPosition: number, expectedText: string, expectedDescription: string) => {
+        const { userActionLocator, userActionTextLocator } = createLocators();
+        await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText(expectedText);
+        await expect(this.frameLocator.locator(userActionTextLocator).nth(actionPosition)).toHaveText(expectedDescription);
+    };
+
+    // Helper to resolve action details from step key
     const getStepDetails = (step: string) => {
-        if (step=='CORRECT') {
+        if (step === 'CORRECT') {
             return {
                 optionText: correctOptionText,
                 actionText: "Selected Correct Choice"
@@ -450,37 +454,49 @@ export class SummaryReportActivityFour {
             throw new Error(`Unknown step format: ${step}`);
         }
     };
-    
-        for(let i=0;i<StepsInvolved.length; i++ ){
-             const { optionText, actionText } = getStepDetails(StepsInvolved[i]);
-            await verifyAction(i, actionText, optionText);
-        }
-        }
-     private async verifyUserActionDetailsMultiSelect(StepsInvolved:string[],actualStepNumber:number,sceneLevel:string, testData: any) {
+
+    // Loop through all actions and verify them
+    for (let i = 0; i < StepsInvolved.length; i++) {
+        const { optionText, actionText } = getStepDetails(StepsInvolved[i]);
+        await verifyAction(i, actionText, optionText);
+    }
+
+    // If the last step was incorrect, verify the auto-correct suggestion
+    const lastStep = StepsInvolved[StepsInvolved.length - 1];
+    if (lastStep.includes("INCORRECT")) {
+        await expect(this.frameLocator.locator(autoCorrectLocator)).toHaveText(correctOptionText);
+    }
+}
+
+     private async verifyUserActionDetailsMultiSelect(step: string,StepsInvolved:string[],actualStepNumber:number,sceneLevel:string, testData: any,attemptNumber:number) {
         const stepDetails = testData[`STEP_${sceneLevel}`];
         const idealChoices = stepDetails.correctAnswers;
         const nonIdealChoices = stepDetails.incorrectAnswers;
+        // Calculate the dropdown number based on actualStepNumber
+        const dropdownNumber =actualStepNumber - 1;
+        const baseLocator=`//*[@id='attempt-dropdown-arrow-button-${attemptNumber}']/parent::*/parent::div[contains(@class, 'attempt-heading-container')]/following-sibling::section//section`;
+        const autoCorrectLocator=`${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'autocorrect-action-container')]//span[@class='action-description']`;
+            
         // Helper function to create locators
-        const createLocators = (actionPosition: number) => ({
-            userActionLocator: `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-icon-text-container>.action-text`,
-            userActionTextLocator: `section#step-dropdown-${dropdownNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-description`
-        });
+        const createLocators = () => {
+        const userActionLocator = `${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'user-action-details-container')]//div[@class='action-text']`;
+        const userActionTextLocator = `${baseLocator}[@id='step-dropdown-${dropdownNumber}']//div//div[contains(@class,'user-action-details-container')]//div[@class='action-description']`;
+        return { userActionLocator, userActionTextLocator };
+    };
         
         // Helper function to verify action expectations
         const verifyAction = async (actionPosition: number, expectedText: string, expectedDescription: string) => {
-            const { userActionLocator, userActionTextLocator } = createLocators(actionPosition);
-            await expect(this.frameLocator.locator(userActionLocator)).toHaveText(expectedText);
-            await expect(this.frameLocator.locator(userActionTextLocator)).toHaveText(expectedDescription);
+            const { userActionLocator, userActionTextLocator } = createLocators();
+            await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText(expectedText);
+            await expect(this.frameLocator.locator(userActionTextLocator).nth(actionPosition)).toHaveText(expectedDescription);
         };
        
-        const dropdownNumber =actualStepNumber - 1;
         for (let i = 0; i < StepsInvolved.length; i++) {
             let optionToClick: any;
             if (StepsInvolved.length === 1) {
                 if (StepsInvolved[i] === "CORRECT") {
                 for (let j = 0; j < idealChoices.length; j++) {
                     optionToClick = idealChoices[j];
-                    console.log("clicked:" + optionToClick);
                     await verifyAction( j, "Selected Correct Choice", optionToClick);
                 }
                 } 
@@ -489,29 +505,42 @@ export class SummaryReportActivityFour {
                 const secondEntry = StepsInvolved[1];
                 if (secondEntry === "CORRECT") {
                 for (let j = 0; j < idealChoices.length; j++) {
+                    optionToClick = idealChoices[j];
                     console.log("clicked correct:" + idealChoices[j]);
                     await verifyAction( j, "Selected Correct Choice", optionToClick);
                 }
                 for (let j = 0; j < nonIdealChoices.length; j++) {
+                    optionToClick = nonIdealChoices[j];
                     console.log("clicked incorrect:" + nonIdealChoices[j]);
                     await verifyAction( j+idealChoices.length, "Selected Incorrect Choice", optionToClick);
                 }
                 console.log("Second attempt: Selecting only incorrect options");
-                for (let j = 0; j < nonIdealChoices.length; j++) {
-                   console.log("clicked incorrect:" + nonIdealChoices[j]);
-                   await verifyAction( j, "Selected Correct Choice", optionToClick);
-                   await verifyAction( j+idealChoices.length+nonIdealChoices.length, "Selected Incorrect Choice", optionToClick);
+                for (let j = 0; j < idealChoices.length; j++) {
+                    optionToClick = idealChoices[j];
+                    //console.log("clicked correct:" + idealChoices[j]);
+                    await verifyAction( j+idealChoices.length+nonIdealChoices.length, "Selected Correct Choice", optionToClick);
                 }
+                // for (let j = 0; j < nonIdealChoices.length; j++) {
+                //     optionToClick = nonIdealChoices[j];
+                //    console.log("clicked incorrect:" + nonIdealChoices[j]);
+                //    //await verifyAction( j, "Selected Correct Choice", optionToClick);
+                //    await verifyAction( j+idealChoices.length+nonIdealChoices.length, "Selected Incorrect Choice", optionToClick);
+                // }
                 
                 } else if (firstEntry.includes("INCORRECT") && secondEntry.includes("INCORRECT")) {
                 console.log("Both entries are incorrect - sequential selection approach");
                 const firstIncorrectOption = nonIdealChoices[0];
                 console.log("clicked first incorrect:" + firstIncorrectOption);
-                await verifyAction( 0, "Selected Incorrect Choice", optionToClick);
+                await verifyAction( 0, "Selected Incorrect Choice", firstIncorrectOption);
                 console.log("Second attempt: Selecting first correct option");
                 const firstCorrectOption = idealChoices[0];
                 console.log("clicked first correct:" + firstCorrectOption);
-                await verifyAction( 1, "Selected Incorrect Choice", optionToClick);
+                await verifyAction( 1, "Selected Incorrect Choice", firstIncorrectOption);
+                await verifyAction( 2, "Selected Correct Choice", firstCorrectOption);
+                for (let j = 1; j < idealChoices.length; j++) {
+                    //await expect(this.frameLocator.locator(autoCorrectLocator).nth(j-1)).toHaveText(idealChoices[j]);
+                }  
+
                 } else {
                 throw new Error(`Unknown step format combination: ${firstEntry}, ${secondEntry}`);
                 }

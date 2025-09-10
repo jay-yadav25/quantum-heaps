@@ -132,7 +132,7 @@ export class ActivityFiveChallengeMode {
     await this.frameLocator
       .locator(`//button[@id='${selectedOptionID}']`).first()
       .click();
-    if (selectedOptionID === "ch_01_opt_2" || selectedOptionID === "ch_01_11_opt_2" || selectedOptionID === "ch_01_12_opt_2"|| selectedOptionID === "ch_03_opt_2" ||selectedOptionID === "ch_04_opt_3"||selectedOptionID === "ch_04_opt_1"||selectedOptionID === "ch_05_opt_1"||selectedOptionID === "ch_05_opt_2"||selectedOptionID === "ch_05_opt_3") {
+    if (selectedOptionID === "ch_01_opt_2" || selectedOptionID === "ch_01_11_opt_2" || selectedOptionID === "ch_01_12_opt_2"|| selectedOptionID === "ch_04_opt_3"||selectedOptionID === "ch_04_opt_1"||selectedOptionID === "ch_05_opt_1"||selectedOptionID === "ch_05_opt_2"||selectedOptionID === "ch_05_opt_3") {
       //for C1-C,C1.1-C,C1.2-C,C3-C,C4-D,C4-I,C5CID
       const replierName = actionDetails[actionKey + "_replier_name"];
       const replyMood = actionDetails[actionKey + "_reply_mood"];
@@ -159,7 +159,38 @@ export class ActivityFiveChallengeMode {
       await expect(this.frameLocator.locator(replyMoodSelector3)).toHaveText("[" + replyMood3 + "]");
       await expect(this.frameLocator.locator(`//div[@id='${replyTextID3}']`)).toHaveText(replyText3);
 
-    } else if (selectedOptionID == "ch_02_opt_2" || selectedOptionID === "ch_02_21_opt_2") {
+    } else if ( selectedOptionID === "ch_03_opt_2") {
+      //for C1-C,C1.1-C,C1.2-C,C3-C,C4-D,C4-I,C5CID
+      const replierName = actionDetails[actionKey + "_replier_name"];
+      const replyMood = actionDetails[actionKey + "_reply_mood"];
+      const replyText = actionDetails[actionKey + "_reply"];
+      const replyTextID = `${selectedOptionID}_rep_1`;
+      const replyMoodSelector = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replierNameLocator = `//div[@id='${replyTextID}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-name")]`;
+      await expect(this.frameLocator.locator(replierNameLocator)).toHaveText(replierName + "");
+      await expect(this.frameLocator.locator(replyMoodSelector)).toHaveText("[" + replyMood + "]");
+      await expect(this.frameLocator.locator(`//div[@id='${replyTextID}']`)).toHaveText(replyText);
+
+      const replyText2 = actionDetails[actionKey + "_reply2"];
+      const replyTextID2 = `${selectedOptionID}_rep_2`;
+      await expect(this.frameLocator.locator(`//span[@id='${replyTextID2}']`)).toHaveText(replyText2);
+
+      const replyText3 = actionDetails[actionKey + "_reply3"];
+      const replyTextID3 = `${selectedOptionID}_rep_3`;
+      await expect(this.frameLocator.locator(`//span[@id='${replyTextID3}']`)).toHaveText(replyText3);
+
+      const replierName4 = actionDetails[actionKey + "_replier_name4"];
+      const replyMood4 = actionDetails[actionKey + "_reply_mood4"];
+      const replyText4 = actionDetails[actionKey + "_reply4"];
+      const replyTextID4 = `${selectedOptionID}_rep_4`;
+
+      const replyMoodSelector4 = `//div[@id='${replyTextID4}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
+      const replierNameLocator4 = `//div[@id='${replyTextID4}']/parent::div/preceding-sibling::div/span[contains(@class, "patient-name")]`;
+      await expect(this.frameLocator.locator(replierNameLocator4)).toHaveText(replierName4 + "");
+      await expect(this.frameLocator.locator(replyMoodSelector4)).toHaveText("[" + replyMood4 + "]");
+      await expect(this.frameLocator.locator(`//div[@id='${replyTextID4}']`)).toHaveText(replyText4);
+
+    }else if (selectedOptionID == "ch_02_opt_2" || selectedOptionID === "ch_02_21_opt_2") {
       //for C2-C and C2.1-C
       const replierName = actionDetails[actionKey + "_replier_name"];
       const replyMood = actionDetails[actionKey + "_reply_mood"];

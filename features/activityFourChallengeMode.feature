@@ -19,7 +19,7 @@ Feature: Launch Activity
     Then the Learning Objectives popup should be visible and content should be as per content matrix
     Examples:
   | scenario |
-  # |   S1     |
+  |   S1     |
 
 
   Scenario Outline: Verify all step functionalities for the golden path in Activity Four - Challenge Mode "<scenario>"
@@ -70,26 +70,27 @@ Feature: Launch Activity
       # | S29      |
       # | S30      |
       # | S31      |
+      #  | S32      |
       # | S33      |
       # | S34      |
-      # | S35      |
-      # | S36      |
-      # | S37      |
+      # # | S35      |
+      # # | S36      |
+      # # | S37      |
       # | S38      |
-      # | S39      |
-      # | S40      |
+      # # | S39      |
+      # # | S40      |
       # | S41      |
       # | S42      |
       # | S43      |
       # | S44      |
       # | S45      |
       # | S46      |
-      # | S47      |
-      # | S48      |
+      # # | S47      |
+      # # | S48      |
       # | S49      |
       # | S50      |
-      # | S51      |
-      # | S52    |
+      # # | S51      |
+      # # | S52    |
       # | S53      |
       # | S54      |
 
