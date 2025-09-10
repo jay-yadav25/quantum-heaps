@@ -231,22 +231,30 @@ await this.page.pause();
  // const iframe = page.frameLocator('//html/body/div[2]/div/iframe');
   
   // Test initial state
-  await performAccessibilityScan({
-  page: this.page,
-  testInfo,
-  scanType: 'iframe',
-  attachmentName: 'iframe-LO-Page-Accessibility'
-})
+//   await performAccessibilityScan({
+//   page: this.page,
+//   testInfo,
+//   scanType: 'iframe',
+//   attachmentName: 'iframe-LO-Page-Accessibility'
+// })
 
-await performAccessibilityScan({
-  page: this.page,
-  testInfo,
-  scanType: 'fullPage',
-  attachmentName: 'full-page-accessibility'
-})
+// await performAccessibilityScan({
+//   page: this.page,
+//   testInfo,
+//   scanType: 'fullPage',
+//   attachmentName: 'full-page-accessibility'
+// })
   
   }
 
+  public async performAccessivityScanForGivenPage(testInfo:any,pageName:string){
+       await performAccessibilityScan({
+        page: this.page,
+        testInfo,
+        scanType: 'iframe',
+        attachmentName: `${pageName}-Accessibility`
+      })
+  }
   public async verifyLearningObjectivesPopUp(testData:any,testInfo:any) {
     const learningObjectiveHeader=testData.learningObjectiveItems.learningObjective;
     const learningObjectivesList=testData.learningObjectiveItems.learningObjectivesList;
@@ -258,13 +266,13 @@ await performAccessibilityScan({
     for (let i = 0; i < objectiveItems.length; i++) {
         await expect(objectiveItems[i]).toHaveText(learningObjectivesList[i]);
     }
-     await performAccessibilityScan({
-  page: this.page,
-  testInfo,
-  scanType: 'element',
-  selector:'.wk_ex_iframe [role="dialog"]',
-  attachmentName: 'popup-LO-Page-Accessibility'
-})
+//      await performAccessibilityScan({
+//   page: this.page,
+//   testInfo,
+//   scanType: 'element',
+//   selector:'.wk_ex_iframe [role="dialog"]',
+//   attachmentName: 'popup-LO-Page-Accessibility'
+// })
     await this.continueButtonIntroAndLoPopup.click();
   }
   public async verifyIntroductionPageIsVisible() {

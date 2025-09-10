@@ -84,3 +84,7 @@ Then('the Learning Objectives popup should be visible and content should be as p
   await activityFour.verifyLearningObjectivesPopUp(testData,$testInfo);
 });
 
+Then('perfome accessibility scan for {string}', async function ({ testData,$testInfo }, pageName: string) {
+  activityFour.performAccessivityScanForGivenPage($testInfo,pageName)
+});
+

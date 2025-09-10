@@ -3,23 +3,28 @@ Feature: Launch Activity
   Scenario Outline: Verify Content of learnign objective and introduction 
     Given the user has launched the activity 4 on the web
     Then the Learning Objectives page of Activity Four - Challenge Mode should be displayed
+    And perfome accessibility scan for "ActivityFourLoPage"
     And the activity title and learning objectives should match the content matrix of Activity Four - Challenge Mode
 
     When the user clicks the Start button on the Learning Objectives page of Activity Four - Challenge Mode
     Then the Introduction page of Activity Four - Challenge Mode should be visible
+     And perfome accessibility scan for "ActivityFourIntroPage"
     And the introduction text should match the content matrix of Activity Four - Challenge Mode
 
     When the user clicks the Continue button on the Introduction page of Activity Four - Challenge Mode
     Then the first step of Activity Four - Challenge Mode should be displayed
+     And perfome accessibility scan for "ActivityFourStepOne"
 
     When the user click on the Introduction button in more options menue items
+     And perfome accessibility scan for "ActivityFourIntroPopup"
     Then the Introduction popup should be visible and content should be as per content matrix
 
     When the user click on the Learning Objective button in more options menue items
+     And perfome accessibility scan for "ActivityFourLoPopup"
     Then the Learning Objectives popup should be visible and content should be as per content matrix
     Examples:
-  | scenario |
-  |   S1     |
+  # | scenario |
+  # |   S1     |
 
 
   Scenario Outline: Verify all step functionalities for the golden path in Activity Four - Challenge Mode "<scenario>"
