@@ -1,7 +1,8 @@
 const env = {
   ENVIRONMENT: process.env.ENVIRONMENT,
   TARGET_ROLES_FILTER: process.env.TARGET_ROLES_FILTER,
-  TEST_SUITE: process.env.TEST_SUITE
+  TEST_SUITE: process.env.TEST_SUITE,
+  BROWSER:process.env.BROWSER
 }
 
 export default env

@@ -27,9 +27,20 @@ function getBrowserSpecificOptions(browserName: string) {
       return {
         channel: "webkit",
         ...devices["Desktop Safari"]
+      };
+    case "android":
+      return { 
+       // channel: "Mobile Chrome",
+        ...devices["Pixel 5"] 
+      };
+    case "ios":
+      return { 
+        //channel: "Mobile Safari",
+        ...devices['iPhone 12'] 
       }
+    }
   }
-}
+  
 
 const testDir = defineBddConfig({
   paths: ['features/*.feature'],
@@ -75,7 +86,7 @@ export default defineConfig({
   globalSetup: './fixtures/globalSetup',
   projects: [
     {
-      name: 'Clinical Simulation',
+      name: 'Cengage DHO',
       use: {
         ...getBrowserSpecificOptions(browserName),
       },

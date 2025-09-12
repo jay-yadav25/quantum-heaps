@@ -18,6 +18,7 @@ export class ChallengeMode {
   readonly noOfAttemptChatPopup: Locator;
   readonly respondButton: Locator;
   readonly restartButton: Locator;
+  readonly continueButton:Locator;
 
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
     this.page = page;
@@ -37,6 +38,8 @@ export class ChallengeMode {
     this.chatEndMessage1 = this.frameLocator.locator("//div[@class='chat-end-message-bg']/div/p");
     this.chatEndMessage2 = this.frameLocator.locator("//div[@class='chat-end-message-bg']/p");
     this.noOfAttemptChatPopup = this.frameLocator.locator("//div[@class='popup-header']/span");
+    this.continueButton = this.frameLocator.locator("button#continue-btn");
+    
   }
 
 
@@ -295,10 +298,13 @@ export class ChallengeMode {
   public async typeInInputText(text: string) {
     await this.inputField.fill(text);
   }
+ 
 
   public async clickOnAvatarSelectionDone() {
+    //this.scenarioStartTime = performance.now();
     await this.avatarSelectionDoneButton.click();
   }
+  
 
   public async clickOnDoneButton() {
     await this.doneSubmitButton.click();
@@ -308,6 +314,9 @@ export class ChallengeMode {
     await this.submitButton.click();
   }
 
+   public async clickOnContinueButton() {
+    await this.continueButton.click();
+  }
   public async clickOnRetryButton() {
     await this.retryButton.click();
   }

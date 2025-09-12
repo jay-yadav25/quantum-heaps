@@ -1,6 +1,4 @@
 import { expect, Locator, FrameLocator, type Page, Frame } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-import { performAccessibilityScan } from '../../utils/accessibilityScan';
 export class ActivityFour {
   readonly page: Page;
   private readonly frameLocator: FrameLocator;
@@ -19,7 +17,6 @@ export class ActivityFour {
   readonly stepInstructionList:Locator;
   readonly popupContinueButton:Locator;
   readonly totalTimeTaken:Locator;
-  readonly loader:Locator;
   private scenarioStartTime: number = 0;
    // Learning Objectives Page
     readonly learningObjectiveTitle: Locator;
@@ -88,79 +85,11 @@ export class ActivityFour {
     this.moreOptionsButton = this.frameLocator.locator('//button[@aria-label="More Options"]');
     this.moreOptionLearnignObjectiveButton = this.frameLocator.locator('//li[@aria-label="Learning Objectives"]');
     this.moreOptionIntroductionButton = this.frameLocator.locator('//li[@aria-label="Introduction"]');
-    this.loader = this.frameLocator.locator('div.circular-loader');
     this.restartButton=this.frameLocator.locator('#restart-btn');
   }
   
-  public async performAccessibilityScan(stepName: string, testInfo: any): Promise<any> {
-    try {
-      const scanResults = await new AxeBuilder({ page: this.page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-        .analyze();
 
-      if (testInfo) {
-        await testInfo.attach(`accessibility-scan-${stepName}`, {
-          body: JSON.stringify(scanResults, null, 2),
-          contentType: 'application/json'
-        });
-        console.log(scanResults);
-      }
-      console.log(scanResults);
-      if (scanResults.violations.length > 0) {
-        console.log(`Accessibility violations found at ${stepName}:`,
-          scanResults.violations.map(v => ({ id: v.id, impact: v.impact, description: v.description })));
-      }
-
-      expect(scanResults.violations).toEqual([]);
-      return scanResults;
-    } catch (error) {
-      console.error(`Error during accessibility scan at ${stepName}:`, error);
-      throw error;
-    }
-  }
-
-
-  public async launchActivity(environment:string,activityNo: number) {
-    console.log(environment);
-  let baseUrl='';
-  if(environment==="PROD"){
-    baseUrl="https://cengage-dho.zeuslearning.com/index.html";
-  }else if (environment==="STAGE"){
-    baseUrl="https://dev-cengage-dho.zeuslearning.com/launcherPages/cengage_dho_launcher.html";
-  }
-  const activityMap: Record<number, string> = {
-    1: "cs_c_01",
-    2: "cs_l_02",
-    3: "dm_l_03",
-    4: "dm_c_04",
-    5: "cs_c_05",
-    6: "dm_l_06",
-  };
-
-  const dhoCode = activityMap[activityNo];
-    const url = `${baseUrl}?launchType=1&dho=${dhoCode}&attemptId=1`;
-    await this.page.goto(url);
-    const timeout = 4 * 60 * 1000; // 4 minutes
-    const interval = 2000; // 2 seconds
-    const startTime = Date.now();
-
-  while (Date.now() - startTime < timeout) {
-    try {
-      // Check if loader is visible
-      if (await this.loader.isVisible()) {
-        await this.page.waitForTimeout(interval);
-        continue;
-      }
-      if (await this.startButton.isVisible() && await this.startButton.isEnabled()) {
-        return;
-      }
-
-    } catch (err) {
-    }
-    await this.page.waitForTimeout(interval);
-  }
-  throw new Error("Loader did not disappear or button not clickable within 4 minutes");
-  }
+  
 
  public async runScenarioPathForActivityFourChallengeMode(path: string[], testData: any) {
   for (let i = 0; i < path.length; i++) {
@@ -191,132 +120,11 @@ private findNextValidStep(path: string[], currentIndex: number): string {
 }
 
 
-  public async clickOnStartButton() {
-   await this.startButton.click();
-  }
+
   public async clickOnPopupContinueButton() {
     await this.popupContinueButton.nth(1).click();
   }
-  public async clickOnMoreOptionPopupIntroductionButton() {
-    await this.clickOnPopupContinueButton();
-    await this.moreOptionsButton.click();
-    await this.moreOptionIntroductionButton.click();
-  }
-  public async clickOnMoreOptionPopupLearningObjectiveButton() {
-    await this.moreOptionsButton.click();
-    await this.moreOptionLearnignObjectiveButton.click();
-  }
-  public async verifyLearningObjectivePageIsVisible() {
-    await this.page.waitForTimeout(5000);
-    await this.startButton.isVisible();
-  }
-  public async verifyTitleAndLearningObjectivesPage(testData: any, testInfo: any) {
-    const activityTitle = testData.learningObjectiveItems.title;
-  const learningObjectiveHeader = testData.learningObjectiveItems.learningObjective;
-  const learningObjectivesList = testData.learningObjectiveItems.learningObjectivesList;
-
-  // Check visibility and content
-  await expect(this.learningObjectiveTitle).toBeVisible();
-  await expect(this.learningObjectiveTitle).toHaveText("Learning Objectives");
-  await expect(this.learningObjectiveHeader).toHaveText(learningObjectiveHeader);
-
-  const objectiveItems = await this.learningObjectiveDetails.all();
-  expect(objectiveItems.length).toBe(learningObjectivesList.length);
-
-  for (let i = 0; i < objectiveItems.length; i++) {
-    await expect(objectiveItems[i]).toHaveText(learningObjectivesList[i]);
-  }
-await this.page.pause();
-//await this.performAccessibilityScan('after-learning-objectives-verification', testInfo);
- // const iframe = page.frameLocator('//html/body/div[2]/div/iframe');
-  
-  // Test initial state
-//   await performAccessibilityScan({
-//   page: this.page,
-//   testInfo,
-//   scanType: 'iframe',
-//   attachmentName: 'iframe-LO-Page-Accessibility'
-// })
-
-// await performAccessibilityScan({
-//   page: this.page,
-//   testInfo,
-//   scanType: 'fullPage',
-//   attachmentName: 'full-page-accessibility'
-// })
-  
-  }
-
-  public async performAccessivityScanForGivenPage(testInfo:any,pageName:string){
-       await performAccessibilityScan({
-        page: this.page,
-        testInfo,
-        scanType: 'iframe',
-        attachmentName: `${pageName}-Accessibility`
-      })
-  }
-  public async verifyLearningObjectivesPopUp(testData:any,testInfo:any) {
-    const learningObjectiveHeader=testData.learningObjectiveItems.learningObjective;
-    const learningObjectivesList=testData.learningObjectiveItems.learningObjectivesList;
-    await expect(this.learningObjectiveTitleInPopup).toBeVisible();
-    await expect(this.learningObjectiveTitleInPopup).toHaveText("Learning Objectives");
-    await expect(this.learningObjectiveHeaderInPopup).toHaveText(learningObjectiveHeader);
-    const objectiveItems = await this.learningObjectiveDetailsInPopup.all();
-    expect(objectiveItems.length).toBe(learningObjectivesList.length);
-    for (let i = 0; i < objectiveItems.length; i++) {
-        await expect(objectiveItems[i]).toHaveText(learningObjectivesList[i]);
-    }
-//      await performAccessibilityScan({
-//   page: this.page,
-//   testInfo,
-//   scanType: 'element',
-//   selector:'.wk_ex_iframe [role="dialog"]',
-//   attachmentName: 'popup-LO-Page-Accessibility'
-// })
-    await this.continueButtonIntroAndLoPopup.click();
-  }
-  public async verifyIntroductionPageIsVisible() {
-    await this.introductionContinueButton.isVisible();
-  }
-  public async verifyIntroductionPage(testData:any) {
-    const introductionList=testData.introduction.introductionList;
-    const activityOverviewList=testData.introduction.activityOverviewList;
-    const mode=testData.introduction.mode;
-    await expect(this.introductionPopUpTitle).toBeVisible();
-    await expect(this.introductionPopUpTitle).toHaveText("Introduction");
-    const introductionsListLocator = await this.introPopupText.all();
-    expect(introductionsListLocator.length).toBe(introductionList.length);
-    for (let i = 0; i < introductionList.length; i++) {
-        await expect(introductionsListLocator[i]).toHaveText(introductionList[i]);
-    }
-      await expect(this.activityOverviewTitle).toHaveText("Activity Overview");
-    const activityOverviewLocator = await this.activityOverviewDetails.all();
-    expect(activityOverviewLocator.length).toBe(activityOverviewList.length);
-    for (let i = 0; i < activityOverviewList.length; i++) {
-        await expect(activityOverviewLocator[i]).toHaveText(activityOverviewList[i]);
-    }
-    await expect(this.introductionActivityMode).toHaveText(mode);
-  }
-  public async verifyIntroductionPopUp(testData:any) {
-    const introductionList=testData.introduction.introductionList;
-    const activityOverviewList=testData.introduction.activityOverviewList;
-    const mode=testData.introduction.mode;
-    await expect(this.introductionPopUpTitleInPopup).toBeVisible();
-    await expect(this.introductionPopUpTitleInPopup).toHaveText("Introduction");
-    const introductionsListLocator = await this.introPopupText.all();
-    expect(introductionsListLocator.length).toBe(introductionList.length);
-    for (let i = 0; i < introductionList.length; i++) {
-        await expect(introductionsListLocator[i]).toHaveText(introductionList[i]);
-    }
-      await expect(this.activityOverviewTitleInPopup).toHaveText("Activity Overview");
-    const activityOverviewLocator = await this.activityOverviewDetailsInPopup.all();
-    expect(activityOverviewLocator.length).toBe(activityOverviewList.length);
-    for (let i = 0; i < activityOverviewList.length; i++) {
-        await expect(activityOverviewLocator[i]).toHaveText(activityOverviewList[i]);
-    }
-    await expect(this.introductionActivityModeInPopup).toHaveText(mode);
-    await this.continueButtonIntroAndLoPopup.click();
-  }
+ 
   public async clickOnContinueButton() {
     await this.continueButton.click();
   }
@@ -324,9 +132,7 @@ await this.page.pause();
     await this.introductionContinueButton.click();
   }
 
-  public async verifyFirstStepIsVisible() {
-    
-  }
+
   public async clickOnSubmitButton() {
     await this.submitButton.click();
   }

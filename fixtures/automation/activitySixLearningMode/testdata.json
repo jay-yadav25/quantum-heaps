@@ -1,13 +1,14 @@
 {
-  "activityTitle": "",
-  "learningObjectives": {
-    "global": [
-      ""
-    ]
+  "activityTitle": "Parliamentary Procedure",
+  "learningObjectiveItems": {
+    "learningObjective": "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:",
+    "learningObjectivesList": [""]
   },
-  "globalIntroduction": {
-    "content": "You are a student athletic trainer who is completing an internship with the Mustangs, a local professional baseball team. In this activity, you will face several scenarios that test your ability to make legal and ethical decisions. Your task is to choose the most appropriate course of action in each scenario.",
-    "learningMode": "Learning Mode: This is a practice activity with hints available at each step."
+  "introduction": {
+    "introductionList": ["You have just graduated from a physical therapy assistant program in Virginia and have been recently hired by Madison Valley Hospital in Wisconsin. One of your assignments is to ambulate Ms. Jones, in room 221, 100 feet as tolerated; at 1000 and 1400. She may use a walker as needed to assist with ambulation. You are running behind schedule for her morning appointment and arrive at her room at 1030.",
+                          "You have been working with her for several days, so you know that she is motivated to walk, and you are eager to get started so that she stays on her planned ambulation schedule."],
+    "activityOverviewList": [""],
+    "mode":""
   },
   "STEP_1": {
     "instructions": "It's the start of the HOSA chapter meeting. Members are scattered around, chatting and laughing. The president stands at the front, trying to regain control of the room.",
@@ -430,6 +431,8 @@
   },
 
   "CORRECT": ["OPT_1_SLOT_6", "OPT_2_SLOT_5", "OPT_3_SLOT_4", "OPT_4_SLOT_3", "OPT_5_SLOT_2", "OPT_6_SLOT_1", "CHECK"],
+
+  "INCORRECT_1": ["OPT_1_SLOT_1", "CHECK", "OPT_1_SLOT_6", "OPT_2_SLOT_5", "OPT_3_SLOT_4", "OPT_4_SLOT_3", "OPT_5_SLOT_2", "OPT_6_SLOT_1", "CHECK"],
   
   "INCORRECT_2": ["OPT_1_SLOT_1", "CHECK", "OPT_1_SLOT_6", "OPT_2_SLOT_5", "OPT_3_SLOT_4", "OPT_4_SLOT_3", "OPT_5_SLOT_2", "OPT_6_SLOT_1", "CHECK"],
   
@@ -548,5 +551,4 @@
   "INCORRECT_59": ["OPT_5_SLOT_6", "CHECK", "OPT_3_SLOT_5", "CHECK", "OPT_1_SLOT_4", "CHECK", "OPT_2_SLOT_3", "CHECK", "OPT_1_SLOT_6", "OPT_2_SLOT_5", "OPT_3_SLOT_4", "OPT_4_SLOT_3", "OPT_5_SLOT_2", "OPT_6_SLOT_1", "CHECK"],
   
   "INCORRECT_60": ["OPT_6_SLOT_3", "OPT_4_SLOT_1", "OPT_2_SLOT_6", "OPT_1_SLOT_2", "OPT_3_SLOT_5", "OPT_5_SLOT_4", "CHECK", "OPT_1_SLOT_6", "OPT_2_SLOT_5", "OPT_3_SLOT_4", "OPT_4_SLOT_3", "OPT_5_SLOT_2", "OPT_6_SLOT_1", "CHECK"]
-
 }

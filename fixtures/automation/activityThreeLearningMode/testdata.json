@@ -1,15 +1,15 @@
-{
-  "activityTitle": "Athletic Training Ethics Simulation - Activity 3",
-  "learningObjectives": {
-    "global": [
-      "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:",
-      "Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.",
-      "Describe the concepts of patient rights and privileged communications and the legislation and procedures that are put into practice to ensure confidentiality of healthcare information."
-    ]
+{ 
+  "activityTitle":"Legal And Ethical Considerations:Patient Confidentiality",
+  "learningObjectiveItems": {
+    "title": "Learning Objectives",
+    "learningObjective": "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:",
+    "learningObjectivesList": ["Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.",
+                               "Describe the concepts of patient rights and privileged communications and the legislation and procedures that are put into practice to ensure confidentiality of healthcare information."]
   },
-  "globalIntroduction": {
-    "content": "You are a student athletic trainer who is completing an internship with the Mustangs, a local professional baseball team. In this activity, you will face several scenarios that test your ability to make legal and ethical decisions. Your task is to choose the most appropriate course of action in each scenario.",
-    "learningMode": "Learning Mode: This is a practice activity with hints available at each step."
+  "introduction": {
+    "introductionList": ["You are a student athletic trainer who is completing an internship with the Mustangs, a local professional baseball team. In this activity, you will face several scenarios that test your ability to make legal and ethical decisions. Your task is to choose the most appropriate course of action in each scenario."],
+    "activityOverviewList": [],
+    "mode":"Learning Mode: This is a practice activity with hints available at each step."
   },
   "SCENE1": {
     "sceneTitle": "Manny's Secret (1 of 2)",

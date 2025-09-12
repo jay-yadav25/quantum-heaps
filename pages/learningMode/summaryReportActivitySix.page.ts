@@ -17,7 +17,7 @@ export class SummaryReportActivitySix {
     this.noOfHintUsed = page.frameLocator('iframe[name="ext_012345678_1"]').locator('strong.hint-value');
     }
 
-    public async runScenarioPathForActivityThreeLearnigMode(path: string[], testData: any): Promise<void> {
+    public async runScenarioPathForActivitySixLearnigMode(path: string[], testData: any): Promise<void> {
         console.log('Starting Report Verification:', path);
         const result = this.splitByNextStep(path);
         for (let i = 0; i < result.length; i++) {  

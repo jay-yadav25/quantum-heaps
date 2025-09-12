@@ -1,13 +1,6 @@
 {
-  "activity_metadata": {
-    "title": "Healthcare Ethics and Legal Decision Making",
-    "description": "Physical Therapy Assistant Ethics and Legal Compliance Training",
-    "total_steps": 5,
-    "challenge_mode": true,
-    "graded": true
-  },
+  "activityTitle": "Ethical Decision-Making:Scope of Practice",
   "learningObjectiveItems": {
-    "title": "Ethical Decision-Making Scope of Practice",
     "learningObjective": "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:",
     "learningObjectivesList": ["Identify the two (2) main types of laws affecting healthcare workers and in what forms these laws may be expressed.",
                                "Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.",

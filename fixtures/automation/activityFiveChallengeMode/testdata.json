@@ -1,4 +1,15 @@
-{
+{ 
+  "activityTitle": "",
+  "learningObjectiveItems": {
+    "learningObjective": "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:",
+    "learningObjectivesList": ["Identify the two (2) main types of laws affecting healthcare workers and in what forms these laws may be expressed.",
+                               "Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.",
+                               "Describe the concepts of patient rights and privileged communications and the legislation and procedures that are put into practice to ensure confidentiality of healthcare information.",
+                               "Describe the professional regulations and standards that are in place to ensure that healthcare providers/facilities are acting in a legal and ethical manner."]
+  },
+  "conversationPage": {
+    
+  },
   "default_chat": {
     "Jay": "Good morning, Mrs. Green. Dr. Wiley has ordered an immunization for Mason. He is to receive his MMRV vaccine. I understand that Dr. Wiley has discussed this vaccine with you, so I will just need you to sign this consent form.",
     "Emily": "I... I don't feel comfortable with Mason getting this shot. There has been so much in the news about vaccines.",
@@ -196,25 +207,5 @@
   "incorrect_reply_mood3": "concerned and irritated",
   "incorrect_reportFeedback": "Your response lacked enthusiasm, patience, tact, responsibility and competence, as you seemed pushy to the patient and bringing in the mother into the conversation caused him to become further upset.",
   "incorrect_attempt_ending_popup_text": "The response you chose lacked enthusiasm, patience, tact, responsibility and competence, as you seemed pushy to the patient and bringing in the mother into the conversation caused him to become further upset. Dealing with a pediatric patient requires having a positive attitude, and being supportive."
-  },
-  
-  "activityTitle": "",
-  "learningObjectiveTitle": "Learning Objectives",
-  "learningObjectives": [
-    
-  ],
-  "introductionTitle": "Introduction",
-  "introductionText": "You are a licensed practical nurse (LPN) at Dr. Wiley's clinic. Your role involves engaging with pediatric patients and their parents to administer vaccines and clear any doubts and fears related to vaccinations. Anna Greene has brought her 4-year-old son, Mason Greene, to Dr. Wiley's clinic. Mason is to have his MMRV (measles, mumps, rubella, varicella) immunization. Your task is to connect with Anna, understand her concerns, and help her feel confident about moving forward with the vaccination and then successfully administer the vaccine to Mason while handling his fear.",
-  "activityOverview": [
-    "The conversation includes multiple challenge levels focused on problem-solving and communication.",
-    "Your responses shape the outcome, with multiple paths to success.",
-    "If you take a non-ideal path, you'll have opportunities to return to the ideal track, though your grades will be reduced."
-  ],
-  "chatSectionTitle": "",
-  "instructionTitle": "Instructions",
-  "instructionText": "",
-  "characterName": "",
-  "characterRole": "",
-  "patientName": "",
-  "patientRole": ""
+  }
 } 

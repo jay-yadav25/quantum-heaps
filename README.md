@@ -75,8 +75,51 @@ Note: \* The feature file name and its respective test data's folder name should
     2 passed (2.3s)
     ```
 
-npx bddgen --tags "@districtSoftDelete"  
+npx bddgen --tags "@smoke"  
  npx playwright test
 
-TAGS=@districtSoftDelete npm run test
-TAGS=@districtSoftDelete npm run playwright:test -- --ui
+TAGS=@smoke npm run test
+TAGS=@smoke npm run playwright:test -- --ui
+
+11. Running Tests Using Test Suites with TEST_SUITE Env
+
+   We use TEST_SUITE=<NAME> to select which tagged scenarios to run. The mappings are defined in test-suites.json.
+
+   Examples of test-suites.json:
+
+   {
+   "ALL": "",
+   "REGRESSION": "@regression",
+   "SMOKE": "@smoke",
+   "CUSTOM": "@smoke and @activityThree"
+   }
+
+   Tag Expression Rules
+
+   Run scenarios with both tags
+
+   "CUSTOM": "@smoke and @activityThree"
+
+
+   → Runs only scenarios that contain both @smoke and @activityThree.
+
+   Run scenarios with either tag
+
+   "CUSTOM": "@smoke or @activityThree"
+
+
+   → Runs scenarios that have either @smoke or @activityThree.
+
+   Exclude a tag
+
+   "CUSTOM": "@smoke and not @wip"
+
+
+   → Runs @smoke scenarios but skips those tagged with @wip.
+
+   Combine multiple expressions
+
+   "CUSTOM": "(@activityOne or @activityTwo) and not @wip"
+
+
+   👉 All activity tags are named as @activityOne, @activityTwo, @activityThree, @activityFour, @activityFive, @activitySix.

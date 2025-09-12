@@ -1,5 +1,15 @@
 {
-  "introduction": "You are a registered nurse in a surgical unit at a specialty hospital. Your role involves preparing patients for surgery and ensuring they fully understand and consent to their procedures. Mr. Ricardo Gonzalez is scheduled for a laparoscopic cholecystectomy at 1030. Jeremy Daniels, the PA, meets you in the hallway to share the details of the surgery with you. Your task is to confirm your understanding of the surgery procedure with the PA, engage in a conversation with the patient to address his concerns, and guide him through the consent process with patience, tact, and competence.",
+ "activityTitle": "",
+  "learningObjectiveItems": {
+    "learningObjective": "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:",
+    "learningObjectivesList": ["Identify the two (2) main types of laws affecting healthcare workers and in what forms these laws may be expressed.",
+                               "Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.",
+                               "Describe the concepts of patient rights and privileged communications and the legislation and procedures that are put into practice to ensure confidentiality of healthcare information.",
+                               "Describe the professional regulations and standards that are in place to ensure that healthcare providers/facilities are acting in a legal and ethical manner."]
+  },
+  "conversationPage": {
+    
+  },
   "default_chat": {
     "Jay": "Good morning, Mr. Gonzalez. I'm a registered nurse, and I am here to have you sign the consent form and get you ready for surgery. What did Jeremy tell you about your procedure?",
     "Ricardo_Gonzalez": "He said he would poke some holes into my stomach and remove my gallbladder, but I don't really get what he means. How will I be able to eat if I have holes in my stomach?",

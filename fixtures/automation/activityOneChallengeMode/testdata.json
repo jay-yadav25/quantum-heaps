@@ -1,5 +1,15 @@
 {
-  "introduction": "You are a clinical social worker at a specialty hospital. Your role involves engaging with patients and their families to provide essential emotional and practical support. Emily Torres is the primary caregiver for her mother, Mrs. Gloria Diaz, who is in the late stages of Alzheimer's disease. Your task is to connect with Emily, understand her concerns, and guide her through the process of finding the support she needs.",
+  "activityTitle": "",
+  "learningObjectiveItems": {
+    "learningObjective": "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:",
+    "learningObjectivesList": ["Identify the two (2) main types of laws affecting healthcare workers and in what forms these laws may be expressed.",
+                               "Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.",
+                               "Describe the concepts of patient rights and privileged communications and the legislation and procedures that are put into practice to ensure confidentiality of healthcare information.",
+                               "Describe the professional regulations and standards that are in place to ensure that healthcare providers/facilities are acting in a legal and ethical manner."]
+  },
+  "conversationPage": {
+    
+  },
   "default_chat": {
     "[Avatar Name]": "Hi, Emily. Thank you for taking the time to come in today. I understand that your mom has Alzheimer's, and that you and your family have been caring for her for quite a while now. That's a big responsibility, and I can imagine it's been challenging at times. How have things been going for you? I know it's not always easy to talk about the difficulties you're facing, but I'm here to listen and help however I can.",
     "Emily": "It's... it's been a lot. I feel like I'm constantly juggling everything—taking care of Mom, managing the housework, and trying to stay connected with my kids. It feels like I never have enough time for myself anymore. And honestly, I don't know how much longer I can keep up with everything.",
@@ -120,32 +130,5 @@
     "incorrect_reply_mood": "angry and frustrated",
     "incorrect_reportFeedback": "Your response lacks effective communication skills and comes across as justifying and pushing an option that was already rejected.",
     "incorrect_attempt_ending_popup_text": "The response you chose lacked effective communication skills and came across as justifying and pushing an option that was already rejected. Dealing with a caregiver requires openness and a helpful attitude."
-  },
-
-  "activityTitle": "Communicatingwith a Patient's Family",
-  "learningObjectiveTitle": "Learning Objectives",
-  "learningObjectives": [
-    "Identify healthy lifestyle practices that lead to good health.",
-    "Identify the correlation between positive and negative relationships on emotional, physical, and mental health.",
-    "Identify positive and negative stressors and how to eliminate or decrease negative stress.",
-    "Identify the characteristics of a successful healthcare team menber.",
-    "Describe the process and importance of effective communication in the healthcare workspace."
-  ],
-  "introductionTitle": "Introduction",
-  "introductionText": "You are a clinical social worker at a specialty hospital. Your role involves engaging with patients and their families to provide essential emotional and practical support. Emily Torres is the primary caregiver for her mother, Mrs. Gloria Diaz, who is in the late stages of Alzheimer's disease. Your task is to connect with Emily, understand her concerns, and guide her through the process of finding the support she needs.",
-  "activityOverviewTitle": "Learning Objectives",
-  "activityOverview": [
-    "Identify healthy lifestyle practices that lead to good health.",
-    "Identify the correlation between positive and negative relationships on emotional, physical, and mental health.",
-    "Identify positive and negative stressors and how to eliminate or decrease negative stress.",
-    "Identify the characteristics of a successful healthcare team menber.",
-    "Describe the process and importance of effective communication in the healthcare workspace."
-  ],
-  "chatSectionTitle": "Communication Skills Training",
-  "instructionTitle": "Instructions",
-  "instructionText": "Select the most appropriate response to advance the conversation. Your goal is to de-escalate the situation and build rapport with the patient.",
-  "characterName": "Nurse Alex",
-  "characterRole": "Registered Nurse",
-  "patientName": "Sam Johnson",
-  "patientRole": "Patient"
+  }
 }
