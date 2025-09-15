@@ -115,7 +115,7 @@
     "incorrect_reply": "Guarantee? You can 100% guarantee my daughter will be fine? That's a pretty bold promise. You're brushing off my concerns like they don't matter, but I won't be taking a risk with Macie! Tell Dr. Wiley that we won't be coming back here.",
     "incorrect_reply_mood": "defensive and frustrated",
     "incorrect_reportFeedback": "Your response showed positive attitude but lacked patience, responsibility, and competence, as it provided assurance that can't be guaranteed and minimized the feelings of the patient's mother.",
-    "incorrect_attempt_ending_popup_text": "The response you chose showed positive attitude but lacked patience, responsibility, and competence, andcame across as impatient, patronizing, and inconsiderate of the parent's fears. Dealing with a concerned parent requires patience and being supportive."
+    "incorrect_attempt_ending_popup_text": "The response you chose showed positive attitude but lacked patience, responsibility, and competence, and came across as impatient, patronizing, and inconsiderate of the parent's fears. Dealing with a concerned parent requires patience and being supportive."
   },
   "C2.1": {
     "ideal": "I understand your concerns, Mrs. Greene. It's perfectly normal to feel anxious or scared. Being a parent is never easy. Please know that Macie is in excellent hands. Once you sign the consent form, we can get started whenever you are ready.",
@@ -156,7 +156,7 @@
     "distractor_attempt_ending_popup_text": "The response you chose showed enthusiasm, but lacked competence, responsibility, and tact, and seemed to move the process forward too quickly without explaining the procedure, upsetting and scaring the patient's mother. Dealing with a concerned parent requires you to be responsible and supportive.",
     "incorrect": "Okay, I'll give the form to the doctor so that she knows that you've agreed. We have to document it for legal reasons, you know... just in case anything happens. Now I'll administer the shot. I promise this will be quick.",
     "incorrect_replier_name": "Anna Greene, Patient's Mother",
-    "incorrect_reply": "Wait... what do you mean ‘just in case anything happens'? I didn't realize signing that form meant I'd be legally responsible if something goes wrong! This seems risky and I don't want to take any chances. Tell Dr. Wiley that Macie will not be taking the vaccine.",
+    "incorrect_reply": "Wait... what do you mean 'just in case anything happens'? I didn't realize signing that form meant I'd be legally responsible if something goes wrong! This seems risky and I don't want to take any chances. Tell Dr. Wiley that Macie will not be taking the vaccine.",
     "incorrect_reply_mood": "panicked",
     "incorrect_reportFeedback": "Your response lacked enthusiasm, competence, responsibility, and tact, and it sowed unnecessary fear in the parent's mind about the legal ramifications of the vaccine, without fully explaining the procedure to them.",
     "incorrect_attempt_ending_popup_text": "The response you chose lacked enthusiasm, competence, responsibility, and tact, and it sowed unnecessary fear in the parent's mind about the legal ramifications of the vaccine, without fully explaining the procedure to them. Dealing with a concerned parent requires having a positive attitude and being supportive."
@@ -206,8 +206,8 @@
     "distractor_replier_name3": "Anna Greene, Patient's Mother",
     "distractor_reply3": "Okay, Macie, okay! Don't worry, we won't do this, alright? ... I'm sorry, but I don't think we'll be able to get her vaccinated today. Let's do this some other time.",
     "distractor_reply_mood3": "concerned and apologetic",
-    "distractor_reportFeedback": "Your response showed patience, responsibility, and enthusiasm, but lacked tact and competence, as explaining that everyone must do it or by stating that she will recieve more shots does not necessarily lessen the young patient's fears, but rather cause further anxiety.",
-    "distractor_attempt_ending_popup_text": "The response you chose showed patience, responsibility, and enthusiasm, but lacked tact and competence, as explaining that everyone must do it or by stating that she will recieve more shots does not necessarily lessen the young patient's fears, but rather cause further anxiety. Dealing with a pediatric patient requires having a positive attitude, and being supportive.",
+    "distractor_reportFeedback": "Your response showed patience, responsibility, and enthusiasm, but lacked tact and competence, as explaining that everyone must do it or by stating that she will receive more shots does not necessarily lessen the young patient's fears, but rather cause further anxiety.",
+    "distractor_attempt_ending_popup_text": "The response you chose showed patience, responsibility, and enthusiasm, but lacked tact and competence, as explaining that everyone must do it or by stating that she will receive more shots does not necessarily lessen the young patient's fears, but rather cause further anxiety. Dealing with a pediatric patient requires having a positive attitude, and being supportive.",
     "incorrect": "Don't worry kiddo, these shots only hurt for a minute, but they will keep you from getting sick for many years. Now let's get started. You don't want to upset your mommy, do you?",
     "incorrect_replier_name": "Macie Greene, Pediatric Patient",
     "incorrect_reply": "They'll hurt me! Go away! ... Mamma, I don't want to do it! I don't want to get hurt!",

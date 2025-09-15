@@ -1,5 +1,38 @@
 @dho
 Feature: Launch Activity
+
+  @smoke @activityFive @regression
+  Scenario Outline: Verify Content of Learnign objective ,Avatar Selection ,Introduction and Chat Section of [Activity Five]
+    Given the user has launched the activity <Number> on the web
+    Then the Learning Objectives page of "Activity Five" should be displayed
+    And the activity title and learning objectives should match the content matrix of "Activity Five"
+
+    When the user clicks the Start button on the Learning Objectives page of "Activity Five"
+    Then the Introduction popup of "Activity Five" should be visible
+    And the Introduction popup content should be as per content matrix
+  
+    When the user clicks the Continue button on the Introduction popup of "Activity Five"
+    Then the avatar selection page of "Activity Five" should be displayed
+    And the avatar selection page content should be as per content matrix
+
+    When the user enters a name and clicks the Done button
+    Then the Chat section should be displayed
+    And the chat page content should be as per content matrix
+
+    When the user click on the Introduction button in more options menue items
+    Then the Introduction popup content should be as per content matrix
+    And the user clicks the Continue button on the Introduction popup of "Activity Five"
+   
+
+
+    When the user click on the Learning Objective button in more options menue items
+    Then the Learning Objectives popup should be visible and content should be as per content matrix
+    And the user clicks the Continue button on the Learning Objective popup of "Activity Five"
+    
+    Examples:
+    |Number|
+    |  5   |
+
   @smoke @ActivityFive  @regression @trial
   Scenario Outline: Verify chat section functionality of activity five for golden scenario <scenario>
     Given the user has launched the activity 5 on the web
@@ -23,48 +56,48 @@ Feature: Launch Activity
       | S5       |
       | S6       |
       | S7       |
-      # | S8       |
-      # | S9       |
-      # | S10      |
-      # | S11      |
-      # | S12      |
-      # | S13      |
-      # | S14      |
-      # | S15      |
-      # | S16      |
-      # | S17      |
-      # | S18      |
-      # | S19      |
-      # | S20      |
-      # | S21      |
-      # | S22      |
-      # | S23      |
-      # | S24      |
-      # | S25      |
-      # | S26      |
-      # | S27      |
-      # | S28      |
-      # | S29      |
-      # | S30      |
-      # | S31      |
-      # | S33      |
-      # | S34      |
-      # | S35      |
-      # | S36      |
-      # | S37      |
-      # | S38      |
-      # | S39      |
-      # | S40      |
-      # | S41      |
-      # | S42      |
-      # | S43      |
-      # | S44      |
-      # | S45      |
-      # | S46      |
-      # | S47      |
-      # | S48      |
-      # | S49      |
-      # | S50      |
+      | S8       |
+      | S9       |
+      | S10      |
+      | S11      |
+      | S12      |
+      | S13      |
+      | S14      |
+      | S15      |
+      | S16      |
+      | S17      |
+      | S18      |
+      | S19      |
+      | S20      |
+      | S21      |
+      | S22      |
+      | S23      |
+      | S24      |
+      | S25      |
+      | S26      |
+      | S27      |
+      | S28      |
+      | S29      |
+      | S30      |
+      | S31      |
+      | S33      |
+      | S34      |
+      | S35      |
+      | S36      |
+      | S37      |
+      | S38      |
+      | S39      |
+      | S40      |
+      | S41      |
+      | S42      |
+      | S43      |
+      | S44      |
+      | S45      |
+      | S46      |
+      | S47      |
+      | S48      |
+      | S49      |
+      | S50      |
 
   @regression @ActivityFive 
   Scenario Outline: Verify chat section functionality of activity five for golden scenario <scenario>
