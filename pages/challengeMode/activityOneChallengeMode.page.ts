@@ -2,7 +2,7 @@ import { expect, Locator, FrameLocator, type Page } from '@playwright/test';
 
 export class ChallengeMode {
   readonly page: Page;
-  private readonly frameLocator: FrameLocator;
+  readonly frameLocator: FrameLocator;
   readonly startButton: Locator;
   readonly inputField: Locator;
   readonly avatarSelectionDoneButton: Locator;
@@ -19,7 +19,7 @@ export class ChallengeMode {
   readonly respondButton: Locator;
   readonly restartButton: Locator;
   readonly continueButton:Locator;
-
+  
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
     this.page = page;
     this.frameLocator = page.frameLocator(`iframe[name="${iframeName}"]`);
@@ -42,6 +42,7 @@ export class ChallengeMode {
     
   }
 
+  public scenarioStartTimeCommunicationActvity: number = 0;
 
   public async runScenarioPath(path: string[], testData: any) {
     let previousStep: string | null = null;
@@ -301,7 +302,7 @@ export class ChallengeMode {
  
 
   public async clickOnAvatarSelectionDone() {
-    //this.scenarioStartTime = performance.now();
+    this.scenarioStartTimeCommunicationActvity = performance.now();
     await this.avatarSelectionDoneButton.click();
   }
   

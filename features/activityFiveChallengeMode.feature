@@ -1,6 +1,6 @@
 @dho
 Feature: Launch Activity
-  @smoke @ActivityFiveSmoke  @regression @trial
+  @smoke @ActivityFive  @regression @trial
   Scenario Outline: Verify chat section functionality of activity five for golden scenario <scenario>
     Given the user has launched the activity 5 on the web
     Then the Learning Objectives page of "Activity Five" should be displayed
@@ -17,12 +17,12 @@ Feature: Launch Activity
     Examples:
       | scenario |
       | S1       |
-      # | S2       |
-      # | S3       |
-      # | S4       |
-      # | S5       |
-      # | S6       |
-      # | S7       |
+      | S2       |
+      | S3       |
+      | S4       |
+      | S5       |
+      | S6       |
+      | S7       |
       # | S8       |
       # | S9       |
       # | S10      |
@@ -66,7 +66,7 @@ Feature: Launch Activity
       # | S49      |
       # | S50      |
 
-  @regression
+  @regression @ActivityFive 
   Scenario Outline: Verify chat section functionality of activity five for golden scenario <scenario>
     Given the user has launched the activity 5 on the web
      Then the Learning Objectives page of "Activity Five" should be displayed

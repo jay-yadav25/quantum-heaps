@@ -10,7 +10,7 @@
   "conversationPage": {
     
   },
-  "default_chat": {
+  "defaultChat": {
     "Jay": "Good morning, Mr. Gonzalez. I'm a registered nurse, and I am here to have you sign the consent form and get you ready for surgery. What did Jeremy tell you about your procedure?",
     "Ricardo_Gonzalez": "He said he would poke some holes into my stomach and remove my gallbladder, but I don't really get what he means. How will I be able to eat if I have holes in my stomach?",
     "Ricardo_Gonzalez_reply_mood": "appears confused",

@@ -34,7 +34,7 @@ Feature: Launch Activity
     |  2   |
 
  
-    @smoke @ActivityTwoSmoke @regression @trial
+    @smoke @ActivityTwo @regression 
     Scenario Outline: Verify chat section functionality for golden scenario learning mode <scenario>
     Given the user has launched the activity 2 on the web
     Then the Learning Objectives page of "Activity Two" should be displayed
@@ -50,27 +50,27 @@ Feature: Launch Activity
     Examples:
     | scenario |
     | S1       |
-    # | S2       |
-    # | S3       |
-    # | S4       |
-    # | S5       |
-    # | S6       |
-    # | S7       |
-    # | S8       |
-    # | S9       |
-    # | S10      |
-    # | S11      |
-    # | S12      |
-    # | S13      |
-    # | S14      |
-    # | S15      |
-    # | S16      |
-    # | S17      |
-    # | S18      |
-    # | S19      |
-    # | S20      |
+    | S2       |
+    | S3       |
+    | S4       |
+    | S5       |
+    | S6       |
+    | S7       |
+    | S8       |
+    | S9       |
+    | S10      |
+    | S11      |
+    | S12      |
+    | S13      |
+    | S14      |
+    | S15      |
+    | S16      |
+    | S17      |
+    | S18      |
+    | S19      |
+    | S20      |
 
-  @regression
+  @regression @ActivityTwo
   Scenario Outline: Verify chat section functionality for golden scenario learning mode <scenario>
     Given the user has launched the activity 2 on the web
     Then the Learning Objectives page of "Activity Two" should be displayed

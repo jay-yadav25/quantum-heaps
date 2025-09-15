@@ -408,8 +408,8 @@ export class SummaryReport {
         // First attempt always uses default response
         if (step.startsWith("C1")) {
             return {
-                patientResponse: testData["default_chat"]["Emily"],
-                patientMood: testData["default_chat"]["Emily_reply_mood"]
+                patientResponse: testData["defaultChat"]["Emily"],
+                patientMood: testData["defaultChat"]["Emily_reply_mood"]
             };
         }
         const lastCorrectResponse = this.findLastCorrectResponse(attemptNumber, allAttempts, testData);
@@ -439,8 +439,8 @@ export class SummaryReport {
         }
         // Return default if no CORRECT action found
         return {
-            patientResponse: testData["default_chat"]["Emily"],
-            patientMood: testData["default_chat"]["Emily_reply_mood"]
+            patientResponse: testData["defaultChat"]["Emily"],
+            patientMood: testData["defaultChat"]["Emily_reply_mood"]
         };
     }
 
@@ -462,8 +462,8 @@ export class SummaryReport {
                 patientMood = testData[level]?.["distractor_reply_mood"];
                 break;
             default:
-                patientResponse = testData["default_chat"]["Emily"];
-                patientMood = testData["default_chat"]["Emily_reply_mood"];
+                patientResponse = testData["defaultChat"]["Emily"];
+                patientMood = testData["defaultChat"]["Emily_reply_mood"];
         }
         return { patientResponse, patientMood };
     }

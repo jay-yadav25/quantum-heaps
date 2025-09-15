@@ -1,38 +1,33 @@
 @dho
 Feature: Launch Activity
-@smoke @ActivityFourSmoke @regression
+@smoke @ActivityFour @regression
  Scenario Outline: Verify Content of learnign objective and introduction of [Activity Four]
     Given the user has launched the activity <Number> on the web
     Then the Learning Objectives page of "Activity Four" should be displayed
-    #And perfome accessibility scan for "Activity Four"
     And the activity title and learning objectives should match the content matrix of "Activity Four"
 
     When the user clicks the Start button on the Learning Objectives page of "Activity Four"
     Then the Introduction page of "Activity Four" should be visible
-     #And perfome accessibility scan for "Activity Four-IntroPage"
     And the introduction text should match the content matrix of "Activity Four"
 
     When the user clicks the Continue button on the Introduction page of "Activity Four"
     Then the first step of "Activity Four" should be displayed
-     #And perfome accessibility scan for "Activity Four-Step One"
-
+    
     When the user click on the Introduction button in more options menue items
-    # And perfome accessibility scan for "Activity Four-IntroPopup"
     Then the Introduction popup content should be as per content matrix
-    And the user clicks the Continue button on the Introduction popup of "<Activity Number>"
+    And the user clicks the Continue button on the Introduction popup of "Activity Four"
    
 
 
     When the user click on the Learning Objective button in more options menue items
-     #And perfome accessibility scan for "Activity Four-LoPopup"
     Then the Learning Objectives popup should be visible and content should be as per content matrix
-    And the user clicks the Continue button on the Learning Objective popup of "<Activity Number>"
+    And the user clicks the Continue button on the Learning Objective popup of "Activity Four"
     
     Examples:
-  | Activity Number        |Number|
-  |   Three Learning Mode  |   4  |
-  
-  @smoke @ActivityFourSmoke @regression
+    |Number|
+    |   4  |
+    
+  @smoke @ActivityFour @regression
   Scenario Outline: Verify all step functionalities for the golden path in Activity Four - Challenge Mode "<scenario>"
 
     Given the user has launched the activity 4 on the web
@@ -77,7 +72,7 @@ Feature: Launch Activity
       | S25      |
       | S26      |
       | S27      |
-  @regression
+  @regression @ActivityFour
   Scenario Outline: Verify all step functionalities for the golden path in Activity Four - Challenge Mode "<scenario>"
 
     Given the user has launched the activity 4 on the web

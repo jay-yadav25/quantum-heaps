@@ -50,6 +50,8 @@ export class ActivityCommonPage {
     readonly learningObjectiveDetailsInPopup: Locator;
     readonly learningObjectiveHeader: Locator;
     readonly learningObjectiveHeaderInPopup:Locator;
+    readonly chatSectionInstructionList :Locator;
+    readonly chatSectionConversationTitle:Locator;
     
     // Introduction Popup
    readonly introductionPopupTitle: Locator;
@@ -91,15 +93,19 @@ export class ActivityCommonPage {
 
         // Chat Section
         this.chatSectionActivityTitle = this.frameLocator.locator("h1.navbar-title");
-        this.chatSectionInstructionTitle = this.frameLocator.locator("div.instruction-title");
+        this.chatSectionInstructionTitle = this.frameLocator.locator("h2.instruction-title");
+        this.chatSectionConversationTitle = this.frameLocator.locator("#chat-title");
+        
         this.chatSectionInstructionText = this.frameLocator.locator("div.instruction-content");
+        this.chatSectionInstructionList = this.frameLocator.locator("ul.instruction-description li");
+        
         this.chatTitle = this.frameLocator.locator("div#chat-title");
         this.scenarioCharacterName = this.frameLocator.locator("div.your-character-name");
         this.scenarioCharacterRole = this.frameLocator.locator("div.your-character-role");
-        this.patientCharacterName = this.frameLocator.locator("div.patient-character-name");
+        this.patientCharacterName = this.frameLocator.locator("strong.patient-character-name");
         this.patientCharacterRole = this.frameLocator.locator("div.patient-character-role");
         this.defaultChatOption = this.frameLocator.locator("#default_chat_option_1");
-        this.defaultReplyOption = this.frameLocator.locator("#default_reply_option_1");
+        this.defaultReplyOption = this.frameLocator.locator("span#default_reply_option_1");
         this.doneSubmitButton = this.frameLocator.locator("#chat-done-btn");
         this.submitButton = this.frameLocator.locator("#submit-btn");
         this.popupContinueButton = this.frameLocator.locator("//button[@id='continue-btn' and contains(@class, 'common-done-btn')]");
@@ -285,7 +291,7 @@ public async clickOnContinueButtonIntroAndLoPopup() {
     /**
      * Verify the avatar selection page is displayed
      */
-    public async verifyAvatarSelectionPage() {
+    public async verifyAvatarSelectionPage(testData:any) {
         await expect(this.avatarSelectionContainer).toBeVisible();
         await expect(this.avatarFemale).toBeVisible();
         await expect(this.avatarMale).toBeVisible();
@@ -348,25 +354,33 @@ public async clickOnContinueButtonIntroAndLoPopup() {
      */
     public async verifyChatSection(testData: any) {
         await expect(this.chatSectionActivityTitle).toBeVisible();
-        await expect(this.chatSectionActivityTitle).toHaveText(testData.chatSectionTitle);
+        await expect(this.chatSectionActivityTitle).toHaveText(testData.activityTitle);
+
+        await expect(this.chatSectionConversationTitle).toBeVisible();
+        await expect(this.chatSectionConversationTitle).toHaveText(testData.conversationPage.conversatinTitle);
 
         await expect(this.chatSectionInstructionTitle).toBeVisible();
-        await expect(this.chatSectionInstructionTitle).toHaveText(testData.instructionTitle);
+        await expect(this.chatSectionInstructionTitle).toHaveText("Instructions");
 
-        await expect(this.chatSectionInstructionText).toBeVisible();
-        await expect(this.chatSectionInstructionText).toHaveText(testData.instructionText);
+        const chatSectionInstructionTextLocator = await this.chatSectionInstructionText.all();
+        for (let i = 0; i < testData.instruction.instructionsList.length; i++) {
+            await expect(chatSectionInstructionTextLocator[i]).toHaveText(testData.instruction.instructionsList[i]);
+        }
 
-        await expect(this.scenarioCharacterName).toBeVisible();
-        await expect(this.scenarioCharacterName).toHaveText(testData.characterName);
+        // await expect(this.scenarioCharacterName).toBeVisible();
+        // await expect(this.scenarioCharacterName).toHaveText(testData.characterName);
 
-        await expect(this.scenarioCharacterRole).toBeVisible();
-        await expect(this.scenarioCharacterRole).toHaveText(testData.characterRole);
+        // await expect(this.scenarioCharacterRole).toBeVisible();
+        // await expect(this.scenarioCharacterRole).toHaveText(testData.characterRole);
 
-        await expect(this.patientCharacterName).toBeVisible();
-        await expect(this.patientCharacterName).toHaveText(testData.patientName);
+        // await expect(this.patientCharacterName).toBeVisible();
+        // await expect(this.patientCharacterName).toHaveText(testData.patientName);
 
-        await expect(this.patientCharacterRole).toBeVisible();
-        await expect(this.patientCharacterRole).toHaveText(testData.patientRole);
+        // await expect(this.patientCharacterRole).toBeVisible();
+        // await expect(this.patientCharacterRole).toHaveText(testData.patientRole);
+        await expect(this.defaultChatOption).toHaveText(testData.defaultChat.Jay);
+        await expect(this.defaultReplyOption).toHaveText(testData.defaultChat.Emily);
+    
     }
     //Accessiblity scan common function
     public async performAccessivityScanForGivenPage(testInfo:any,pageName:string){

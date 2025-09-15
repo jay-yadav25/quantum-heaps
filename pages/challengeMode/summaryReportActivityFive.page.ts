@@ -381,9 +381,9 @@ export class SummaryReportActivityFive {
         // First attempt always uses default response
         if (step.startsWith("C1")) {
             return {
-                patientResponse: testData["default_chat"]["Emily"],
-                patientMood: testData["default_chat"]["Emily_reply_mood"],
-                patientName: testData["default_chat"]["replier_name"],
+                patientResponse: testData["defaultChat"]["Emily"],
+                patientMood: testData["defaultChat"]["Emily_reply_mood"],
+                patientName: testData["defaultChat"]["replier_name"],
                 patientResponse2: null,
                 actionType:null,
                 level:null
@@ -416,9 +416,9 @@ export class SummaryReportActivityFive {
         }
         // Return default if no CORRECT action found
         return {
-            patientResponse: testData["default_chat"]["Emily"],
-            patientMood: testData["default_chat"]["Emily_reply_mood"],
-            patientName: testData["default_chat"]["replier_name"],
+            patientResponse: testData["defaultChat"]["Emily"],
+            patientMood: testData["defaultChat"]["Emily_reply_mood"],
+            patientName: testData["defaultChat"]["replier_name"],
             patientResponse2: null,
             actionType:null,
             level:null
@@ -469,9 +469,9 @@ export class SummaryReportActivityFive {
             
             break;
         default:
-            patientResponse = testData["default_chat"]["Ricardo_Gonzalez"];
-            patientMood = testData["default_chat"]["Ricardo_Gonzalez_reply_mood"];
-             patientName= testData["default_chat"]["replier_name"]
+            patientResponse = testData["defaultChat"]["Ricardo_Gonzalez"];
+            patientMood = testData["defaultChat"]["Ricardo_Gonzalez_reply_mood"];
+             patientName= testData["defaultChat"]["replier_name"]
     }
     
     return { patientResponse, patientMood,patientResponse2,patientName,actionType,level };

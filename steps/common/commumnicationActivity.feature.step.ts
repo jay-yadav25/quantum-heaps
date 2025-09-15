@@ -17,13 +17,15 @@ Given('the user has launched the activity {int} on the web', async function ({},
   await activityCommonpage.launchActivity(environment,activityNumber);
 });
 
-Then('the avatar selection page content should be as per content matrix', async ({}) => {
-  
+Then('the avatar selection page content should be as per content matrix', async function ({ testData }) {
+  await activityCommonpage.verifyAvatarSelectionPage(testData);
 });
 
-Then('the chat page content should be as per content matrix', async ({}) => {
-  
+
+Then('the chat page content should be as per content matrix',async function ({ testData }) {
+  await activityCommonpage.verifyChatSection(testData);
 });
+
 
 
 Then('perfome accessibility scan for {string}', async function ({ testData,$testInfo }, pageName: string) {

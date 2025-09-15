@@ -17,8 +17,7 @@ export class ActivityFour {
   readonly stepInstructionList:Locator;
   readonly popupContinueButton:Locator;
   readonly totalTimeTaken:Locator;
-  private scenarioStartTime: number = 0;
-   // Learning Objectives Page
+    // Learning Objectives Page
     readonly learningObjectiveTitle: Locator;
     readonly learningObjectiveDetails: Locator;
     readonly activityTitleStartPage: Locator;

@@ -1,76 +1,41 @@
 import { expect, Locator, FrameLocator, type Page } from '@playwright/test';
+import { ChallengeMode } from '../challengeMode/activityOneChallengeMode.page';
 
-export class LearningMode {
-  readonly page: Page;
-  private readonly frameLocator: FrameLocator;
-  readonly startButton: Locator;
-  readonly inputField: Locator;
-  readonly avatarSelectionDoneButton: Locator;
-  readonly doneSubmitButton: Locator;
-  readonly submitButton: Locator;
-  readonly retryButton: Locator;
-  readonly feedbackPopupText1: Locator;
-  readonly feedbackPopupText2: Locator;
-  readonly feedbackPopupText3: Locator;
-  readonly intrductionPopupContinueButton: Locator;
-  readonly chatEndMessage1: Locator;
-  readonly chatEndMessage2: Locator;
-  readonly attemptNumberMessage1: Locator;
-  readonly attemptNumberMessage2: Locator;
-  readonly noOfAttemptChatPopup: Locator;
-  readonly continueButton: Locator;
+export class LearningMode extends ChallengeMode {
   readonly hintButton: Locator;
   readonly timeTaken: Locator;
   readonly noOfHintUsed: Locator;
   readonly noOfAttemptUsed: Locator;
-
   readonly hintTitle: Locator;
   readonly emojiTitle: Locator;
   readonly emojiReaction: Locator;
   readonly suggestionTitle: Locator;
   readonly suggestionList: Locator;
   readonly suggestionListItems: Locator;
-  readonly respondButton: Locator;
-  readonly feedbackPopupTitle:Locator;
-  readonly popupCloseButton:Locator;
+  readonly feedbackPopupTitle: Locator;
+  readonly popupCloseButton: Locator;
+  readonly attemptNumberMessage1: Locator;
+  readonly attemptNumberMessage2: Locator;
 
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
-    this.page = page;
-    this.frameLocator = page.frameLocator(`iframe[name="${iframeName}"]`);
-    this.startButton = this.frameLocator.locator("//button[@id='start-btn']");
-    this.inputField = this.frameLocator.locator("//input[@class='input']");
-    this.avatarSelectionDoneButton = this.frameLocator.locator("//button[@id='avatar-done-btn']");
-    this.doneSubmitButton = this.frameLocator.locator("//button[@id='chat-done-btn']");
-    this.submitButton = this.frameLocator.locator("//button[@id='submit-btn']");
-    this.retryButton = this.frameLocator.locator("//button[@id='retry-btn']");
-    this.feedbackPopupText1 = this.frameLocator.locator("//div[@class='popup-content-container']//p[1]");
-    this.feedbackPopupText2 = this.frameLocator.locator("//div[@class='popup-content-container']//p[2]");
-    this.feedbackPopupText3 = this.frameLocator.locator("//div[@class='popup-content-container']//span").first();
-    this.intrductionPopupContinueButton = this.frameLocator.locator(".continue-button");
-    this.chatEndMessage1 = this.frameLocator.locator("//div[@class='chat-end-message-bg']/div/p");
-    this.chatEndMessage2 = this.frameLocator.locator("//div[@class='chat-end-message-bg']/p");
-    this.noOfAttemptChatPopup = this.frameLocator.locator("//div[@class='popup-header']/span");
-    this.respondButton = this.frameLocator.locator("//button[@id='respond-btn']").first();
-    this.continueButton = this.frameLocator.locator("button#continue-btn");
+    super(page, iframeName); // Call parent constructor to inherit all ChallengeMode locators
+    
+    // Only define LearningMode-specific locators
     this.hintButton = this.frameLocator.locator("button#chat-hint-btn");
-
-    this.hintTitle = this.frameLocator.locator("#dialog_label"); // hint title
+    this.timeTaken = this.frameLocator.locator("strong.time-value").first();
+    this.noOfAttemptUsed = this.frameLocator.locator("strong.attempt-value").first();
+    this.noOfHintUsed = this.frameLocator.locator("strong.hint-value").first();
+    this.hintTitle = this.frameLocator.locator("#dialog_label");
     this.emojiTitle = this.frameLocator.locator("strong.emoji-title");
     this.emojiReaction = this.frameLocator.locator("div.emoji-reaction");
     this.suggestionTitle = this.frameLocator.locator("strong.suggestion-title");
     this.suggestionList = this.frameLocator.locator("ul.suggestion-list");
     this.suggestionListItems = this.frameLocator.locator("ul.suggestion-list li");
-    this.timeTaken = this.frameLocator.locator(" strong.time-value").first();
-    this.noOfAttemptUsed = this.frameLocator.locator("strong.attempt-value").first();
-    this.noOfHintUsed = this.frameLocator.locator("strong.hint-value").first();
     this.feedbackPopupTitle = this.frameLocator.locator("#dialog_label").first();
     this.popupCloseButton = this.frameLocator.locator("#popup-close-btn").first();
     this.attemptNumberMessage1 = this.frameLocator.locator("//div[@class='chat-end-msg']/div[1]").first();
-     this.attemptNumberMessage2 = this.frameLocator.locator("//div[@class='chat-end-msg']/div[2]").first();
-
-
+    this.attemptNumberMessage2 = this.frameLocator.locator("//div[@class='chat-end-msg']/div[2]").first();
   }
-  private scenarioStartTime: number = 0;
 
 
   public async runScenarioPathForLearnigMode(path: string[], testData: any) {
@@ -87,21 +52,21 @@ export class LearningMode {
       }
       if (step === 'COMPLETE') {
         console.log(`✅ COMPLETE reached — Last step was ${previousStep}`);
-        await this.verifyPassedScenario(path);
+        await this.verifyPassedScenarioActivityTwo(path);
         break;
       }
 
       if (step.startsWith('RESTART')) {
         console.log(`🔁 Restarting challenge level — Last step was ${previousStep}`);
-        await this.verifyFailedScenario(previousStep,step, testData);
+        await this.verifyFailedScenarioActivityTwo(previousStep,step, testData);
         continue;
       }
-      await this.selectAndVerifyReplyText(step, testData);
+      await this.selectAndVerifyReplyTextActivityTwo(step, testData);
       previousStep = step;
     }
   }
 
-  private async selectAndVerifyReplyText(step: string, testData: any) {
+  private async selectAndVerifyReplyTextActivityTwo(step: string, testData: any) {
     const [level, rawAction] = step.split("_");
 
     const actionMap: { [key: string]: string } = {
@@ -116,7 +81,7 @@ export class LearningMode {
     const distractor = actionDetails["distractor"];
 
     // Get the option IDs
-    const { correctOptionID, incorrectOptionID, distractorOptionID } = await this.getOptionIds(level);
+    const { correctOptionID, incorrectOptionID, distractorOptionID } = await this.getOptionIdsActivityTwo(level);
 
     
     await expect(this.frameLocator.locator(`//button[@id='${correctOptionID}']//span//span[2]`).first()).toHaveText(correct);
@@ -160,9 +125,9 @@ export class LearningMode {
       const replyText2 = actionDetails[actionKey + "_reply2"];
       const replyTextID2 = `${selectedOptionID}_rep_2`;
       await expect(this.frameLocator.locator(`//span[@id='${replyTextID2}']`)).toHaveText(replyText2);
-      const defaultChat = testData["default_chat"]["Jay"];
-      const defaultReply = testData["default_chat"]["Ricardo_Gonzalez"];
-      const defaultMood = testData["default_chat"]["Ricardo_Gonzalez_reply_mood"];
+      const defaultChat = testData["defaultChat"]["Jay"];
+      const defaultReply = testData["defaultChat"]["Ricardo_Gonzalez"];
+      const defaultMood = testData["defaultChat"]["Ricardo_Gonzalez_reply_mood"];
       const defaultReplyMoodSelector = `//div[@id='ch_01_default_opt_1_rep_1']/parent::div/preceding-sibling::div/span[contains(@class, "patient-reaction")]`;
 
       await expect(this.frameLocator.locator(`//span[@id='ch_01_default_opt_1']`)).toHaveText(defaultChat);
@@ -220,7 +185,7 @@ export class LearningMode {
     }
   }
 
-  private async verifyFailedScenario(previousStep: any,step:string, testData: any) {
+  private async verifyFailedScenarioActivityTwo(previousStep: any,step:string, testData: any) {
     await expect(this.chatEndMessage1).toHaveText("This conversation has ended without a positive resolution.");
     await expect(this.chatEndMessage2).toHaveText("Select the Continue button to proceed.");
     await this.clickOnDoneButton();
@@ -270,12 +235,12 @@ const suffix: string = getOrdinalSuffix(restartNumber);
   }
 
 
-  private async verifyPassedScenario(path: string[]) {
+  private async verifyPassedScenarioActivityTwo(path: string[]) {
     await expect(this.chatEndMessage1).toHaveText("This conversation has ended with a positive resolution.");
     await expect(this.chatEndMessage2).toHaveText("Select the Submit button to submit your results to your teacher.");
     // Click done button and calculate time taken
     await this.clickOnDoneButton();
-    const actualTimeTaken = performance.now() - this.scenarioStartTime;
+    const actualTimeTaken = performance.now() - this.scenarioStartTimeCommunicationActvity;
 
     // Verify popup content
     const feedbackPopupFirstText = "Great job! You successfully navigated the conversation with patience, tact, and competence. You demonstrated effective use of communication and problem solving skills to reach a positive outcome!";
@@ -386,11 +351,7 @@ const suffix: string = getOrdinalSuffix(restartNumber);
     await this.inputField.fill(text);
   }
 
-  public async clickOnAvatarSelectionDone() {
-    this.scenarioStartTime = performance.now();
-    await this.avatarSelectionDoneButton.click();
-  }
-
+  
   public async clickOnDoneButton() {
     await this.doneSubmitButton.click();
   }
@@ -407,7 +368,7 @@ const suffix: string = getOrdinalSuffix(restartNumber);
     await this.hintButton.click();
   }
 
-  private async getOptionIds(level: string) {
+  private async getOptionIdsActivityTwo(level: string) {
     // Remove the "C" prefix and split by "."
     const parts = level.replace("C", "").split(".");
 

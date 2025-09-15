@@ -10,7 +10,7 @@
   "conversationPage": {
     
   },
-  "default_chat": {
+  "defaultChat": {
     "[Avatar Name]": "Hi, Emily. Thank you for taking the time to come in today. I understand that your mom has Alzheimer's, and that you and your family have been caring for her for quite a while now. That's a big responsibility, and I can imagine it's been challenging at times. How have things been going for you? I know it's not always easy to talk about the difficulties you're facing, but I'm here to listen and help however I can.",
     "Emily": "It's... it's been a lot. I feel like I'm constantly juggling everything—taking care of Mom, managing the housework, and trying to stay connected with my kids. It feels like I never have enough time for myself anymore. And honestly, I don't know how much longer I can keep up with everything.",
     "Emily_reply_mood": "stressed and overwhelmed"

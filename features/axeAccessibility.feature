@@ -1,7 +1,7 @@
 @dho
 Feature: Axe Accessibility Scan All Activity
 
-  @accessibility
+  @accessibility @regression
   Scenario Outline: Run axe Accessibility Automation on all page of [<Activity Number>]
     Given the user has launched the activity <Number> on the web
     Then the Learning Objectives page of "<Activity Number>" should be displayed
@@ -35,7 +35,7 @@ Feature: Axe Accessibility Scan All Activity
 
 
 
-   @accessibility
+   @accessibility @regression
   Scenario Outline: Run axe Accessibility Automation on all page of [<Activity Number>]
     Given the user has launched the activity <Number> on the web
     Then the Learning Objectives page of "<Activity Number>" should be displayed

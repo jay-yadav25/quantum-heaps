@@ -201,8 +201,8 @@ export class SummaryReportActivityTwo {
         // First attempt always uses default response
         if (step.startsWith("C1")) {
             return {
-                patientResponse: testData["default_chat"]["Ricardo_Gonzalez"],
-                patientMood: testData["default_chat"]["Ricardo_Gonzalez_reply_mood"]
+                patientResponse: testData["defaultChat"]["Ricardo_Gonzalez"],
+                patientMood: testData["defaultChat"]["Ricardo_Gonzalez_reply_mood"]
             };
         }
         const lastCorrectResponse = this.findLastCorrectResponse(attemptNumber, allAttempts, testData);
@@ -232,8 +232,8 @@ export class SummaryReportActivityTwo {
         }
         // Return default if no CORRECT action found
         return {
-            patientResponse: testData["default_chat"]["Ricardo_Gonzalez"],
-            patientMood: testData["default_chat"]["Ricardo_Gonzalez_reply_mood"]
+            patientResponse: testData["defaultChat"]["Ricardo_Gonzalez"],
+            patientMood: testData["defaultChat"]["Ricardo_Gonzalez_reply_mood"]
         };
     }
 
@@ -255,8 +255,8 @@ export class SummaryReportActivityTwo {
     //             patientMood = testData[level]?.["distractor_reply_mood"];
     //             break;
     //         default:
-    //             patientResponse = testData["default_chat"]["Ricardo_Gonzalez"];
-    //             patientMood = testData["default_chat"]["Ricardo_Gonzalez_reply_mood"];
+    //             patientResponse = testData["defaultChat"]["Ricardo_Gonzalez"];
+    //             patientMood = testData["defaultChat"]["Ricardo_Gonzalez_reply_mood"];
     //     }
     //     return { patientResponse, patientMood };
     // }
@@ -307,8 +307,8 @@ export class SummaryReportActivityTwo {
             }
             break;
         default:
-            patientResponse = testData["default_chat"]["Ricardo_Gonzalez"];
-            patientMood = testData["default_chat"]["Ricardo_Gonzalez_reply_mood"];
+            patientResponse = testData["defaultChat"]["Ricardo_Gonzalez"];
+            patientMood = testData["defaultChat"]["Ricardo_Gonzalez_reply_mood"];
     }
     
     return { patientResponse, patientMood };
