@@ -31,9 +31,9 @@ interface TestData {
 
 export class ActivitySix {
   readonly page: Page;
-  private readonly frameLocator: FrameLocator;
-  private scenarioStartTime: number = 0;
-  private seenSteps: Set<string> = new Set();
+  public readonly frameLocator: FrameLocator;
+  public scenarioStartTime: number = 0;
+  public seenSteps: Set<string> = new Set();
 
   // Core action buttons
   readonly startButton: Locator;
@@ -156,7 +156,7 @@ export class ActivitySix {
     await this.hintButton.click();
   }
 
-  private findNextValidStep(path: string[], currentIndex: number): string {
+  public findNextValidStep(path: string[], currentIndex: number): string {
     for (let i = currentIndex + 1; i < path.length; i++) {
       const stepName = path[i];
       if (!['HINT', 'NEXTSTEP'].includes(stepName)) {
@@ -166,17 +166,17 @@ export class ActivitySix {
     return "NOTFOUND";
   }
 
-  private extractStepNumber(step: string): string {
+  public extractStepNumber(step: string): string {
     const match = step.match(/(?:S|TS)(\d+)/);
     return match ? match[1] : "0";
   }
 
-  private getStepNumber(step: string): string | null {
+  public getStepNumber(step: string): string | null {
     const match = step.match(/^(S\d+)/);
     return match ? match[1] : null;
   }
 
-  private isFirstOccurrence(step: string): boolean {
+  public isFirstOccurrence(step: string): boolean {
     const stepNumber = this.getStepNumber(step);
     if (!stepNumber) return false;
     
@@ -188,7 +188,7 @@ export class ActivitySix {
     }
   }
 
-  private parseDisplayedTime(displayedTime: string): number {
+  public parseDisplayedTime(displayedTime: string): number {
     if (!displayedTime) return 0;
 
     const minMatch = displayedTime.match(/(\d+)\s*min/);
@@ -200,7 +200,7 @@ export class ActivitySix {
     return (minutes * 60) + seconds;
   }
 
-  private async verifyScenarioTiming(): Promise<void> {
+  public async verifyScenarioTiming(): Promise<void> {
     const actualTimeTaken = performance.now() - this.scenarioStartTime;
     const displayedTime = await this.totalTimeTaken.innerText();
     const expectedSeconds = Math.round(actualTimeTaken / 1000);
@@ -214,7 +214,7 @@ export class ActivitySix {
   }
 
   // Step processing methods
-  private async processStep(
+  public async processStep(
     step: string, 
     nextStepForHint: string, 
     previousStep: string, 
@@ -243,7 +243,7 @@ export class ActivitySix {
     }
   }
 
-  private async handleSingleSelectStep(
+  public async handleSingleSelectStep(
     step: string, 
     previousStep: string, 
     testData: TestData
@@ -260,13 +260,13 @@ export class ActivitySix {
     await this.selectSingleSelectOptions(step, testData);
   }
 
-  private async handleTapAndTapStep(step: string, testData: TestData): Promise<void> {
+  public async handleTapAndTapStep(step: string, testData: TestData): Promise<void> {
     await this.verifyStepInstruction(step, testData);
     await this.selectTapAndTapOptions(step, testData);
   }
 
   // Verification methods
-  private async verifyHintPopup(step: string, testData: TestData): Promise<void> {
+  public async verifyHintPopup(step: string, testData: TestData): Promise<void> {
     const stepNumber = this.getStepNumber(step);
     const stepDetails = testData['STEP_' + stepNumber] as StepData;
     const actualStepNumber = stepNumber ? parseInt(stepNumber, 10) : null;
@@ -299,35 +299,36 @@ export class ActivitySix {
     await this.popupContinueButton.nth(1).click();
   }
 
-  private async verifyStepInstruction(step: string, testData: TestData): Promise<void> {
+  public async verifyStepInstruction(step: string, testData: TestData): Promise<void> {
     const stepNumber = this.extractStepNumber(step);
     const stepDetails = testData["STEP_" + stepNumber] as StepData;
     
-    // await expect(this.stepDescription).toHaveText("Scenario Description");
-    // await expect(this.stepInstruction).toHaveText(stepDetails.instructions);
+    await expect(this.stepDescription).toHaveText("Scenario Description");
+    await expect(this.stepInstruction).toHaveText(stepDetails.instructions);
     await this.popupContinueButton.nth(1).click();
     
     const instructionListItems = await this.stepInstructionList.all();
     for (let i = 0; i < stepDetails.instructionsList.length; i++) {
-      //await expect(instructionListItems[i]).toHaveText(stepDetails.instructionsList[i]);
+      await expect(instructionListItems[i]).toHaveText(stepDetails.instructionsList[i]);
     }
   }
 
-  private async verifySingleSelectStep(step: string, testData: TestData): Promise<void> {
+  public async verifySingleSelectStep(step: string, testData: TestData): Promise<void> {
     await this.verifyStepInstruction(step, testData);
+    await this.verifySpeechBubbleConversation(step, testData);
     await this.verifyQuestion(step, testData);
     await this.verifySingleSelectOptions(step, testData);
   }
 
-  private async verifyQuestion(step: string, testData: TestData): Promise<void> {
+  public async verifyQuestion(step: string, testData: TestData): Promise<void> {
     const stepNumber = step.match(/S(\d+)/)?.[1];
     const stepDetails = testData['STEP_' + stepNumber] as StepData;
     const questionLocator = `.step-${stepNumber} h3`;
     
-    //await expect(this.frameLocator.locator(questionLocator)).toHaveText(stepDetails.question);
+    await expect(this.frameLocator.locator(questionLocator)).toHaveText(stepDetails.question);
   }
 
-  private async verifySingleSelectOptions(step: string, testData: TestData): Promise<void> {
+  public async verifySingleSelectOptions(step: string, testData: TestData): Promise<void> {
     const stepNumber = step.match(/S(\d+)/)?.[1];
     const stepDetails = testData['STEP_' + stepNumber] as StepData;
     
@@ -340,12 +341,12 @@ export class ActivitySix {
     const optionTexts = [stepDetails.INCORRECT_1, stepDetails.CORRECT, stepDetails.INCORRECT_2];
     
     for (let i = 0; i < optionSelectors.length; i++) {
-      //await expect(this.frameLocator.locator(optionSelectors[i]).first()).toHaveText(optionTexts[i]);
+      await expect(this.frameLocator.locator(optionSelectors[i]).first()).toHaveText(optionTexts[i]);
     }
   }
 
   // Selection methods
-  private async selectSingleSelectOptions(step: string, testData: TestData): Promise<void> {
+  public async selectSingleSelectOptions(step: string, testData: TestData): Promise<void> {
     const stepNumber = step.match(/S(\d+)/)?.[1];
     const stepDetails = testData['STEP_' + stepNumber] as StepData;
     
@@ -358,11 +359,11 @@ export class ActivitySix {
     const feedbackTextSelector = `${optionSelector} .flip-card-back .card-text`;
     const feedbackTitleSelector = `${optionSelector} .flip-card-back .card-title`;
     
-    // await expect(this.frameLocator.locator(feedbackTextSelector)).toHaveText(feedback.text);
-    // await expect(this.frameLocator.locator(feedbackTitleSelector)).toHaveText(feedback.title);
+    await expect(this.frameLocator.locator(feedbackTextSelector)).toHaveText(feedback.text);
+    await expect(this.frameLocator.locator(feedbackTitleSelector)).toHaveText(feedback.title);
   }
 
-  private determineSelectedOption(step: string, stepDetails: StepData): {
+  public determineSelectedOption(step: string, stepDetails: StepData): {
     selectedOptionID: number;
     feedback: { title: string; text: string };
   } {
@@ -377,7 +378,7 @@ export class ActivitySix {
     }
   }
 
-  private async selectTapAndTapOptions(step: string, testData: TestData): Promise<void> {
+  public async selectTapAndTapOptions(step: string, testData: TestData): Promise<void> {
     const stepNumber = this.extractStepNumber(step);
     const stepDetails = testData['STEP_' + stepNumber] as StepData;
     const actions = step.replace(/^TS9_/, "");
@@ -413,7 +414,7 @@ export class ActivitySix {
     }
   }
 
-  private async performTapAndTapAction(action: string): Promise<void> {
+  public async performTapAndTapAction(action: string): Promise<void> {
     const [, optionNum, , slotNum] = action.split("_");
     const optionSelector = `#step_9_pickZone_1_section_1_opt_${optionNum}`;
     const slotSelector = `#step_9_dropZone_1_section_1-slot-${slotNum}`;
@@ -430,7 +431,7 @@ export class ActivitySix {
     await this.frameLocator.locator(slotSelector).click();
   }
 
-  private async verifyFeedbackPopup(
+  public async verifyFeedbackPopup(
     feedback: { title: string; text: string }, 
     isCorrect: boolean
   ): Promise<void> {
@@ -443,6 +444,19 @@ export class ActivitySix {
       // For incorrect answers, there should be a retry button
       const retryButton = this.frameLocator.locator('button[id*="retry"]');
       await retryButton.click();
+    }
+  }
+
+  private async verifySpeechBubbleConversation(step: string, testData: any) {
+     const stepNumber = step.match(/S(\d+)/)?.[1];
+    const stepDetails = testData["SCENE"+stepNumber];
+    const speechBubbleTexts = stepDetails.conversation;
+    console.log(speechBubbleTexts);
+    if (speechBubbleTexts && Array.isArray(speechBubbleTexts) && speechBubbleTexts.length > 0) {
+      for (let i = 0; i < speechBubbleTexts.length; i++) {
+        const characterName=speechBubbleTexts[i].title;
+        await expect(this.frameLocator.locator(`//strong[@class='name-title' and normalize-space()='${characterName}']/following-sibling::span[1]`).first()).toHaveText(speechBubbleTexts[i].text);
+      }
     }
   }
 }

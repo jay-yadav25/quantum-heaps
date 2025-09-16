@@ -1,18 +1,21 @@
-{ 
-  "activityTitle":"Legal And Ethical Considerations:Patient Confidentiality",
+{
+  "activityTitle": "Legal And Ethical Considerations:Patient Confidentiality",
   "learningObjectiveItems": {
     "title": "Learning Objectives",
     "learningObjective": "This learning lab will enable you to explore specific aspects of the following chapter objectives within the context of a typical healthcare scenario:",
-    "learningObjectivesList": ["Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.",
-                               "Describe the concepts of patient rights and privileged communications and the legislation and procedures that are put into practice to ensure confidentiality of healthcare information."]
+    "learningObjectivesList": [
+      "Explain how ethics differ from laws and how ethics are an important consideration in providing quality patient care.",
+      "Describe the concepts of patient rights and privileged communications and the legislation and procedures that are put into practice to ensure confidentiality of healthcare information."
+    ]
   },
   "introduction": {
-    "introductionList": ["You are a student athletic trainer who is completing an internship with the Mustangs, a local professional baseball team. In this activity, you will face several scenarios that test your ability to make legal and ethical decisions. Your task is to choose the most appropriate course of action in each scenario."],
+    "introductionList": [
+      "You are a student athletic trainer who is completing an internship with the Mustangs, a local professional baseball team. In this activity, you will face several scenarios that test your ability to make legal and ethical decisions. Your task is to choose the most appropriate course of action in each scenario."
+    ],
     "activityOverviewList": [],
-    "mode":"Learning Mode: This is a practice activity with hints available at each step."
+    "mode": "Learning Mode: This is a practice activity with hints available at each step."
   },
-  "SCENE1": {
-    "sceneTitle": "Manny's Secret (1 of 2)",
+  "STEP_1": {
     "instructions": "You just finished a stretching and ice bath treatment on Manny Garcia, one of the team players. As you are writing up the documentation of his treatment, you overhear Manny talking to one of the team's coaches.",
     "instructionsList": [
       "Review the conversation between Manny and the team coach.",
@@ -30,464 +33,679 @@
         "text": "I just don't think that I am ready to give all of this up. The doctor has advised that I stop playing but it has been my life for so long. What else can I do?"
       }
     ],
-    "decisionPoint": {
-      "question": "What should you do with the information you just overheard?",
-      "nonIdeal1": "You take out your phone and send a text to your best friend that you just heard that Garcia is about to be cut or retire from the team. You feel safe doing so since you are not posting the information to a public site.",
-      "ideal": "You decide, in the moment, to not share the information you have heard. Relevant information will be shared by officials when the time is right.",
-      "nonIdeal2": "You make a mental note to share this information with your best friend later in private. You are confident that you and your best friend can keep this information safe from the public."
-    },
-    "decisionPointFeedback": {
-      "nonIdeal": { "title": "Not quite!",
-          "text":"This is not the ideal choice. Some legal and ethical issues are being violated in this situation." },
-      "ideal":{ "title": "Correct!",
-          "text": "This is a good decision and the most appropriate and ethical way to approach this situation."}
+    "question": "What should you do with the information you just overheard?",
+    "INCORRECT_1": "You take out your phone and send a text to your best friend that you just heard that Garcia is about to be cut or retire from the team. You feel safe doing so since you are not posting the information to a public site.",
+    "CORRECT": "You decide, in the moment, to not share the information you have heard. Relevant information will be shared by officials when the time is right.",
+    "INCORRECT_2": "You make a mental note to share this information with your best friend later in private. You are confident that you and your best friend can keep this information safe from the public.",
+    "feedback": {
+      "INCORRECT_1": {
+        "title": "Not quite!",
+        "text": "This is not the ideal choice. It lacks formality and structure."
+      },
+      "INCORRECT_2": {
+        "title": "Not quite!",
+        "text": "This is not the ideal choice. It lacks formality and structure."
+      },
+      "CORRECT": {
+        "title": "Correct!",
+        "text": "This is a good decision. The meeting should be formally called to order to establish that it has begun."
+      }
     },
     "hints": {
-      "thinkAbout": [
+      "ThinkAbout": [
         "How is information shared in a professional environment?",
         "Does sharing this information put anyone at physical or reputational risk?"
       ],
-      "askYourself": [
+      "AskYourself": [
         "Just because you hear something, does that mean it's yours to share?",
         "What responsibilities come with being part of a healthcare or athletic care team?"
       ]
     },
-    "followUp": {
-      "nonIdealFollowUp1": {
-        "instructions": "After overhearing the conversation between Manny and the team coach you chose to send a text to your best friend sharing that Manny is about to be cut or will retire from the team. You felt safe doing so since you didn't post this information to a public site. This was not the ideal choice.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
+    "reportRational": "In the healthcare field, you're expected to protect sensitive health and employment information of the patients you treat, demonstrating professional ethics, trustworthiness, and ethical responsibility."
+  },
+  "STEP_2": {
+    "instructions": "After overhearing the conversation between Manny and the team coach you chose to send a text to your best friend sharing that Manny is about to be cut or will retire from the team. You felt safe doing so since you didn't post this information to a public site. This was not the ideal choice.",
+    "instructionsList": [
+      "Consider what you know about legal and ethical issues. Select all the options that were violated.",
+      "Refer to the hint if you need guidance."
+    ],
+    "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)",
+    "options": [
+      "Confidentiality",
+      "Professional Ethics",
+      "Malpractice",
+      "Defamation"
+    ],
+    "correctAnswers": [
+      "Confidentiality",
+      "Professional Ethics"
+    ],
+    "incorrectAnswers": [
+      "Malpractice",
+      "Defamation"
+    ],
+    "feedback": {
+      "Confidentiality": {
+        "title": "Correct!",
+        "text": "Patient confidentiality could have been violated by sharing private medical information with someone outside the patient's healthcare team."
       },
-      "idealFollowUp": {
-        "instructions": "After overhearing the conversation between Manny and the team coach you chose not to share the information you had overheard. You concluded that relevant information will be shared by officials when the time is right. This was a good decision and the most appropriate and ethical way to approach this situation.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that could have been violated by sharing this information.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues could you have potentially violated if you chose to share information with others? (Select all that apply.)"
+      "Professional Ethics": {
+        "title": "Correct!",
+        "text": "Professional ethics could have been violated by disclosing private information to someone outside the professional environment, compromising trust and conduct."
       },
-      "nonIdealFollowUp2": {
-        "instructions": "After overhearing the conversation between Manny and the team coach you chose to make a mental note to share this information with your best friend later in private. You felt confident that you and your best friend would keep this information safe from the public. This was not the ideal choice.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
+      "Malpractice": {
+        "title": "Not quite!",
+        "text": "There was no occurrence of malpractice in this scenario. Use a hint if you need guidance."
       },
-      "options": ["Confidentiality","Professional Ethics","Malpractice","Defamation"],
-      "correctAnswers": ["Confidentiality","Professional Ethics"],
-      "incorrectAnswers": ["Malpractice","Defamation"],
-      "idealChoiceFeedback": {
-        "Confidentiality": {
-          "title": "Correct!",
-          "text": "Patient confidentiality could have been violated by sharing private medical information with someone outside the patient's healthcare team."
-        },
-        "Professional Ethics": {
-          "title": "Correct!",
-          "text": "Professional ethics could have been violated by disclosing private information to someone outside the professional environment, compromising trust and conduct."
-        },
-        "Malpractice": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of malpractice in this scenario. Use a hint if you need guidance."
-        },
-        "Defamation": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of defamation in this scenario. Use a hint if you need guidance."
-        }
-      },
-      "nonIdealChoiceFeedback": {
-        "Confidentiality": {
-          "title": "Correct!",
-          "text": "Patient confidentiality was violated by sharing private medical information with someone outside the patient's healthcare team."
-        },
-        "Professional Ethics": {
-          "title": "Correct!",
-          "text": "Professional ethics were violated by disclosing private information to someone outside the professional environment, compromising trust and conduct."
-        },
-        "Malpractice": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of malpractice in this scenario. Use a hint if you need guidance."
-        },
-        "Defamation": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of defamation in this scenario. Use a hint if you need guidance."
-        }
-      },
-      "hints": {
-        "Confidentiality": "Information about the patient that must remain private and can be shared only with other members of the patient's healthcare team.",
-        "Professional Ethics": "Professional ethics are guiding principles for how people and groups should interact with one another within a particular profession or business environment.",
-        "Malpractice": "Providing improper or unprofessional treatment or care that results in injury to another person.",
-        "Defamation": "Slander or libel; a false statement that causes ridicule or damage to a reputation."
+      "Defamation": {
+        "title": "Not quite!",
+        "text": "There was no occurrence of defamation in this scenario. Use a hint if you need guidance."
       }
     },
-    "rationalForReportMainScene": "In the healthcare field, you're expected to protect sensitive health and employment information of the patients you treat, demonstrating professional ethics, trustworthiness, and ethical responsibility.",
-    "rationaleForReportFollowUpScene": "Legal and ethical considerations like professional ethics and confidentiality get violated by disclosing private medical information with someone outside the patient's healthcare team.",
-    "FS1_CORRECT": ["CORRECT_1", "CORRECT_2"],
-    "FS1_INCORRECT_1": ["INCORRECT_1", "CORRECT_1", "INCORRECT_2", "CORRECT_2"],
-    "FS1_INCORRECT_2": ["INCORRECT_1", "INCORRECT_2", "CORRECT_1", "CORRECT_2"],
-    "FS1_INCORRECT_3": ["CORRECT_1", "INCORRECT_1", "CORRECT_2"],
-    "FS1_INCORRECT_4": ["CORRECT_1", "INCORRECT_1", "INCORRECT_2", "CORRECT_2"],
-    "FS1_INCORRECT_5": ["INCORRECT_2", "CORRECT_1", "CORRECT_2"],
-    "FS1_INCORRECT_6": ["HINT", "CORRECT_1", "HINT", "CORRECT_2"],
-    "FS1_INCORRECT_7": ["HINT", "INCORRECT_1", "HINT", "CORRECT_1", "HINT", "INCORRECT_2", "HINT", "CORRECT_2"],
-    "FS1_INCORRECT_8": ["HINT", "INCORRECT_1", "HINT", "INCORRECT_2", "HINT", "CORRECT_1", "HINT", "CORRECT_2"],
-    "FS1_INCORRECT_9": ["HINT", "CORRECT_1", "HINT", "INCORRECT_1", "HINT", "CORRECT_2"],
-    "FS1_INCORRECT_10": ["HINT", "CORRECT_1", "HINT", "INCORRECT_1", "HINT", "INCORRECT_2", "HINT", "CORRECT_2"],
-    "FS1_INCORRECT_11": ["HINT", "INCORRECT_2", "HINT", "CORRECT_1", "HINT", "CORRECT_2"] },
-  "SCENE2": {
-    "sceneTitle": "Field Emergency",
-    "instructions": "You get a text to come to the field right away because Ryan Nolan, the team's pitching ace, was hit in the face by a batted ball. When you arrive, he's lying on the mound. The head athletic trainer instructs you to hold an ice pack to Nolan's left eye socket, which appears to be fractured. Blood is also dripping from his nose and mouth.",
+    "hints": {
+      "Confidentiality": "Information about the patient that must remain private and can be shared only with other members of the patient's healthcare team.",
+      "Professional Ethics": "Professional ethics are guiding principles for how people and groups should interact with one another within a particular profession or business environment.",
+      "Malpractice": "Providing improper or unprofessional treatment or care that results in injury to another person.",
+      "Defamation": "Slander or libel; a false statement that causes ridicule or damage to a reputation."
+    },
+    "reportRational": "Legal and ethical considerations like professional ethics and confidentiality get violated by disclosing private medical information with someone outside the patient's healthcare team.",
+    "FS1_CORRECT": [
+      "CORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_1": [
+      "INCORRECT_1",
+      "CORRECT_1",
+      "INCORRECT_2",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_2": [
+      "INCORRECT_1",
+      "INCORRECT_2",
+      "CORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_3": [
+      "CORRECT_1",
+      "INCORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_4": [
+      "CORRECT_1",
+      "INCORRECT_1",
+      "INCORRECT_2",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_5": [
+      "INCORRECT_2",
+      "CORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_6": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_7": [
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_8": [
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_9": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_10": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS1_INCORRECT_11": [
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ]
+  },
+  "STEP_3": {
+    "instructions": "",
     "instructionsList": [
-      "Refer to the question that Nolan asks you and choose the most appropriate response from the three options provided at the bottom of the screen.",
-      "To listen to the question, select the audio button beneath the chat bubble.",
-      "Refer to the hint if you need guidance."
+      "",
+      "",
+      "",
+      ""
     ],
     "conversation": [
       {
-        "title": "Ryan Nolan",
-        "text": "Am I going to be alright? My vision is blurry, and I am in so much pain."
+        "title": "",
+        "text": ""
+      },
+      {
+        "title": "",
+        "text": ""
       }
     ],
-    "decisionPoint": {
-      "question": "How should you respond to Nolan's question?",
-      "nonIdeal1": "You reply reassuringly, \"Oh, it doesn't look too bad, you'll have a nice black eye, but otherwise you should be fine. You'll be back on the field in no time!\"",
-      "ideal": "You reply reassuringly, \"I know you must be in a lot of pain, but we will do all that we can to help you. You are in good hands.\"",
-      "nonIdeal2": "You reply honestly, \"It looks like you have a fractured eye socket, but don't worry. We can stop the bleeding and prescribe you some pain medication.\""
-    },
-    "decisionPointFeedback": {
-       "nonIdeal": { "title": "Not quite!",
-          "text":"This is not the ideal choice. Some legal and ethical issues are being violated in this situation." },
-      "ideal":{ "title": "Correct!",
-          "text": "This is a good decision and the most appropriate and ethical way to approach this situation."}
-    },
-    "hints": {
-      "thinkAbout": [
-        "What kind of communication is appropriate in high-pressure medical or athletic situations?",
-        "What information are you allowed to share with someone who is in pain and looking to you for answers?"
-      ],
-      "askYourself": [
-        "How would your words affect the player in this moment?",
-        "What is the most helpful and professional way to respond when you're unsure of the full picture?"
-      ]
-    },
-    "followUp": {
-      "nonIdealFollowUp1": {
-        "instructions": "You chose to reassure Nathan by sharing your opinion that his injury wasn't that bad and he would be back on the field in no time. This was not the ideal choice.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
+    "question": "",
+    "INCORRECT_1": "",
+    "CORRECT": "",
+    "INCORRECT_2": "",
+    "feedback": {
+      "INCORRECT_1": {
+        "title": "",
+        "text": ""
       },
-      "idealFollowUp": {
-        "instructions": "You chose to reassure Nathan by replying that he would be treated well for his injury. Your response was empathetic and did not provide any additional information or opinions that you were not permitted to share. This was a good decision and the most appropriate and ethical way to approach this situation.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that could have been violated by sharing your opinions on the injury.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues could you have potentially violated if you chose to share your thoughts and opinions about what was wrong with the patient? (Select all that apply.)"
+      "INCORRECT_2": {
+        "title": "",
+        "text": ""
       },
-      "nonIdealFollowUp2": {
-        "instructions": "You chose to respond to Nathan with honesty, admitting that it looked like he had a fractured eye socket, but there was no cause for worry, as you could stop the bleeding and prescribe some pain medications to him. This was not the ideal choice.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
-      },
-      "options": ["Scope of Practice","Professional Ethics","Invasion of Privacy","Defamation"],
-      "correctAnswers": ["Scope of Practice","Professional Ethics"],
-      "incorrectAnswers": ["Invasion of Privacy","Defamation"],
-      "idealChoiceFeedback": {
-        "Scope of Practice": {
-          "title": "Correct!",
-          "text": "Scope of practice could have been violated by sharing a diagnosis or advice that a student trainer isn't qualified to give."
-        },
-        "Professional Ethics": {
-          "title": "Correct!",
-          "text": "Professional ethics could have been violated by sharing potentially misleading medical information with the athlete."
-        },
-        "Invasion of Privacy": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of invasion of privacy in this scenario. Use a hint if you need guidance."
-        },
-        "Defamation": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of defamation in this scenario. Use a hint if you need guidance."
-        }
-      },
-      "nonIdealChoiceFeedback": {
-        "Scope of Practice": {
-          "title": "Correct!",
-          "text": "Scope of practice was violated by sharing a diagnosis or advice that a student trainer isn't qualified to give."
-        },
-        "Professional Ethics": {
-          "title": "Correct!",
-          "text": "Professional ethics were violated by sharing potentially misleading medical information with the athlete."
-        },
-        "Invasion of Privacy": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of invasion of privacy in this scenario. Use a hint if you need guidance."
-        },
-        "Defamation": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of defamation in this scenario. Use a hint if you need guidance."
-        }
-      },
-      "hints": {
-        "Scope of Practice": "The procedures, processes and actions that healthcare providers are legally permitted to perform in keeping with the terms of their professional license.",
-        "Professional Ethics": "Professional ethics are guiding principles for how people and groups should interact with one another within a particular profession or business environment.",
-        "Invasion of Privacy": " It occurs when personal information is revealed about an individual without their consent.",
-        "Defamation": "Slander or libel; a false statement that causes ridicule or damage to a reputation."
+      "CORRECT": {
+        "title": "",
+        "text": ""
       }
     },
-    "rationalForReportMainScene": "You aren't qualified to diagnose, but offering reassurance with compassion, without medical opinions, helps ease the athlete's anxiety and supports ethical healthcare communication.",
-    "rationaleForReportFollowUpScene": "Legal and ethical considerations like professional ethics and scope of practice get violated by sharing a diagnosis or advice that you aren't qualified to give.",
-    "FS2_CORRECT": ["CORRECT_1", "CORRECT_2"],
-    "FS2_INCORRECT_1": ["INCORRECT_1", "CORRECT_1", "INCORRECT_2", "CORRECT_2"],
-    "FS2_INCORRECT_2": ["INCORRECT_1", "INCORRECT_2", "CORRECT_1", "CORRECT_2"],
-    "FS2_INCORRECT_3": ["CORRECT_1", "INCORRECT_1", "CORRECT_2"],
-    "FS2_INCORRECT_4": ["CORRECT_1", "INCORRECT_1", "INCORRECT_2", "CORRECT_2"],
-    "FS2_INCORRECT_5": ["INCORRECT_2", "CORRECT_1", "CORRECT_2"],
-    "FS2_INCORRECT_6": ["HINT", "CORRECT_1", "HINT", "CORRECT_2"],
-    "FS2_INCORRECT_7": ["HINT", "INCORRECT_1", "HINT", "CORRECT_1", "HINT", "INCORRECT_2", "HINT", "CORRECT_2"],
-    "FS2_INCORRECT_8": ["HINT", "INCORRECT_1", "HINT", "INCORRECT_2", "HINT", "CORRECT_1", "HINT", "CORRECT_2"],
-    "FS2_INCORRECT_9": ["HINT", "CORRECT_1", "HINT", "INCORRECT_1", "HINT", "CORRECT_2"],
-    "FS2_INCORRECT_10": ["HINT", "CORRECT_1", "HINT", "INCORRECT_1", "HINT", "INCORRECT_2", "HINT", "CORRECT_2"],
-    "FS2_INCORRECT_11": ["HINT", "INCORRECT_2", "HINT", "CORRECT_1", "HINT", "CORRECT_2"]
+    "hints": {
+      "ThinkAbout": [
+        "",
+        ""
+      ],
+      "AskYourself": [
+        "",
+        ""
+      ]
+    },
+    "reportRational": ""
   },
-  "SCENE3": {
-    "sceneTitle": "Nolan's Injury",
-    "instructions": "While you are at the field and the others are busy, you consider taking a couple of photos of the injury, thinking they would be useful for your reflection journal for class. You take care to stand back and not distract others or get in their way as they administer medical attention to the player.",
+  "STEP_4": {
+    "instructions": "",
     "instructionsList": [
-      "Evaluate the situation and choose the most appropriate course of action from the three options provided at the bottom of the screen.",
-      "Refer to the hint if you need guidance."
+      "",
+      ""
     ],
-    "decisionPoint": {
-      "question": "What is the best practice for you to follow?",
-      "nonIdeal1": "Since only your teacher and classmates will read your reflection, you take photos of the injury and include them in your reflection journal along with the player's name and his stated fears about his condition.",
-      "ideal": "You decide to hold off on taking photos for your reflection journal. You will write up your report without the photos or ask for permission to take photos later, after the incident.",
-      "nonIdeal2": "You take photos of the injury and include them in your reflection journal but don't mention the player's name. Once you finish writing the report in your journal, you share a photo of your work on your social media account with your friend group. The friend group includes some of your classmates."
-    },
-    "decisionPointFeedback": {
-       "nonIdeal": { "title": "Not quite!",
-          "text":"This is not the ideal choice. Some legal and ethical issues are being violated in this situation." },
-      "ideal":{ "title": "Correct!",
-          "text": "This is a good decision and the most appropriate and ethical way to approach this situation."}
-    },
-    "hints": {
-      "thinkAbout": [
-        "What responsibilities come with documenting real-life medical situations, even for educational purposes?",
-        "What steps should be taken before collecting or sharing any information about someone receiving medical care?"
-      ],
-      "askYourself": [
-        "How would patients feel if details or images of their condition were shared-even with good intentions?",
-        "How do privacy, consent, and professional standards guide you in this kind of a moment?"
-      ]
-    },
-    "followUp": {
-      "nonIdealFollowUp1": {
-        "instructions": "You decided to take photos of the injury and include them in your reflection journal along with the player's name and his stated fears about his condition. You felt confident doing so, as you figured only your teacher and classmates will be reading your reflection. This was not the ideal choice.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
-      },
-      "idealFollowUp": {
-        "instructions": "You decided to hold off on taking photos of the injury for your reflection journal. You figure you will either write up your report without the photos or ask for permission to take photos later, after the incident. This was a good decision and the most appropriate and ethical way to approach this situation.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that could have been violated.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues could you have potentially violated if you chose to take photos? (Select all that apply.)"
-      },
-      "nonIdealFollowUp2": {
-        "instructions": "You decided to take photos of the injury and included them in your reflection journal without mentioning the player's name. After you finished writing your report, you share a photo of your work on your social media account with your friend group that also included some of your classmates. This was not the ideal choice.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
-      },
-      "options": ["Privileged Communication", "Informed Consent", "Defamation", "Scope of Practice"],
-      "correctAnswers": ["Privileged Communication", "Informed Consent"],
-      "incorrectAnswers": ["Defamation", "Scope of Practice"],
-      "idealChoiceFeedback": {
-        "Privileged Communication": {
-          "title": "Correct!",
-          "text": "Privileged communication could have been violated by sharing confidential photos with someone outside the patient's healthcare team."
-        },
-        "Informed Consent": {
-          "title": "Correct!",
-          "text": "Informed consent could have been violated by taking photos of the patient's injury without his permission."
-        },
-        "Defamation": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of defamation in this scenario. Use a hint if you need guidance."
-        },
-        "Scope of Practice": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of violation of your scope of practice in this scenario. Use a hint if you need guidance."
-        }
-      },
-      "nonIdealChoiceFeedback": {
-        "Privileged Communication": {
-          "title": "Correct!",
-          "text": "Privileged communication was violated by sharing confidential photos with someone outside the patient's healthcare team."
-        },
-        "Informed Consent": {
-          "title": "Correct!",
-          "text": "Informed consent was violated by taking photos of the patient's injury without his permission."
-        },
-        "Defamation": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of defamation in this scenario. Use a hint if you need guidance."
-        },
-        "Scope of Practice": {
-          "title": "Not quite!",
-          "text": "There was no occurrence of violation of your scope of practice in this scenario. Use a hint if you need guidance."
-        }
-      },
-      "hints": {
-        "Privileged Communication": "It comprises all information given to healthcare personnel by a patient. This must be kept confidential and only shared with other members of the patient's healthcare team.",
-        "Informed Consent": "Permission granted voluntarily by a person who is of sound mind and who has been instructed, in terms the person can understand, about all the risks involved.",
-        "Defamation": "Slander or libel; a false statement that causes ridicule or damage to a reputation.",
-        "Scope of Practice": "The procedures, processes and actions that healthcare providers are legally permitted to perform in keeping with the terms of their professional license."
+    "question": "",
+    "options": [
+      "Scope of Practice",
+      "Professional Ethics",
+      "Invasion of Privacy",
+      "Defamation"
+    ],
+    "correctAnswers": [
+      "Scope of Practice",
+      "Professional Ethics"
+    ],
+    "incorrectAnswers": [
+      "Invasion of Privacy",
+      "Defamation"
+    ],
+    "feedback": {
+      "": {
+        "title": "",
+        "text": ""
       }
     },
-    "rationalForReportMainScene": "Taking photos without consent, especially in vulnerable moments, crosses professional boundaries and may violate privacy policies. Choosing to document in words or seek permission later shows ethical judgment, professionalism, and respect for the athlete's dignity.",
-    "rationaleForReportFollowUpScene": "Legal and ethical considerations like privileged communication and informed consent get violated by sharing confidential photos with someone outside the patient's healthcare team.",
-    "FS3_CORRECT": ["CORRECT_1", "CORRECT_2"],
-    "FS3_INCORRECT_1": ["INCORRECT_1", "CORRECT_1", "INCORRECT_2", "CORRECT_2"],
-    "FS3_INCORRECT_2": ["INCORRECT_1", "INCORRECT_2", "CORRECT_1", "CORRECT_2"],
-    "FS3_INCORRECT_3": ["CORRECT_1", "INCORRECT_1", "CORRECT_2"],
-    "FS3_INCORRECT_4": ["CORRECT_1", "INCORRECT_1", "INCORRECT_2", "CORRECT_2"],
-    "FS3_INCORRECT_5": ["INCORRECT_2", "CORRECT_1", "CORRECT_2"],
-    "FS3_INCORRECT_6": ["HINT", "CORRECT_1", "HINT", "CORRECT_2"],
-    "FS3_INCORRECT_7": ["HINT", "INCORRECT_1", "HINT", "CORRECT_1", "HINT", "INCORRECT_2", "HINT", "CORRECT_2"],
-    "FS3_INCORRECT_8": ["HINT", "INCORRECT_1", "HINT", "INCORRECT_2", "HINT", "CORRECT_1", "HINT", "CORRECT_2"],
-    "FS3_INCORRECT_9": ["HINT", "CORRECT_1", "HINT", "INCORRECT_1", "HINT", "CORRECT_2"],
-    "FS3_INCORRECT_10": ["HINT", "CORRECT_1", "HINT", "INCORRECT_1", "HINT", "INCORRECT_2", "HINT", "CORRECT_2"],
-    "FS3_INCORRECT_11": ["HINT", "INCORRECT_2", "HINT", "CORRECT_1", "HINT", "CORRECT_2"]
+    "hints": {
+      "": "",
+      "": "",
+      "": "",
+      "": ""
+    },
+    "reportRational": "",
+    "FS2_CORRECT": [
+      "CORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_1": [
+      "INCORRECT_1",
+      "CORRECT_1",
+      "INCORRECT_2",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_2": [
+      "INCORRECT_1",
+      "INCORRECT_2",
+      "CORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_3": [
+      "CORRECT_1",
+      "INCORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_4": [
+      "CORRECT_1",
+      "INCORRECT_1",
+      "INCORRECT_2",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_5": [
+      "INCORRECT_2",
+      "CORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_6": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_7": [
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_8": [
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_9": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_10": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS2_INCORRECT_11": [
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ]
   },
-  "SCENE4": {
-    "sceneTitle": "Classroom Discussion",
-    "instructions": "The next day, you are in your athletic training class. Your teacher hasn't arrived yet, and your classmates are sharing information about their internships. You consider sharing the information you overheard and the incident you witnessed at the field.",
+  "STEP_5": {
+    "instructions": "",
     "instructionsList": [
-      "Evaluate the situation and choose the most appropriate course of action from the three options provided at the bottom of the screen.",
-      "Refer to the hint if you need guidance."
+      "",
+      "",
+      "",
+      ""
     ],
-    "decisionPoint": {
-      "question": "What information should you share with your classmates?",
-      "nonIdeal1": "You take out your phone and share the photos. You don't see harm in sharing this information because it isn't being posted, and it will help illustrate examples of medical photos to the other students.",
-      "nonIdeal2": "You don't show the medical photos but share \"off the record\" that you believe Garcia will be cut from the team.",
-      "ideal": "You share that you responded to an emergency incident involving one of the players and had the opportunity to obtain hands-on experience working alongside the head athletic trainer."
-    },
-    "decisionPointFeedback": {
-       "nonIdeal": { "title": "Not quite!",
-          "text":"This is not the ideal choice. Some legal and ethical issues are being violated in this situation." },
-      "ideal":{ "title": "Correct!",
-          "text": "This is a good decision and the most appropriate and ethical way to approach this situation."}
+    "conversation": [
+      {
+        "title": "",
+        "text": ""
       },
-    "hints": {
-      "thinkAbout": [
-        "What kind of information about patients or team members are you allowed to share in an educational setting?",
-        "What rules or ethical standards should you follow while communicating about your internship?"
-      ],
-      "askYourself": [
-        "Is there a difference between learning from your experiences and revealing private details?",
-        "How might informal sharing of information affect the trust others place in you?"
-      ]
-    },
-    "followUp": {
-      "nonIdealFollowUp1": {
-        "instructions": "You decided to share the photos with your classmates on your phone. You felt there was no harm in sharing this as the information wasn't being posted, and this would help illustrate examples of medical photos to other students. This was not the ideal choice. Another student snapped a photo of your phone to capture the information as part of a project she was working on for the class.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
-      },"idealFollowUp": {
-        "instructions": "You decided to share that you had responded to an emergency incident involving one of the players and had the opportunity to obtain hands-on experience working alongside the head athletic trainer. You shared your experience without revealing or sharing any private information of anyone. This was a good decision and the most appropriate and ethical way to approach this situation.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that could have been violated by sharing information or photos.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues could you have potentially violated if you chose to share either the photos or the information you heard? (Select all that apply.)"
+      {
+        "title": "",
+        "text": ""
+      }
+    ],
+    "question": "",
+    "INCORRECT_1": "",
+    "CORRECT": "",
+    "INCORRECT_2": "",
+    "feedback": {
+      "INCORRECT_1": {
+        "title": "",
+        "text": ""
       },
-      "nonIdealFollowUp2": {
-        "instructions": "You decided to share \"off the record\" that you believe Garcia would be cut from the team with your classmates, but you didn't share the medical photos with them. You felt safe doing so, as you didn't share any information officially with them. This was not the ideal choice.",
-        "instructionsList": [
-          "Consider what you know about legal and ethical issues. Select all the options that were violated.",
-          "Refer to the hint if you need guidance."
-        ],
-        "question": "Which of the following legal and ethical issues were violated by this decision? (Select all that apply.)"
+      "INCORRECT_2": {
+        "title": "",
+        "text": ""
       },
-      "options": ["HIPAA", "Defamation", "Informed Consent", "Invasion of Privacy"],
-      "correctAnswers": ["HIPAA", "Defamation", "Informed Consent", "Invasion of Privacy"],
-      "incorrectAnswers": [""],
-      "idealChoiceFeedback": {
-        "HIPAA": {
-          "title": "Correct!",
-          "text": "HIPAA could have been violated by disclosing legally protected health information of patients without proper authorization."
-        },
-        "Defamation": {
-          "title": "Correct!",
-          "text": "Defamation could have occurred by failing to safeguard a patient's private information, potentially causing reputational harm."
-        },
-        "Informed Consent": {
-          "title": "Correct!",
-          "text": "Informed consent could have been violated by sharing medical photos or information without the patient's permission."
-        },
-        "Invasion of Privacy": {
-          "title": "Correct!",
-          "text": "Invasion of privacy could have occurred by revealing identifiable personal health information without the patient's consent."
-        }
-      },
-      "nonIdealChoiceFeedback": {
-        "HIPAA": {
-          "title": "Correct!",
-          "text": "HIPAA was violated by disclosing legally protected health information of patients without proper authorization."
-        },
-        "Defamation": {
-          "title": "Correct!",
-          "text": "Defamation occurred by failing to safeguard a patient's private information, potentially causing reputational harm."
-        },
-        "Informed Consent": {
-          "title": "Correct!",
-          "text": "Informed consent was violated by sharing medical photos or information without the patient's permission."
-        },
-        "Invasion of Privacy": {
-          "title": "Correct!",
-          "text": "Invasion of privacy occurred by revealing identifiable personal health information without the patient's consent."
-        }
-      },
-      "hints": {
-        "HIPAA": "Set of federal regulations adopted to protect the confidentiality of patient information and the ability to retain health insurance coverage.",
-        "Defamation": "Slander or libel; a false statement that causes ridicule or damage to a reputation.",
-        "Informed Consent": "Permission granted voluntarily by a person who is of sound mind and who has been instructed, in terms the person can understand, about all the risks involved.",
-        "Invasion of Privacy": "Revealing personal information about an individual without his or her consent."
+      "CORRECT": {
+        "title": "",
+        "text": ""
       }
     },
-    "rationalForReportMainScene": "Sharing general, non-identifiable details respects legal and ethical boundaries, protects confidentiality, avoids spreading rumors, and still allows you to reflect on your learning experience professionally.",
-    "rationaleForReportFollowUpScene": "Legal and ethical considerations like HIPAA, informed consent, and invasion of privacy get violated and defamation can occur, by disclosing unauthorized information and failing to safeguard a patient's privacy.",
-    "FS4_CORRECT_1": ["CORRECT_2", "CORRECT_1", "CORRECT_4", "CORRECT_3"],
-    "FS4_CORRECT_2": ["CORRECT_4", "CORRECT_2", "CORRECT_3", "CORRECT_1"],
-    "FS4_CORRECT_3": ["CORRECT_3", "CORRECT_1", "CORRECT_2", "CORRECT_4"],
-    "FS4_CORRECT_4": ["CORRECT_1", "CORRECT_4", "CORRECT_2", "CORRECT_3"],
-    "FS4_CORRECT_5": ["CORRECT_2", "CORRECT_3", "CORRECT_1", "CORRECT_4"],
-    "FS4_CORRECT_6": ["CORRECT_4", "CORRECT_1", "CORRECT_3", "CORRECT_2"],
-    "FS4_CORRECT_7": ["HINT", "CORRECT_2", "HINT", "CORRECT_1", "HINT", "CORRECT_4", "HINT", "CORRECT_3"],
-    "FS4_CORRECT_8": ["HINT", "CORRECT_4", "HINT", "CORRECT_2", "HINT", "CORRECT_3", "HINT", "CORRECT_1"],
-    "FS4_CORRECT_9": ["HINT", "CORRECT_3", "HINT", "CORRECT_1", "HINT", "CORRECT_2", "HINT", "CORRECT_4"],
-    "FS4_CORRECT_10": ["HINT", "CORRECT_1", "HINT", "CORRECT_4", "HINT", "CORRECT_2", "HINT", "CORRECT_3"],
-    "FS4_CORRECT_11": ["HINT", "CORRECT_2", "HINT", "CORRECT_3", "HINT", "CORRECT_1", "HINT", "CORRECT_4"],
-    "FS4_CORRECT_12": ["HINT", "CORRECT_4", "HINT", "CORRECT_1", "HINT", "CORRECT_3", "HINT", "CORRECT_2"]
-
+    "hints": {
+      "ThinkAbout": [
+        "",
+        ""
+      ],
+      "AskYourself": [
+        "",
+        ""
+      ]
+    },
+    "reportRational": ""
+  },
+  "STEP_6": {
+    "instructions": "",
+    "instructionsList": [
+      "",
+      ""
+    ],
+    "question": "",
+    "options": [
+      "Privileged Communication",
+      "Informed Consent",
+      "Defamation",
+      "Scope of Practice"
+    ],
+    "correctAnswers": [
+      "Privileged Communication",
+      "Informed Consent"
+    ],
+    "incorrectAnswers": [
+      "Defamation",
+      "Scope of Practice"
+    ],
+    "feedback": {
+      "": {
+        "title": "",
+        "text": ""
+      }
+    },
+    "hints": {
+      "": "",
+      "": "",
+      "": "",
+      "": ""
+    },
+    "reportRational": "",
+    "FS3_CORRECT": [
+      "CORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_1": [
+      "INCORRECT_1",
+      "CORRECT_1",
+      "INCORRECT_2",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_2": [
+      "INCORRECT_1",
+      "INCORRECT_2",
+      "CORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_3": [
+      "CORRECT_1",
+      "INCORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_4": [
+      "CORRECT_1",
+      "INCORRECT_1",
+      "INCORRECT_2",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_5": [
+      "INCORRECT_2",
+      "CORRECT_1",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_6": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_7": [
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_8": [
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_9": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_10": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "INCORRECT_1",
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_2"
+    ],
+    "FS3_INCORRECT_11": [
+      "HINT",
+      "INCORRECT_2",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2"
+    ]
+  },
+  "STEP_7": {
+    "instructions": "",
+    "instructionsList": [
+      "",
+      "",
+      "",
+      ""
+    ],
+    "conversation": [
+      {
+        "title": "",
+        "text": ""
+      },
+      {
+        "title": "",
+        "text": ""
+      }
+    ],
+    "question": "",
+    "INCORRECT_1": "",
+    "CORRECT": "",
+    "INCORRECT_2": "",
+    "feedback": {
+      "INCORRECT_1": {
+        "title": "",
+        "text": ""
+      },
+      "INCORRECT_2": {
+        "title": "",
+        "text": ""
+      },
+      "CORRECT": {
+        "title": "",
+        "text": ""
+      }
+    },
+    "hints": {
+      "ThinkAbout": [
+        "",
+        ""
+      ],
+      "AskYourself": [
+        "",
+        ""
+      ]
+    },
+    "reportRational": ""
+  },
+  "STEP_8": {
+    "instructions": "",
+    "instructionsList": [
+      "",
+      ""
+    ],
+    "question": "",
+    "options": [
+      "HIPAA",
+      "Defamation",
+      "Informed Consent",
+      "Invasion of Privacy"
+    ],
+    "correctAnswers": [
+      "HIPAA",
+      "Defamation",
+      "Informed Consent",
+      "Invasion of Privacy"
+    ],
+    "incorrectAnswers": [
+      ""
+    ],
+    "feedback": {
+      "": {
+        "title": "",
+        "text": ""
+      }
+    },
+    "hints": {
+      "": "",
+      "": "",
+      "": "",
+      "": ""
+    },
+    "reportRational": "",
+    "FS4_CORRECT_1": [
+      "CORRECT_2",
+      "CORRECT_1",
+      "CORRECT_4",
+      "CORRECT_3"
+    ],
+    "FS4_CORRECT_2": [
+      "CORRECT_4",
+      "CORRECT_2",
+      "CORRECT_3",
+      "CORRECT_1"
+    ],
+    "FS4_CORRECT_3": [
+      "CORRECT_3",
+      "CORRECT_1",
+      "CORRECT_2",
+      "CORRECT_4"
+    ],
+    "FS4_CORRECT_4": [
+      "CORRECT_1",
+      "CORRECT_4",
+      "CORRECT_2",
+      "CORRECT_3"
+    ],
+    "FS4_CORRECT_5": [
+      "CORRECT_2",
+      "CORRECT_3",
+      "CORRECT_1",
+      "CORRECT_4"
+    ],
+    "FS4_CORRECT_6": [
+      "CORRECT_4",
+      "CORRECT_1",
+      "CORRECT_3",
+      "CORRECT_2"
+    ],
+    "FS4_CORRECT_7": [
+      "HINT",
+      "CORRECT_2",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_4",
+      "HINT",
+      "CORRECT_3"
+    ],
+    "FS4_CORRECT_8": [
+      "HINT",
+      "CORRECT_4",
+      "HINT",
+      "CORRECT_2",
+      "HINT",
+      "CORRECT_3",
+      "HINT",
+      "CORRECT_1"
+    ],
+    "FS4_CORRECT_9": [
+      "HINT",
+      "CORRECT_3",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_2",
+      "HINT",
+      "CORRECT_4"
+    ],
+    "FS4_CORRECT_10": [
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_4",
+      "HINT",
+      "CORRECT_2",
+      "HINT",
+      "CORRECT_3"
+    ],
+    "FS4_CORRECT_11": [
+      "HINT",
+      "CORRECT_2",
+      "HINT",
+      "CORRECT_3",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_4"
+    ],
+    "FS4_CORRECT_12": [
+      "HINT",
+      "CORRECT_4",
+      "HINT",
+      "CORRECT_1",
+      "HINT",
+      "CORRECT_3",
+      "HINT",
+      "CORRECT_2"
+    ]
   }
 }
- 
