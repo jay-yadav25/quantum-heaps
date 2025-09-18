@@ -1,7 +1,7 @@
 @dho
 Feature: Launch Activity
 
-  @smoke @activityFive @regression
+  @smoke @ActivityFive @regression
   Scenario Outline: Verify Content of Learnign objective ,Avatar Selection ,Introduction and Chat Section of [Activity Five]
     Given the user has launched the activity <Number> on the web
     Then the Learning Objectives page of "Activity Five" should be displayed

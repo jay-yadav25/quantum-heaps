@@ -4,7 +4,7 @@ export class SummaryReportActivitySix {
     readonly page: Page;
     readonly finalScore: Locator;
     readonly noOfHintUsed: Locator;
-    private readonly frameLocator: FrameLocator;
+   public readonly frameLocator: FrameLocator;
 
    constructor(page: Page, iframeName: string = 'ext_012345678_1') {
     this.page = page;
@@ -22,11 +22,12 @@ export class SummaryReportActivitySix {
         const result = this.splitByNextStep(path);
         for (let i = 0; i < result.length; i++) {  
             const step = result[i];
-            console.log(`Processing step ${i + 1}/${result.length}: ${step}`);  
+            const stepNumber=i+1;
+            console.log(`Processing step ${stepNumber}/${result.length}: ${step}`);  
             if(i=8){
-                await this.verifySingleSelectReport(step,i+1,testData);
+                await this.verifySingleSelectReport(step,stepNumber,testData);
             }else{
-                await this.verifyTapAndtapReport(step,i+1,testData);
+                await this.verifyTapAndTapReport(step[0],stepNumber,testData);
             }
         }
         const hintUsed= this.countHintsUsed(path,testData);
@@ -36,7 +37,7 @@ export class SummaryReportActivitySix {
         await this.page.pause();
     }
 
-    private splitByNextStep(steps: string[]): string[][] {
+    public splitByNextStep(steps: string[]): string[][] {
     const result: string[][] = [];
     let currentStep: string[] = [];
     
@@ -56,23 +57,23 @@ export class SummaryReportActivitySix {
     }
     
     return result;
-}
+     }
    
     
-    private async verifySingleSelectReport( step:string[], stepNumber: number, testData: any){
+   public async verifySingleSelectReport( step:string[], stepNumber: number, testData: any){
         await this.verifyInstruction(stepNumber, testData);
         await this.verifySupportingRationals(stepNumber, testData);
         await this.verifyUserActionDetailsForSingleSelect(step, stepNumber,testData);
     }
 
-    private async verifyTapAndtapReport(step:string[],stepNumber: number, testData: any){
+   public async verifyTapAndTapReport(step:string,stepNumber: number, testData: any){
         await this.verifyInstruction(stepNumber, testData);
         await this.verifySupportingRationals(stepNumber, testData);
-        await this.verifyUserActionDetailsForSingleSelect(step, stepNumber,testData);
+        await this.verifyUserActionDetailsForTapAndTap(step, stepNumber,testData);
     }
 
     
-    private async verifyInstruction(stepNumber: number, testData: any) {
+   public async verifyInstruction(stepNumber: number, testData: any) {
         const stepDetails = testData[`STEP_${stepNumber}`]
         const instructionText = stepDetails.instructions;
         const questionText = stepDetails.question;
@@ -88,7 +89,7 @@ export class SummaryReportActivitySix {
     }
 
     
-    private async verifySupportingRationals(stepNumber: number, testData: any) {
+   public async verifySupportingRationals(stepNumber: number, testData: any) {
         const stepDetails = testData[`STEP_${stepNumber}`]
         const rational = stepDetails.rationalForReport;
         const supportingRationalHeadingLocator=`section#step-dropdown-${stepNumber}>div>div.supporting-rationale-container>.supporting-rationale-heading`
@@ -98,12 +99,13 @@ export class SummaryReportActivitySix {
     }
 
    
-  private async verifyUserActionDetailsForSingleSelect(
+ public async verifyUserActionDetailsForSingleSelect(
     step: string[], 
     stepNumber: number, 
     testData: any
 ) {
     const stepDetails = testData[`STEP_${stepNumber}`];
+    //const stepData = stepDetails[step];
     const correctOptionText = stepDetails.CORRECT;
     const incorrectOptionText = stepDetails.INCORRECT_1;
     const incorrectOptionText2 = stepDetails.INCORRECT_2;
@@ -141,85 +143,182 @@ export class SummaryReportActivitySix {
             throw new Error(`Unknown step format: ${step}`);
         }
     };
-    for (let i=0; i<step.length;i++){ 
-        const actionPosition=i;
-        if (step[i] === "HINT") {
-            // Verify hint action first
+    for (let actionPosition=0; actionPosition<step.length;actionPosition++){ 
+        //const actionPosition=i;
+        if (step[actionPosition] === "HINT") {
             const { userActionLocator, userActionTextLocator } = createLocators();
             await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText("Selected Hint");
         } else {
-            const { optionText, actionText } = getStepDetails(step[i]);
-            await verifyAction(i, actionText, optionText);
+            const { optionText, actionText } = getStepDetails(step[actionPosition]);
+            await verifyAction(actionPosition, actionText, optionText);
         }
     }
 }
 
-   private async verifyUserActionDetailsForTapAndTap(
-    step: string[], 
-    stepNumber: number, 
+public async verifyUserActionDetailsForTapAndTap(
+    step: string,
+    stepNumber: number,
     testData: any
 ) {
     const stepDetails = testData[`STEP_${stepNumber}`];
-    const optionText_1= stepDetails.OPTION_1;
-    const optionText_2= stepDetails.OPTION_2;
-    const optionText_3= stepDetails.OPTION_3;
-    const optionText_4= stepDetails.OPTION_4;
-    const optionText_5= stepDetails.OPTION_5;
-    const optionText_6= stepDetails.OPTION_6;
-   
+    const stepData=stepDetails[step];
+    const optionText_1 = stepDetails.OPTION_1;
+    const optionText_2 = stepDetails.OPTION_2;
+    const optionText_3 = stepDetails.OPTION_3;
+    const optionText_4 = stepDetails.OPTION_4;
+    const optionText_5 = stepDetails.OPTION_5;
+    const optionText_6 = stepDetails.OPTION_6;
+
+    const correctSequence = ["OPT_1_SLOT_1", "OPT_2_SLOT_2", "OPT_3_SLOT_3", "OPT_4_SLOT_4", "OPT_5_SLOT_5", "OPT_6_SLOT_6"];
+
     const createLocators = () => ({
         userActionLocator: `section#step-dropdown-${stepNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-icon-text-container>.action-text`,
         userActionTextLocator: `section#step-dropdown-${stepNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-description`
     });
-    
+
     // Helper function to verify action expectations
-    const verifyAction = async (actionPosition: number, expectedText: string, expectedDescription: string) => {
+    const verifyAction = async (actionPosition: number, expectedText: string, expectedDescription: string, attemptNumber?: number) => {
         const { userActionLocator, userActionTextLocator } = createLocators();
         await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText(expectedText);
         await expect(this.frameLocator.locator(userActionTextLocator).nth(actionPosition)).toHaveText(expectedDescription);
-    };
-    
-    // Helper function to get option text and expected action text based on step
-    const getStepDetails = (step: string) => {
-        if (step.includes('_CORRECT')) {
-            return {
-                optionText: optionText_1,
-                actionText: "Selected Correct Choice"
-            };
-        } else if (step.includes('_INCORRECT_1')) {
-            return {
-                optionText: optionText_1,
-                actionText: "Selected Incorrect Choice"
-            };
-        } else if (step.includes('_INCORRECT_2')) {
-            return {
-                optionText: optionText_1,
-                actionText: "Selected Incorrect Choice"
-            };
-        } else {
-            throw new Error(`Unknown step format: ${step}`);
+        
+        // You can use attemptNumber for additional logging or assertions if needed
+        if (attemptNumber !== undefined) {
+            console.log(`Verifying action ${actionPosition} from attempt ${attemptNumber}: ${expectedText}`);
         }
     };
-    for (let i=0; i<step.length;i++){ 
-        const actionPosition=i;
-        if (step[i] === "HINT") {
-            // Verify hint action first
-            const { userActionLocator, userActionTextLocator } = createLocators();
-            await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText("Selected Hint");
+
+    // Helper function to get option text based on option
+    const getOptionText = (option: string) => {
+        switch (option) {
+            case 'OPT_1': return optionText_1;
+            case 'OPT_2': return optionText_2;
+            case 'OPT_3': return optionText_3;
+            case 'OPT_4': return optionText_4;
+            case 'OPT_5': return optionText_5;
+            case 'OPT_6': return optionText_6;
+            default: return '';
+        }
+    };
+
+    // Helper function to check if a step is correct
+    const isStepCorrect = (stepAction: string) => {
+        return correctSequence.includes(stepAction);
+    };
+
+    // Split the step array into attempts based on "CHECK"
+    const attempts: Array<{hint?: boolean, actions: string[]}> = [];
+    let currentAttempt: string[] = [];
+    
+    for (const action of stepData) {
+        if (action === "CHECK") {
+            if (currentAttempt.length > 0) {
+                // Check if there's a HINT in this attempt
+                const hasHint = currentAttempt.includes("HINT");
+                const slotActions = currentAttempt.filter(a => a !== "HINT");
+                
+                attempts.push({
+                    hint: hasHint,
+                    actions: slotActions
+                });
+                currentAttempt = [];
+            }
         } else {
-            const { optionText, actionText } = getStepDetails(step[i]);
-            await verifyAction(i, actionText, optionText);
+            currentAttempt.push(action);
+        }
+    }
+
+    // Process each attempt and build the complete action sequence
+    let allActions: Array<{action: string, isCorrect: boolean, optionText: string, attemptNumber: number}> = [];
+    let correctSlotsFromAllPreviousAttempts: string[] = [];
+
+    for (let attemptIndex = 0; attemptIndex < attempts.length; attemptIndex++) {
+        const attemptData = attempts[attemptIndex];
+        const attempt = attemptData.actions;
+        const hasHint = attemptData.hint;
+        const currentAttemptNumber = attemptIndex + 1;
+        
+        // Add HINT at position 1 if present in this attempt
+        if (hasHint) {
+            allActions.push({
+                action: "HINT",
+                isCorrect: false,
+                optionText: "Selected Hint",
+                attemptNumber: currentAttemptNumber
+            });
+        }
+        
+        // Create a combined sequence with carry forward slots in correct positions
+        const combinedSequence: Array<{action: string, isCorrect: boolean, optionText: string, attemptNumber: number}> = [];
+        
+        // First, add carried forward slots in their correct positions (1-6)
+        const carriedForwardPositions = new Set();
+        for (const correctSlot of correctSlotsFromAllPreviousAttempts) {
+            const slotNumber = parseInt(correctSlot.split('_SLOT_')[1]);
+            const option = correctSlot.split('_')[0] + '_' + correctSlot.split('_')[1];
+            
+            // Insert at correct position (slot number - 1 for 0-based indexing)
+            combinedSequence[slotNumber - 1] = {
+                action: correctSlot,
+                isCorrect: true,
+                optionText: getOptionText(option),
+                attemptNumber: currentAttemptNumber // Carried forward but shown in current attempt
+            };
+            carriedForwardPositions.add(slotNumber);
+        }
+
+        // Then, add actions from current attempt in their positions
+        for (const action of attempt) {
+            const slotNumber = parseInt(action.split('_SLOT_')[1]);
+            const option = action.split('_')[0] + '_' + action.split('_')[1];
+            const isCorrect = isStepCorrect(action);
+            
+            // Only add if this position wasn't carried forward
+            if (!carriedForwardPositions.has(slotNumber)) {
+                combinedSequence[slotNumber - 1] = {
+                    action: action,
+                    isCorrect: isCorrect,
+                    optionText: getOptionText(option),
+                    attemptNumber: currentAttemptNumber
+                };
+            }
+        }
+
+        // Add the combined sequence to allActions (only non-empty positions)
+        for (const actionData of combinedSequence) {
+            if (actionData) {
+                allActions.push(actionData);
+            }
+        }
+
+        // Update carry forward list with correct actions from current attempt (accumulate from ALL previous attempts)
+        for (const action of attempt) {
+            const isCorrect = isStepCorrect(action);
+            if (isCorrect && !correctSlotsFromAllPreviousAttempts.includes(action)) {
+                correctSlotsFromAllPreviousAttempts.push(action);
+            }
+        }
+    }
+
+    // Verify all actions in the report
+    for (let i = 0; i < allActions.length; i++) {
+        const actionData = allActions[i];
+        
+        if (actionData.action === "HINT") {
+            await verifyAction(i, "Selected Hint", "Selected Hint", actionData.attemptNumber);
+        } else {
+            const actionText = actionData.isCorrect ? "Selected Correct Choice" : "Selected Incorrect Choice";
+            await verifyAction(i, actionText, actionData.optionText, actionData.attemptNumber);
         }
     }
 }
-
-private countHintsUsed(path: string[], testData: Record<string, Record<string, string[]>>): { 
+public countHintsUsed(path: string[], testData: Record<string, Record<string, string[]>>): { 
   mainPathHints: string; 
   fsHintsUsed: string; 
   totalHintsUsed: string; 
 } {
   let mainHintCount = 0;
-  let fsHintsCount = 0;
+  let secondaryHintsCount = 0;
 
   // Helper to count grouped/consecutive HINTs as one
   const countGroupedHints = (array: string[]): number => {
@@ -245,14 +344,14 @@ private countHintsUsed(path: string[], testData: Record<string, Record<string, s
 
   // Loop through the path to check FS steps and their hint usage
   for (let step of path) {
-    if (step.startsWith("FS")) {
-      const fsNumber = step.match(/FS(\d+)/)?.[1];
-      if (fsNumber) {
-        const stepDetails = testData['SCENE' + fsNumber];
+    if (!step.startsWith("S")) {
+      const stepNumber = step.match(/MS|TS(\d+)/)?.[1];
+      if (stepNumber) {
+        const stepDetails = testData['STEP_' + stepNumber];
         const stepData = stepDetails?.[step];
 
         if (Array.isArray(stepData)) {
-          fsHintsCount += countGroupedHints(stepData);
+          secondaryHintsCount += countGroupedHints(stepData);
         }
       }
     }
@@ -263,10 +362,8 @@ private countHintsUsed(path: string[], testData: Record<string, Record<string, s
 
   return {
     mainPathHints: formatCount(mainHintCount),
-    fsHintsUsed: formatCount(fsHintsCount),
-    totalHintsUsed: formatCount(mainHintCount + fsHintsCount)
+    fsHintsUsed: formatCount(secondaryHintsCount),
+    totalHintsUsed: formatCount(mainHintCount + secondaryHintsCount)
   };
 }
-
-  
 }

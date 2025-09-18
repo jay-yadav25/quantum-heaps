@@ -321,7 +321,7 @@ export class ActivitySix {
   }
 
   public async verifyQuestion(step: string, testData: TestData): Promise<void> {
-    const stepNumber = step.match(/S(\d+)/)?.[1];
+    const stepNumber = step.match(/S|MS(\d+)/)?.[1];
     const stepDetails = testData['STEP_' + stepNumber] as StepData;
     const questionLocator = `.step-${stepNumber} h3`;
     

@@ -55,13 +55,9 @@ export class ActivityThree extends ActivitySix {
     await this.hintButton.nth(hintButtonIndex).isEnabled();
     await this.hintButton.nth(hintButtonIndex).click();
     await expect(this.hintTitle).toHaveText("Hint");
-    
     const stepDetails = testData['STEP_' + stepNumber];
     const listContent = stepDetails.followUp.hints;
-    console.log("No of Hint" + listContent.length);
-    
     const listItem = await this.hintPopupListItems.all();
-
     for (let i = 0; i < listContent.length; i++) {
       await expect(listItem[i]).toHaveText(listContent[i]);
     }
@@ -83,39 +79,8 @@ export class ActivityThree extends ActivitySix {
 
   private async handleMultiSelectStepActivityThree(step: string, testData: any) {
     await this.verifyStepInstruction(step, testData);
-    await this.verifyMultiSelectStepQuestion(step, testData);
+    await this.verifyQuestion(step, testData);
     await this.verifyAndSelectMultiselectOptions(step, testData);
-  }
-
-  private async verifyMultiSelectStepQuestion(step: string, testData: any) {
-    const [sceneCode, ...optionParts] = step.split('_');
-    const optionKey = optionParts.join('_');
-
-    let sceneLevel = '';
-    let stepDetails: any;
-    let questionText = '';
-    let stepID = '';
-    let stepType = '';
-
-    if (step.startsWith('S') && !step.startsWith('FS')) {
-      const stepNumber = step.match(/S(\d+)/)?.[1];
-      sceneLevel = 'SCENE' + stepNumber;
-      stepDetails = testData[sceneLevel];
-      questionText = stepDetails.decisionPoint.question;
-      const count = Number(sceneCode.slice(1)) * 2 - 1; 
-      stepID = "slt_step_" + count;
-      stepType = "single"
-    } else if (step.startsWith('FS')) {
-      const stepNumber = step.match(/FS(\d+)/)?.[1];
-      const stepDetails = testData['SCENE' + stepNumber];
-      questionText = stepDetails.question;
-      stepID = `mlt_step_${(parseInt(sceneCode.match(/\d+/)?.[0] || '0', 10) * 2)}`;
-      stepType = "multi"
-    }
-    
-    console.log(questionText);
-    const questionLocator = `//*[contains(@id,'${stepID}')]/ancestor::*[contains(@class,'${stepType}-select-component')]/preceding-sibling::strong`
-    await expect(this.frameLocator.locator(questionLocator)).toHaveText(questionText);
   }
 
   private async verifyAndSelectMultiselectOptions(step: string, testData: any) {

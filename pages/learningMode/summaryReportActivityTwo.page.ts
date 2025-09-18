@@ -237,29 +237,6 @@ export class SummaryReportActivityTwo {
         };
     }
 
-    // private getResponseDataForAction(actionType: string, level: string, testData: any) {
-    //     let patientResponse = null;
-    //     let patientMood = null;
-
-    //     switch (actionType) {
-    //         case "CORRECT":
-    //             patientResponse = testData[level]?.["ideal_reply"];
-    //             patientMood = testData[level]?.["ideal_reply_mood"];
-    //             break;
-    //         case "INCORRECT":
-    //             patientResponse = testData[level]?.["incorrect_reply"];
-    //             patientMood = testData[level]?.["incorrect_reply_mood"];
-    //             break;
-    //         case "DISTRACTOR":
-    //             patientResponse = testData[level]?.["distractor_reply"];
-    //             patientMood = testData[level]?.["distractor_reply_mood"];
-    //             break;
-    //         default:
-    //             patientResponse = testData["defaultChat"]["Ricardo_Gonzalez"];
-    //             patientMood = testData["defaultChat"]["Ricardo_Gonzalez_reply_mood"];
-    //     }
-    //     return { patientResponse, patientMood };
-    // }
 
     private getResponseDataForAction(actionType: string, level: string, testData: any) {
     let patientResponse = null;
