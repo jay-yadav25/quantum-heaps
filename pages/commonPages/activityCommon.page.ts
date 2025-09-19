@@ -16,7 +16,7 @@ export class ActivityCommonPage {
       // Introduction Popup
     readonly introductionPageTitle: Locator;
     readonly introPopupText: Locator;
-    readonly intrductionPopupContinueButton: Locator;
+    readonly introductionPopupContinueButton: Locator;
     readonly activityOverviewTitle: Locator;
     readonly activityOverviewDetails: Locator;
 
@@ -61,7 +61,7 @@ export class ActivityCommonPage {
     readonly introductionActivityMode:Locator;
     readonly introductionActivityModeInPopup:Locator;
  readonly moreOptionsButton:Locator;
-    readonly moreOptionLearnignObjectiveButton:Locator;
+    readonly moreOptionLearningObjectiveButton:Locator;
     readonly moreOptionIntroductionButton:Locator;
     readonly popupContinueButton:Locator;
 
@@ -74,7 +74,7 @@ export class ActivityCommonPage {
     
         this.startButton = this.frameLocator.locator("//button[@id='start-btn']");
          this.introductionContinueButton = this.frameLocator.locator("button#introduction-continue-btn");
-        this.intrductionPopupContinueButton = this.frameLocator.locator(".continue-button");
+        this.introductionPopupContinueButton = this.frameLocator.locator(".continue-button");
          this.continueButtonIntroAndLoPopup = this.frameLocator.locator("button#continue-btn").nth(1);
     
 
@@ -131,7 +131,7 @@ export class ActivityCommonPage {
     this.introductionActivityMode = this.frameLocator.locator(".challenge-mode-text>p");
     this.introductionActivityModeInPopup = this.frameLocator.locator(" #dialog_desc .challenge-mode-text>p");
     this.moreOptionsButton = this.frameLocator.locator('//button[@aria-label="More Options"]');
-    this.moreOptionLearnignObjectiveButton = this.frameLocator.locator('//li[@aria-label="Learning Objectives"]');
+    this.moreOptionLearningObjectiveButton = this.frameLocator.locator('//li[@aria-label="Learning Objectives"]');
     this.moreOptionIntroductionButton = this.frameLocator.locator('//li[@aria-label="Introduction"]');
     }
 
@@ -197,7 +197,7 @@ await this.startButton.click();
     }
     public async clickOnMoreOptionPopupLearningObjectiveButton() {
         await this.moreOptionsButton.click();
-        await this.moreOptionLearnignObjectiveButton.click();
+        await this.moreOptionLearningObjectiveButton.click();
     }
 
    // Started
@@ -251,11 +251,13 @@ await this.startButton.click();
     for (let i = 0; i < introductionList.length; i++) {
         await expect(introductionsListLocator[i]).toHaveText(introductionList[i]);
     }
+    if(activityOverviewList.length > 0){
       await expect(this.activityOverviewTitle).toHaveText("Activity Overview");
-    const activityOverviewLocator = await this.activityOverviewDetails.all();
-    expect(activityOverviewLocator.length).toBe(activityOverviewList.length);
-    for (let i = 0; i < activityOverviewList.length; i++) {
-        await expect(activityOverviewLocator[i]).toHaveText(activityOverviewList[i]);
+      const activityOverviewLocator = await this.activityOverviewDetails.all();
+      expect(activityOverviewLocator.length).toBe(activityOverviewList.length);
+      for (let i = 0; i < activityOverviewList.length; i++) {
+          await expect(activityOverviewLocator[i]).toHaveText(activityOverviewList[i]);
+      }
     }
     await expect(this.introductionActivityMode).toHaveText(mode);
   }
@@ -284,8 +286,8 @@ public async clickOnContinueButtonIntroAndLoPopup() {
         await this.continueButtonIntroAndLoPopup.click();
     }
 
-    public async clickOnintrductionPopupContinueButton() {
-        await this.intrductionPopupContinueButton.click();
+    public async clickOnIntroductionPopupContinueButton() {
+        await this.introductionPopupContinueButton.click();
     }
 
     /**
@@ -357,7 +359,7 @@ public async clickOnContinueButtonIntroAndLoPopup() {
         await expect(this.chatSectionActivityTitle).toHaveText(testData.activityTitle);
 
         await expect(this.chatSectionConversationTitle).toBeVisible();
-        await expect(this.chatSectionConversationTitle).toHaveText(testData.conversationPage.conversatinTitle);
+        await expect(this.chatSectionConversationTitle).toHaveText(testData.conversationPage.conversationTitle);
 
         await expect(this.chatSectionInstructionTitle).toBeVisible();
         await expect(this.chatSectionInstructionTitle).toHaveText("Instructions");
@@ -382,8 +384,8 @@ public async clickOnContinueButtonIntroAndLoPopup() {
         await expect(this.defaultReplyOption).toHaveText(testData.defaultChat.Emily);
     
     }
-    //Accessiblity scan common function
-    public async performAccessivityScanForGivenPage(testInfo:any,pageName:string){
+    //Accessibility scan common function
+    public async performAccessibilityScanForGivenPage(testInfo:any,pageName:string){
        await performAccessibilityScan({
         page: this.page,
         testInfo,

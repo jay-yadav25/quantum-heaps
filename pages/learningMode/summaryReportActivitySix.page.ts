@@ -17,14 +17,15 @@ export class SummaryReportActivitySix {
     this.noOfHintUsed = page.frameLocator('iframe[name="ext_012345678_1"]').locator('strong.hint-value');
     }
 
-    public async runScenarioPathForActivitySixLearnigMode(path: string[], testData: any): Promise<void> {
+    public async runScenarioPathForActivitySix(path: string[], testData: any): Promise<void> {
         console.log('Starting Report Verification:', path);
         const result = this.splitByNextStep(path);
+        console.log(result);
         for (let i = 0; i < result.length; i++) {  
             const step = result[i];
             const stepNumber=i+1;
             console.log(`Processing step ${stepNumber}/${result.length}: ${step}`);  
-            if(i=8){
+            if(i===8){
                 await this.verifySingleSelectReport(step,stepNumber,testData);
             }else{
                 await this.verifyTapAndTapReport(step[0],stepNumber,testData);
@@ -34,7 +35,7 @@ export class SummaryReportActivitySix {
         console.log("Actual no of Hint-"+ this.noOfHintUsed.innerText());
         console.log("Expected no of Hint-"+hintUsed.totalHintsUsed);
         await expect(this.noOfHintUsed).toHaveText(hintUsed.totalHintsUsed);
-        await this.page.pause();
+       // await this.page.pause();
     }
 
     public splitByNextStep(steps: string[]): string[][] {
@@ -78,11 +79,12 @@ export class SummaryReportActivitySix {
         const instructionText = stepDetails.instructions;
         const questionText = stepDetails.question;
         if (stepNumber>1){
-            await this.frameLocator.locator(`button#step-dropdown-arrow-button-${stepNumber}`).click();
+            //await this.page.pause();
+            await this.frameLocator.locator(`button#step-dropdown-arrow-button-${stepNumber-1}`).click();
         }
-        const instructionHeadingLocator=`section#step-dropdown-${stepNumber}>div>div.description-container>.description-heading`
-        const instructionLocator=`section#step-dropdown-${stepNumber}>div>div.description-container>.description-text`
-        const questionTextLocator=`section#step-dropdown-${stepNumber}>div>div.description-container>.description-question`
+        const instructionHeadingLocator=`section#step-dropdown-${stepNumber-1}>div>div.description-container>.description-heading`
+        const instructionLocator=`section#step-dropdown-${stepNumber-1}>div>div.description-container>.description-text`
+        const questionTextLocator=`section#step-dropdown-${stepNumber-1}>div>div.description-container>.description-question`
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionHeadingLocator).first()).toHaveText("Description");
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(instructionLocator).first()).toHaveText(instructionText);
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(questionTextLocator).first()).toHaveText(questionText);
@@ -91,11 +93,11 @@ export class SummaryReportActivitySix {
     
    public async verifySupportingRationals(stepNumber: number, testData: any) {
         const stepDetails = testData[`STEP_${stepNumber}`]
-        const rational = stepDetails.rationalForReport;
-        const supportingRationalHeadingLocator=`section#step-dropdown-${stepNumber}>div>div.supporting-rationale-container>.supporting-rationale-heading`
-        const supportingRationalTextLocator=`section#step-dropdown-${stepNumber}>div>div.supporting-rationale-container>.supporting-rationale-text`
+        const reportRational = stepDetails.reportRational;
+        const supportingRationalHeadingLocator=`section#step-dropdown-${stepNumber-1}>div>div.supporting-rationale-container>.supporting-rationale-heading`
+        const supportingRationalTextLocator=`section#step-dropdown-${stepNumber-1}>div>div.supporting-rationale-container>.supporting-rationale-text`
         await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalHeadingLocator).first()).toHaveText("Supporting Rationale");
-        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextLocator).first()).toHaveText(rational);
+        await expect(this.page.frameLocator('iframe[name="ext_012345678_1"]').locator(supportingRationalTextLocator).first()).toHaveText(reportRational);
     }
 
    
@@ -111,15 +113,15 @@ export class SummaryReportActivitySix {
     const incorrectOptionText2 = stepDetails.INCORRECT_2;
    
     const createLocators = () => ({
-        userActionLocator: `section#step-dropdown-${stepNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-icon-text-container>.action-text`,
-        userActionTextLocator: `section#step-dropdown-${stepNumber}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-description`
+        userActionLocator: `section#step-dropdown-${stepNumber-1}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-icon-text-container>.action-text`,
+        userActionTextLocator: `section#step-dropdown-${stepNumber-1}>div>div.user-action-details-container>.all-action-wrapper>.action-wrapper>.action-description`
     });
     
     // Helper function to verify action expectations
-    const verifyAction = async (actionPosition: number, expectedText: string, expectedDescription: string) => {
+    const verifyAction = async (actionPosition: number,descriptionPosition:number, expectedText: string, expectedDescription: string) => {
         const { userActionLocator, userActionTextLocator } = createLocators();
         await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText(expectedText);
-        await expect(this.frameLocator.locator(userActionTextLocator).nth(actionPosition)).toHaveText(expectedDescription);
+        await expect(this.frameLocator.locator(userActionTextLocator).nth(descriptionPosition)).toHaveText(expectedDescription);
     };
     
     // Helper function to get option text and expected action text based on step
@@ -143,14 +145,16 @@ export class SummaryReportActivitySix {
             throw new Error(`Unknown step format: ${step}`);
         }
     };
+    let descriptionPosition=0;
     for (let actionPosition=0; actionPosition<step.length;actionPosition++){ 
-        //const actionPosition=i;
+        
         if (step[actionPosition] === "HINT") {
             const { userActionLocator, userActionTextLocator } = createLocators();
             await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText("Selected Hint");
         } else {
             const { optionText, actionText } = getStepDetails(step[actionPosition]);
-            await verifyAction(actionPosition, actionText, optionText);
+            await verifyAction(actionPosition,descriptionPosition, actionText, optionText);
+            descriptionPosition=descriptionPosition+1;
         }
     }
 }
@@ -344,16 +348,13 @@ public countHintsUsed(path: string[], testData: Record<string, Record<string, st
 
   // Loop through the path to check FS steps and their hint usage
   for (let step of path) {
-    if (!step.startsWith("S")) {
-      const stepNumber = step.match(/MS|TS(\d+)/)?.[1];
-      if (stepNumber) {
-        const stepDetails = testData['STEP_' + stepNumber];
-        const stepData = stepDetails?.[step];
-
-        if (Array.isArray(stepData)) {
-          secondaryHintsCount += countGroupedHints(stepData);
-        }
-      }
+    if (!step.startsWith("S") && step !=="HINT" && step !=="NEXTSTEP") {
+      const stepNumber = step.match(/MS(\d+)/)?.[1];
+      const stepDetails = testData['STEP_' + stepNumber];
+      const stepData = stepDetails[step];
+      secondaryHintsCount += countGroupedHints(stepData);
+        
+      
     }
   }
 

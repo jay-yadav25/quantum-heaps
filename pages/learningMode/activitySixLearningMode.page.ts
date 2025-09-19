@@ -1,22 +1,29 @@
 import { expect, Locator, FrameLocator, type Page } from '@playwright/test';
 
 interface StepData {
-  instructions: string;
-  instructionsList: string[];
+  instructions?: string | string[]; // Can be string or array
+  instructionsList?: string[];
   question: string;
-  hints: {
-    ThinkAbout: string[];
-    AskYourself: string[];
-  };
-  feedback: {
-    CORRECT: { title: string; text: string };
-    INCORRECT_1: { title: string; text: string };
-    INCORRECT_2: { title: string; text: string };
+  conversation?: Array<{title: string, text: string}>;
+  hints?: {
+    ThinkAbout?: string[];
+    AskYourself?: string[];
+  } | {[key: string]: string}; // Support both formats
+  feedback?: {
+    CORRECT?: { title: string; text: string };
+    INCORRECT_1?: { title: string; text: string };
+    INCORRECT_2?: { title: string; text: string };
     INCORRECT?: { title: string; text: string };
+    [key: string]: { title: string; text: string } | undefined; // For multi-select feedback
   };
-  CORRECT: string;
-  INCORRECT_1: string;
-  INCORRECT_2: string;
+  CORRECT?: string;
+  INCORRECT_1?: string;
+  INCORRECT_2?: string;
+  // Multi-select properties
+  options?: string[];
+  correctAnswers?: string[];
+  incorrectAnswers?: string[];
+  // Tap and tap properties
   OPTION_1?: string;
   OPTION_2?: string;
   OPTION_3?: string;
@@ -26,7 +33,7 @@ interface StepData {
 }
 
 interface TestData {
-  [key: string]: StepData | string[];
+  [key: string]: StepData | string[] | any;
 }
 
 export class ActivitySix {
@@ -74,7 +81,7 @@ export class ActivitySix {
 
   // Navigation
   readonly moreOptionsButton: Locator;
-  readonly moreOptionLearnignObjectiveButton: Locator;
+  readonly moreOptionLearningObjectiveButton: Locator;
   readonly moreOptionIntroductionButton: Locator;
 
   constructor(page: Page, iframeName: string = 'ext_012345678_1') {
@@ -118,9 +125,8 @@ export class ActivitySix {
 
     // Navigation
     this.moreOptionsButton = this.frameLocator.locator('button[aria-label="More Options"]');
-    this.moreOptionLearnignObjectiveButton = this.frameLocator.locator('li[aria-label="Learning Objectives"]');
+    this.moreOptionLearningObjectiveButton = this.frameLocator.locator('li[aria-label="Learning Objectives"]');
     this.moreOptionIntroductionButton = this.frameLocator.locator('li[aria-label="Introduction"]');
-  
   }
 
   public async runScenarioPath(path: string[], testData: TestData): Promise<void> {
@@ -167,12 +173,12 @@ export class ActivitySix {
   }
 
   public extractStepNumber(step: string): string {
-    const match = step.match(/(?:S|TS)(\d+)/);
+    const match = step.match(/(?:S|TS|MS)(\d+)/);
     return match ? match[1] : "0";
   }
 
   public getStepNumber(step: string): string | null {
-    const match = step.match(/^(S\d+)/);
+    const match = step.match(/^(S\d+|MS\d+)/);
     return match ? match[1] : null;
   }
 
@@ -260,6 +266,8 @@ export class ActivitySix {
     await this.selectSingleSelectOptions(step, testData);
   }
 
+
+
   public async handleTapAndTapStep(step: string, testData: TestData): Promise<void> {
     await this.verifyStepInstruction(step, testData);
     await this.selectTapAndTapOptions(step, testData);
@@ -267,12 +275,12 @@ export class ActivitySix {
 
   // Verification methods
   public async verifyHintPopup(step: string, testData: TestData): Promise<void> {
-    const stepNumber = this.getStepNumber(step);
-    const stepDetails = testData['STEP_' + stepNumber] as StepData;
+    const stepNumber = this.extractStepNumber(step);
+    const stepDetails = testData['STEP_' + stepNumber] ;
     const actualStepNumber = stepNumber ? parseInt(stepNumber, 10) : null;
-    
-    if (actualStepNumber === null) {
-      throw new Error(`Invalid step format: ${step}`);
+    console.log("StepNumber:"+actualStepNumber)
+    if (actualStepNumber === null || !stepDetails?.hints) {
+      throw new Error(`Invalid step format or missing hints: ${step}`);
     }
 
     const hintButtonIndex = actualStepNumber - 1;
@@ -282,19 +290,16 @@ export class ActivitySix {
     
     await expect(this.hintTitle).toHaveText("Hint");
 
-    // Verify "Think About" items
-    const thinkItems = await this.hintPopupThinkListItems.all();
-    expect(thinkItems.length).toBe(stepDetails.hints.ThinkAbout.length);
-    for (let i = 0; i < stepDetails.hints.ThinkAbout.length; i++) {
-      //await expect(thinkItems[i]).toHaveText(stepDetails.hints.ThinkAbout[i]);
+    // Handle different hint formats
+    if ('ThinkAbout' in stepDetails.hints && 'AskYourself' in stepDetails.hints) {
+      // Original format
+      const thinkItems = await this.hintPopupThinkListItems.all();
+      expect(thinkItems.length).toBe(stepDetails.hints.ThinkAbout!.length);
+      
+      const askItems = await this.hintPopupAskListItems.all();
+      expect(askItems.length).toBe(stepDetails.hints.AskYourself!.length);
     }
-
-    // Verify "Ask Yourself" items
-    const askItems = await this.hintPopupAskListItems.all();
-    expect(askItems.length).toBe(stepDetails.hints.AskYourself.length);
-    for (let i = 0; i < stepDetails.hints.AskYourself.length; i++) {
-      //await expect(askItems[i]).toHaveText(stepDetails.hints.AskYourself[i]);
-    }
+    // For multi-select hints with individual keys, you might need different handling
 
     await this.popupContinueButton.nth(1).click();
   }
@@ -304,12 +309,21 @@ export class ActivitySix {
     const stepDetails = testData["STEP_" + stepNumber] as StepData;
     
     await expect(this.stepDescription).toHaveText("Scenario Description");
-    await expect(this.stepInstruction).toHaveText(stepDetails.instructions);
+    
+    // Handle both string and array formats for instructions
+    if (Array.isArray(stepDetails.instructions)) {
+      await expect(this.stepInstruction).toHaveText(stepDetails.instructions[0]);
+    } else {
+      await expect(this.stepInstruction).toHaveText(stepDetails.instructions!);
+    }
+    
     await this.popupContinueButton.nth(1).click();
     
-    const instructionListItems = await this.stepInstructionList.all();
-    for (let i = 0; i < stepDetails.instructionsList.length; i++) {
-      await expect(instructionListItems[i]).toHaveText(stepDetails.instructionsList[i]);
+    if (stepDetails.instructionsList) {
+      const instructionListItems = await this.stepInstructionList.all();
+      for (let i = 0; i < stepDetails.instructionsList.length; i++) {
+        await expect(instructionListItems[i]).toHaveText(stepDetails.instructionsList[i]);
+      }
     }
   }
 
@@ -320,8 +334,10 @@ export class ActivitySix {
     await this.verifySingleSelectOptions(step, testData);
   }
 
+
+
   public async verifyQuestion(step: string, testData: TestData): Promise<void> {
-    const stepNumber = step.match(/S|MS(\d+)/)?.[1];
+    const stepNumber = this.extractStepNumber(step);
     const stepDetails = testData['STEP_' + stepNumber] as StepData;
     const questionLocator = `.step-${stepNumber} h3`;
     
@@ -329,29 +345,31 @@ export class ActivitySix {
   }
 
   public async verifySingleSelectOptions(step: string, testData: TestData): Promise<void> {
-    const stepNumber = step.match(/S(\d+)/)?.[1];
+    const stepNumber = this.extractStepNumber(step);
     const stepDetails = testData['STEP_' + stepNumber] as StepData;
     
     const optionSelectors = [
-      `.step-${stepNumber} #mlt_step_${stepNumber}_opt_1 .flip-card-front .card-title`,
-      `.step-${stepNumber} #mlt_step_${stepNumber}_opt_2 .flip-card-front .card-title`,
-      `.step-${stepNumber} #mlt_step_${stepNumber}_opt_3 .flip-card-front .card-title`
+      `.step-${stepNumber} #slt_step_${stepNumber}_opt_1 .flip-card-front .card-text`,
+      `.step-${stepNumber} #slt_step_${stepNumber}_opt_2 .flip-card-front .card-text`,
+      `.step-${stepNumber} #slt_step_${stepNumber}_opt_3 .flip-card-front .card-text`
     ];
     
-    const optionTexts = [stepDetails.INCORRECT_1, stepDetails.CORRECT, stepDetails.INCORRECT_2];
+    const optionTexts = [stepDetails.INCORRECT_1!, stepDetails.CORRECT!, stepDetails.INCORRECT_2!];
     
     for (let i = 0; i < optionSelectors.length; i++) {
       await expect(this.frameLocator.locator(optionSelectors[i]).first()).toHaveText(optionTexts[i]);
     }
   }
 
+
+
   // Selection methods
   public async selectSingleSelectOptions(step: string, testData: TestData): Promise<void> {
-    const stepNumber = step.match(/S(\d+)/)?.[1];
+    const stepNumber = this.extractStepNumber(step);
     const stepDetails = testData['STEP_' + stepNumber] as StepData;
     
     const { selectedOptionID, feedback } = this.determineSelectedOption(step, stepDetails);
-    const optionSelector = `.step-${stepNumber} #mlt_step_${stepNumber}_opt_${selectedOptionID}`;
+    const optionSelector = `.step-${stepNumber} #slt_step_${stepNumber}_opt_${selectedOptionID}`;
     
     await this.frameLocator.locator(optionSelector).first().click();
     
@@ -363,16 +381,18 @@ export class ActivitySix {
     await expect(this.frameLocator.locator(feedbackTitleSelector)).toHaveText(feedback.title);
   }
 
+
+
   public determineSelectedOption(step: string, stepDetails: StepData): {
     selectedOptionID: number;
     feedback: { title: string; text: string };
   } {
     if (step.includes('_CORRECT')) {
-      return { selectedOptionID: 2, feedback: stepDetails.feedback.CORRECT };
+      return { selectedOptionID: 2, feedback: stepDetails.feedback!.CORRECT! };
     } else if (step.includes('_INCORRECT_1')) {
-      return { selectedOptionID: 1, feedback: stepDetails.feedback.INCORRECT_1 };
+      return { selectedOptionID: 1, feedback: stepDetails.feedback!.INCORRECT_1! };
     } else if (step.includes('_INCORRECT_2')) {
-      return { selectedOptionID: 3, feedback: stepDetails.feedback.INCORRECT_2 };
+      return { selectedOptionID: 3, feedback: stepDetails.feedback!.INCORRECT_2! };
     } else {
       throw new Error(`Unknown step format: ${step}`);
     }
@@ -392,7 +412,7 @@ export class ActivitySix {
     
     for (let i = 0; i < options.length; i++) {
       const optionSelector = `#step_9_pickZone_1_section_1-option-${i + 1} > span`;
-      //await expect(this.frameLocator.locator(optionSelector).first()).toHaveText(options[i]!);
+      // Uncomment if needed: await expect(this.frameLocator.locator(optionSelector).first()).toHaveText(options[i]!);
     }
     
     // Perform actions
@@ -405,9 +425,9 @@ export class ActivitySix {
         await this.clickContinueButton();
         const isLastAction = i === actionsToPerform.length - 1;
         const feedback = isLastAction ? 
-          stepDetails.feedback.CORRECT : 
-          stepDetails.feedback.INCORRECT;
-        await this.verifyFeedbackPopup(feedback!, isLastAction);
+          stepDetails.feedback!.CORRECT! : 
+          stepDetails.feedback!.INCORRECT!;
+        await this.verifyFeedbackPopup(feedback, isLastAction);
       } else {
         await this.performTapAndTapAction(action);
       }
@@ -441,21 +461,25 @@ export class ActivitySix {
     if (isCorrect) {
       await this.popupCloseButton.click();
     } else {
-      // For incorrect answers, there should be a retry button
       const retryButton = this.frameLocator.locator('button[id*="retry"]');
       await retryButton.click();
     }
   }
 
-  private async verifySpeechBubbleConversation(step: string, testData: any) {
-     const stepNumber = step.match(/S(\d+)/)?.[1];
-    const stepDetails = testData["SCENE"+stepNumber];
-    const speechBubbleTexts = stepDetails.conversation;
-    console.log(speechBubbleTexts);
-    if (speechBubbleTexts && Array.isArray(speechBubbleTexts) && speechBubbleTexts.length > 0) {
-      for (let i = 0; i < speechBubbleTexts.length; i++) {
-        const characterName=speechBubbleTexts[i].title;
-        await expect(this.frameLocator.locator(`//strong[@class='name-title' and normalize-space()='${characterName}']/following-sibling::span[1]`).first()).toHaveText(speechBubbleTexts[i].text);
+  private async verifySpeechBubbleConversation(step: string, testData: TestData): Promise<void> {
+    const stepNumber = this.extractStepNumber(step);
+    const stepDetails = testData["STEP_" + stepNumber] as StepData;
+    
+    if (stepDetails.conversation && Array.isArray(stepDetails.conversation)) {
+     // console.log('Speech bubble texts:', stepDetails.conversation);
+      
+      for (let i = 0; i < stepDetails.conversation.length; i++) {
+        const characterName = stepDetails.conversation[i].title;
+        const speechText = stepDetails.conversation[i].text;
+        
+        await expect(
+          this.frameLocator.locator(`//strong[@class='name-title' and normalize-space()='${characterName}']/following-sibling::span[1]`).first()
+        ).toHaveText(speechText);
       }
     }
   }

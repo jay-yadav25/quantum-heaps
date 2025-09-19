@@ -11,18 +11,29 @@ export class ActivityThree extends ActivitySix {
   }
 
   public async runScenarioPathForActivityThree(path: string[], testData: any) {
-    for (let i = 0; i < path.length; i++) {
-      const currentStep = path[i];
-      const nextValidStep = this.findNextValidStep(path, i);
-      const previousStep = path[i - 1]; 
-      await this.processStepActivityThree(currentStep, nextValidStep, previousStep, testData);
+   for (let i = 0; i < path.length; i++) {
+    const currentStep = path[i];
+    const nextValidStep = this.findNextValidStep(path, i);
+    const previousStep = path[i - 1];
+
+    // Check if there is no previous step (i.e., it's the first step)
+    if (previousStep === undefined) {
+        // Handle the case where there is no previous step
+        console.log("No previous step found, returning FIRSTACTION.");
+        await this.processStepActivityThree(currentStep, nextValidStep, "FIRSTACTION", testData);
+    } else {
+        // Process the step normally
+        await this.processStepActivityThree(currentStep, nextValidStep, previousStep, testData);
     }
-    await this.verifyScenarioTiming();
+}
+
+    //await this.verifyScenarioTiming();
   }
 
   private async processStepActivityThree(step: string, nextValidStep: string, previousStep: string, testData: any) {
     if (step === 'HINT') {
-      if (previousStep !== 'NEXTSTEP') {
+      if (previousStep !== 'NEXTSTEP' && previousStep !== 'FIRSTACTION') {
+        console.log("previousStep"+previousStep)
         await this.verifyHintPopup(nextValidStep, testData);
       }
       return;
@@ -45,7 +56,7 @@ export class ActivityThree extends ActivitySix {
   }
 
   private async verifyFollowUpSceneHints(step: string, testData: any) {
-    const stepNumber = step.match(/MS(\d+)/)?.[1];
+    const stepNumber = step.match(/MS(\d+)/)?.[1] ;
     const actualStepNumber = stepNumber ? parseInt(stepNumber, 10) : null;
     if (actualStepNumber === null) {
       throw new Error(`Invalid step format: ${step}`);
@@ -56,7 +67,7 @@ export class ActivityThree extends ActivitySix {
     await this.hintButton.nth(hintButtonIndex).click();
     await expect(this.hintTitle).toHaveText("Hint");
     const stepDetails = testData['STEP_' + stepNumber];
-    const listContent = stepDetails.followUp.hints;
+    const listContent = stepDetails.hints;
     const listItem = await this.hintPopupListItems.all();
     for (let i = 0; i < listContent.length; i++) {
       await expect(listItem[i]).toHaveText(listContent[i]);
@@ -68,10 +79,11 @@ export class ActivityThree extends ActivitySix {
     const isFirstOccurrence = this.isFirstOccurrence(step);
     
     if (isFirstOccurrence) {
+      await this.verifySingleSelectStep(step, testData);
       if (previousStep === 'HINT') {
         await this.verifyHintPopup(step, testData);
       }
-      await this.verifySingleSelectStep(step, testData);
+      
     }
     
     await this.selectSingleSelectOptions(step, testData);

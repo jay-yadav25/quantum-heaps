@@ -23,7 +23,7 @@
                               "To listen to the possible responses, select the audio button in the bottom right corner of each answer option."]
     },
   "conversationPage": {
-    "conversatinTitle":"Your Conversation with Anna and Macie"
+    "conversationTitle":"Your Conversation with Anna and Macie"
   },
    "defaultChat": {
     "Jay": "Good morning, Mrs. Greene. Dr. Wiley has ordered an immunization for Macie. She is to receive her MMRV vaccine. I understand that Dr. Wiley has discussed this vaccine with you, so I will just need you to sign this consent form",

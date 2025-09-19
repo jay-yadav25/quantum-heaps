@@ -1,7 +1,7 @@
 @dho
 Feature: Launch Activity
 @smoke @ActivityFour @regression
- Scenario Outline: Verify Content of learnign objective and introduction of [Activity Four]
+ Scenario Outline: Verify Content of learning objective and introduction of [Activity Four]
     Given the user has launched the activity <Number> on the web
     Then the Learning Objectives page of "Activity Four" should be displayed
     And the activity title and learning objectives should match the content matrix of "Activity Four"
@@ -13,13 +13,13 @@ Feature: Launch Activity
     When the user clicks the Continue button on the Introduction page of "Activity Four"
     Then the first step of "Activity Four" should be displayed
     
-    When the user click on the Introduction button in more options menue items
+    When the user click on the Introduction button in more options menu items
     Then the Introduction popup content should be as per content matrix
     And the user clicks the Continue button on the Introduction popup of "Activity Four"
    
 
 
-    When the user click on the Learning Objective button in more options menue items
+    When the user click on the Learning Objective button in more options menu items
     Then the Learning Objectives popup should be visible and content should be as per content matrix
     And the user clicks the Continue button on the Learning Objective popup of "Activity Four"
     

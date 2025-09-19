@@ -68,13 +68,13 @@ export default defineConfig({
     actionTimeout: 60 * 1000,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'retain-on-failure',
-    headless:true,
+    headless:false,
     ignoreHTTPSErrors: true,
     video: "retain-on-failure",
     screenshot: "only-on-failure",
   },
   // Limit the number of workers on CI, use default locally
-  workers: "80%",
+  workers: "50%",
   /* Run tests(scenarios) in files(features) as well in parallel, 
    * By default only features run parallelly, Scenarios in a single feature run in order 
    */

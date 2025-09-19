@@ -2,7 +2,7 @@
 Feature: Launch Activity
 
   @smoke @ActivityFive @regression
-  Scenario Outline: Verify Content of Learnign objective ,Avatar Selection ,Introduction and Chat Section of [Activity Five]
+  Scenario Outline: Verify Content of Learning objective ,Avatar Selection ,Introduction and Chat Section of [Activity Five]
     Given the user has launched the activity <Number> on the web
     Then the Learning Objectives page of "Activity Five" should be displayed
     And the activity title and learning objectives should match the content matrix of "Activity Five"
@@ -19,13 +19,13 @@ Feature: Launch Activity
     Then the Chat section should be displayed
     And the chat page content should be as per content matrix
 
-    When the user click on the Introduction button in more options menue items
+    When the user click on the Introduction button in more options menu items
     Then the Introduction popup content should be as per content matrix
     And the user clicks the Continue button on the Introduction popup of "Activity Five"
    
 
 
-    When the user click on the Learning Objective button in more options menue items
+    When the user click on the Learning Objective button in more options menu items
     Then the Learning Objectives popup should be visible and content should be as per content matrix
     And the user clicks the Continue button on the Learning Objective popup of "Activity Five"
     

@@ -48,7 +48,7 @@ Then('the report content should match the performed {string} for Activity Four -
 //Activity Three
 When('the user selects the response option according to the {string} for Activity Three - Learning Mode', async function ({testData,loginData}, scenarioNumber: string) {
   const scenario = loginData[scenarioNumber];
-  await activityThree.runScenarioPathForActivityThreeLearnigMode(scenario,testData)
+  await activityThree.runScenarioPathForActivityThree(scenario,testData)
 });
 
 Then('the Report page of Activity Three - Learning Mode should be visible', async function ({ testData }) {
@@ -57,7 +57,7 @@ Then('the Report page of Activity Three - Learning Mode should be visible', asyn
 
 Then('the report content should match the performed {string} for Activity Three - Learning Mode', async function ({testData,loginData}, scenarioNumber: string) {
   const scenario = loginData[scenarioNumber];
-  await summaryReportActivityThree.runScenarioPathForActivityThreeLearnigMode(scenario,testData);
+  await summaryReportActivityThree.runScenarioPathForActivityThree(scenario,testData);
 });
 
 //Activity Six
@@ -72,7 +72,7 @@ Then('the Report page of Activity Six - Learning Mode should be visible', async 
 
 Then('the report content should match the performed {string} for Activity Six - Learning Mode', async function ({testData,loginData}, scenarioNumber: string) {
   const scenario = loginData[scenarioNumber];
-  await summaryReportActivitySix.runScenarioPathForActivitySixLearnigMode(scenario,testData);
+  await summaryReportActivitySix.runScenarioPathForActivitySix(scenario,testData);
 });
 
 

@@ -2,5 +2,5 @@
     "ALL": "",
     "REGRESSION": "@regression",
     "SMOKE": "@smoke",
-    "CUSTOM": "@ActivityFive and @regression" 
+    "CUSTOM": "@ActivityThree and @regression" 
 }

@@ -15,17 +15,26 @@ export class SummaryReportActivityThree extends SummaryReportActivitySix {
             const step = result[i];
             const stepNumber =i +1;
             console.log(`Processing step ${i + 1}/${result.length}: ${step}`);  
-            if(i=8){
-                await this.verifySingleSelectReport(step,stepNumber,testData);
-            }else{
-                await this.verifyMultiSelectReport(step[0],stepNumber,testData);
+            if (step[0] === 'HINT') {
+                 if(step[1].startsWith("S")){
+                    await this.verifySingleSelectReport(step,stepNumber,testData);
+                 }else{
+                    await this.verifyMultiSelectReport(step[0],stepNumber,testData);
+                }
+            }
+            else{
+                if(step[0].startsWith("S")){
+                    await this.verifySingleSelectReport(step,stepNumber,testData);
+                }else{
+                    await this.verifyMultiSelectReport(step[0],stepNumber,testData);
+                }
             }
         }
         const hintUsed= this.countHintsUsed(path,testData);
         console.log("Actual no of Hint-"+ this.noOfHintUsed.innerText());
         console.log("Expected no of Hint-"+hintUsed.totalHintsUsed);
         await expect(this.noOfHintUsed).toHaveText(hintUsed.totalHintsUsed);
-        await this.page.pause();
+        //await this.page.pause();
     }
 
     private async verifyMultiSelectReport( step:string, stepNumber: number, testData: any){
@@ -40,6 +49,7 @@ export class SummaryReportActivityThree extends SummaryReportActivitySix {
     const idealChoices = stepDetails.correctAnswers || [];
     const nonIdealChoices = stepDetails.incorrectAnswers || [];
     const dropdownNumber = stepNumber ? stepNumber - 1 : 1;
+    let descriptionPosition =0;
     for (let i = 0; i < stepData.length; i++) {
         let optionToClick: any;
         const actionPosition = i;
@@ -52,14 +62,16 @@ export class SummaryReportActivityThree extends SummaryReportActivitySix {
                 optionToClick = idealChoices[correctIndex];
                 console.log(optionToClick);
                 await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText("Selected Correct Choice");
-                await expect(this.frameLocator.locator(userActionTextLocator).nth(actionPosition)).toHaveText(optionToClick);
+                await expect(this.frameLocator.locator(userActionTextLocator).nth(descriptionPosition)).toHaveText(optionToClick);
+                descriptionPosition =descriptionPosition+1;
             }
         } else if (stepData[i].startsWith("INCORRECT")) {
             const incorrectIndex = parseInt(stepData[i].split("_")[1]) - 1;
             if (incorrectIndex >= 0 && incorrectIndex < nonIdealChoices.length) {
                 optionToClick = nonIdealChoices[incorrectIndex];
                 await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText("Selected Incorrect Choice");
-                await expect(this.frameLocator.locator(userActionTextLocator).nth(actionPosition)).toHaveText(optionToClick);
+                await expect(this.frameLocator.locator(userActionTextLocator).nth(descriptionPosition)).toHaveText(optionToClick);
+                descriptionPosition =descriptionPosition+1;
             }
         } else if (stepData[i].startsWith("HINT")) {
             await expect(this.frameLocator.locator(userActionLocator).nth(actionPosition)).toHaveText("Selected Hint");
