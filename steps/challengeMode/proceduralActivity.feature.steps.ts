@@ -30,7 +30,9 @@ Before({ tags: '@dho' }, async ({ page }) => {
 
 
 
-
+When('the user clicks the Continue button on the Introduction page of {string} and Start Timer for Decision Making',  async function ({ testData }) {
+  await activityThree.clickIntroductionContinueButton();
+});
 When('the user selects the response option according to the {string} for Activity Four - Challenge Mode', async function ({testData,loginData}, scenarioNumber: string) {
   const scenario = loginData[scenarioNumber];
   await activityFour.runScenarioPathForActivityFourChallengeMode(scenario,testData)

@@ -236,7 +236,7 @@ await this.startButton.click();
         for (let i = 0; i < objectiveItems.length; i++) {
             await expect(objectiveItems[i]).toHaveText(learningObjectivesList[i]);
         }
-        await this.continueButtonIntroAndLoPopup.click();
+        //await this.continueButtonIntroAndLoPopup.click();
     }
     public async verifyIntroductionPageIsVisible() {
        await expect(this.introductionPageTitle).toBeVisible();
@@ -272,11 +272,13 @@ await this.startButton.click();
     for (let i = 0; i < introductionList.length; i++) {
         await expect(introductionsListLocator[i]).toHaveText(introductionList[i]);
     }
+    if(activityOverviewList.length > 0){
       await expect(this.activityOverviewTitleInPopup).toHaveText("Activity Overview");
     const activityOverviewLocator = await this.activityOverviewDetailsInPopup.all();
     expect(activityOverviewLocator.length).toBe(activityOverviewList.length);
     for (let i = 0; i < activityOverviewList.length; i++) {
         await expect(activityOverviewLocator[i]).toHaveText(activityOverviewList[i]);
+    }
     }
     await expect(this.introductionActivityModeInPopup).toHaveText(mode);
     

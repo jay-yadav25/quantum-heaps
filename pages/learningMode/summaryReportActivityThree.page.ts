@@ -31,8 +31,8 @@ export class SummaryReportActivityThree extends SummaryReportActivitySix {
             }
         }
         const hintUsed= this.countHintsUsed(path,testData);
-        console.log("Actual no of Hint-"+ this.noOfHintUsed.innerText());
-        console.log("Expected no of Hint-"+hintUsed.totalHintsUsed);
+        console.log("Actual no of Hint:"+ await this.noOfHintUsed.innerText());
+        console.log("Expected no of Hint:"+hintUsed.totalHintsUsed);
         await expect(this.noOfHintUsed).toHaveText(hintUsed.totalHintsUsed);
         //await this.page.pause();
     }

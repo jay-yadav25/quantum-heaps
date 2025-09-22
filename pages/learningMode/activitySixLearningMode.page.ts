@@ -39,7 +39,7 @@ interface TestData {
 export class ActivitySix {
   readonly page: Page;
   public readonly frameLocator: FrameLocator;
-  public scenarioStartTime: number = 0;
+  public scenarioStartTimeDecisionMaking: number = 0;
   public seenSteps: Set<string> = new Set();
 
   // Core action buttons
@@ -151,7 +151,8 @@ export class ActivitySix {
 
   public async clickIntroductionContinueButton(): Promise<void> {
     await this.introductionContinueButton.click();
-    this.scenarioStartTime = performance.now();
+    this.scenarioStartTimeDecisionMaking = performance.now();
+    console.log(this.scenarioStartTimeDecisionMaking);
   }
 
   public async clickSubmitButton(): Promise<void> {
@@ -207,7 +208,7 @@ export class ActivitySix {
   }
 
   public async verifyScenarioTiming(): Promise<void> {
-    const actualTimeTaken = performance.now() - this.scenarioStartTime;
+    const actualTimeTaken = performance.now() - this.scenarioStartTimeDecisionMaking;
     const displayedTime = await this.totalTimeTaken.innerText();
     const expectedSeconds = Math.round(actualTimeTaken / 1000);
 
@@ -301,7 +302,7 @@ export class ActivitySix {
     }
     // For multi-select hints with individual keys, you might need different handling
 
-    await this.popupContinueButton.nth(1).click();
+    await this.popupContinueButton.nth(2).click();
   }
 
   public async verifyStepInstruction(step: string, testData: TestData): Promise<void> {
@@ -317,7 +318,7 @@ export class ActivitySix {
       await expect(this.stepInstruction).toHaveText(stepDetails.instructions!);
     }
     
-    await this.popupContinueButton.nth(1).click();
+    await this.popupContinueButton.nth(2).click();
     
     if (stepDetails.instructionsList) {
       const instructionListItems = await this.stepInstructionList.all();

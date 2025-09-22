@@ -51,6 +51,9 @@ Then('the Introduction page of {string} should be visible', async function ({ te
 Then('the introduction text should match the content matrix of {string}', async function ({ testData }) {
   await activityCommonPage.verifyIntroductionPage(testData);
 });
+Then('the user clicks the Continue button on the Introduction popup of Decision Making Activity {string}',async function ({ testData }) {
+  await activityCommonPage.clickOnContinueButtonIntroAndLoPopup();
+});
 
 When('the user clicks the Continue button on the Introduction page of {string}', async function ({ testData }) {
   await activityCommonPage.clickOnIntroductionContinueButton();

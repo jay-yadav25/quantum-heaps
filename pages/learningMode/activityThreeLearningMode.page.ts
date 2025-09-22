@@ -27,7 +27,7 @@ export class ActivityThree extends ActivitySix {
     }
 }
 
-    //await this.verifyScenarioTiming();
+    await this.verifyScenarioTiming();
   }
 
   private async processStepActivityThree(step: string, nextValidStep: string, previousStep: string, testData: any) {

@@ -608,12 +608,12 @@
       },
       "Informed Consent": {
         "title": "Correct!",
-        "text": "Informed consent becomes a concern if medical photos or information are shared without the patient’s permission."
+        "text": "Informed consent becomes a concern if medical photos or information are shared without the patient's permission."
       
       },
       "Invasion of Privacy": {
         "title": "Correct!",
-       "text": "Invasion of privacy becomes a concern if identifiable personal health information is revealed without the patient’s consent."
+       "text": "Invasion of privacy becomes a concern if identifiable personal health information is revealed without the patient's consent."
       }
     },
     "hints": {

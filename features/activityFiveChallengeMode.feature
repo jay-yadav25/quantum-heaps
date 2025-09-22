@@ -23,8 +23,6 @@ Feature: Launch Activity
     Then the Introduction popup content should be as per content matrix
     And the user clicks the Continue button on the Introduction popup of "Activity Five"
    
-
-
     When the user click on the Learning Objective button in more options menu items
     Then the Learning Objectives popup should be visible and content should be as per content matrix
     And the user clicks the Continue button on the Learning Objective popup of "Activity Five"
