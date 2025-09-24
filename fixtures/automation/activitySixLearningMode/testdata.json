@@ -418,9 +418,9 @@
     "reportRational": "A meeting is adjourned after all business is completed or time is over for the meeting. The chair or any member can call for a motion for the meeting to end."
   },
 
-   "CORRECT": ["OPT_1_SLOT_1", "OPT_2_SLOT_2", "OPT_3_SLOT_3", "OPT_4_SLOT_4", "OPT_5_SLOT_5", "OPT_6_SLOT_6", "CHECK"],
+  "CORRECT": ["OPT_1_SLOT_1", "OPT_2_SLOT_2", "OPT_3_SLOT_3", "OPT_4_SLOT_4", "OPT_5_SLOT_5", "OPT_6_SLOT_6", "CHECK"],
 
-  "INCORRECT_1": ["OPT_1_SLOT_6", "OPT_2_SLOT_5", "OPT_3_SLOT_4", "OPT_4_SLOT_3", "OPT_5_SLOT_2", "OPT_6_SLOT_1", "CHECK", "OPT_1_SLOT_1", "OPT_2_SLOT_2", "OPT_3_SLOT_3", "OPT_4_SLOT_4", "OPT_5_SLOT_5", "OPT_6_SLOT_6", "CHECK"],
+  "INCORRECT_1": ["OPT_1_SLOT_6", "OPT_2_SLOT_5", "OPT_3_SLOT_4", "OPT_4_SLOT_3", "HINT","OPT_5_SLOT_2", "OPT_6_SLOT_1", "CHECK", "OPT_1_SLOT_1", "OPT_2_SLOT_2", "OPT_3_SLOT_3", "OPT_4_SLOT_4", "HINT","OPT_5_SLOT_5", "OPT_6_SLOT_6", "CHECK"],
   
   "INCORRECT_2": ["OPT_1_SLOT_1", "OPT_2_SLOT_5", "OPT_3_SLOT_4", "OPT_4_SLOT_3", "OPT_5_SLOT_2", "OPT_6_SLOT_1", "CHECK", "OPT_2_SLOT_2", "OPT_3_SLOT_3", "OPT_4_SLOT_4", "OPT_5_SLOT_5", "OPT_6_SLOT_6", "CHECK"],
   

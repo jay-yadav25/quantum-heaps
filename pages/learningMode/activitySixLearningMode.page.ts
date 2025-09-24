@@ -302,7 +302,7 @@ export class ActivitySix {
     }
     // For multi-select hints with individual keys, you might need different handling
 
-    await this.popupContinueButton.nth(2).click();
+    await this.popupContinueButton.nth(1).click();
   }
 
   public async verifyStepInstruction(step: string, testData: TestData): Promise<void> {
@@ -318,7 +318,7 @@ export class ActivitySix {
       await expect(this.stepInstruction).toHaveText(stepDetails.instructions!);
     }
     
-    await this.popupContinueButton.nth(2).click();
+    await this.popupContinueButton.nth(1).click();
     
     if (stepDetails.instructionsList) {
       const instructionListItems = await this.stepInstructionList.all();

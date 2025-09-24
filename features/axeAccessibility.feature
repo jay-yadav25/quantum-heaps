@@ -29,9 +29,9 @@ Feature: Axe Accessibility Scan All Activity
     And the user clicks the Continue button on the Learning Objective popup of "<Activity Number>"
     Examples:
    |Activity Number |Number|
-    |ActivityOne|  1   |
-    |ActivityTwo|  2   |
-   | ActivityFive|  5   |
+   |ActivityOne     |  1   |
+   |ActivityTwo     |  2   |
+   |ActivityFive    |  5   |
 
 
 
@@ -59,9 +59,9 @@ Feature: Axe Accessibility Scan All Activity
     And the user clicks the Continue button on the Learning Objective popup of "<Activity Number>"
     Examples:
    |Activity Number |Number|
-    |ActivityThree|  3   |
-    |ActivityFour |  4   |
-   | ActivitySix  |  6   |
+   |ActivityThree   |  3   |
+   |ActivityFour    |  4   |
+   | ActivitySix    |  6   |
 
 
 
