@@ -1,5 +1,5 @@
 {
-  "name": "cengage-dho-automation",
+  "name": "QUANTUM",
   "version": "1.0.0",
   "scripts": {
     "playwright:test": "npx cross-env ENVIRONMENT=$ENVIRONMENT TAGS=\"$TAGS\" playwright test",

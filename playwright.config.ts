@@ -3,37 +3,37 @@ import { defineBddConfig } from 'playwright-bdd';
 require('dotenv').config()
 
 const testSuites = require('./testSuites.json');
-const browserName: string = process.env.BROWSER || "chrome";
+const browserName: string = process.env.BROWSER || "CHROME";
 const testSuite = process.env.TEST_SUITE || 'ALL'
 const isCI = process.env.CI === 'true';
 const buildNo = process.env.BUILD_NUMBER || 'default'
 
 function getBrowserSpecificOptions(browserName: string) {
   switch (browserName) {
-    case "firefox":
+    case "FIREFOX":
       return {
         ...devices["Desktop Firefox"],
       };
-    case "chrome":
+    case "CHROME":
     case "chromium":
       return {
         ...devices["Desktop Chrome"],
       };
-    case "edge":
+    case "EDGE":
       return {
         channel: "msedge",
       };
-    case "safari":
+    case "SAFARI":
       return {
         channel: "webkit",
         ...devices["Desktop Safari"]
       };
-    case "android":
+    case "ANDROID":
       return { 
        // channel: "Mobile Chrome",
         ...devices["Pixel 5"] 
       };
-    case "ios":
+    case "IOS":
       return { 
         //channel: "Mobile Safari",
         ...devices['iPhone 12'] 
@@ -73,6 +73,7 @@ export default defineConfig({
     ignoreHTTPSErrors: true,
     video: "retain-on-failure",
     screenshot: "only-on-failure",
+    
   },
   // Limit the number of workers on CI, use default locally
   workers: "50%",
@@ -87,7 +88,7 @@ export default defineConfig({
   globalSetup: './fixtures/globalSetup',
   projects: [
     {
-      name: 'Cengage DHO',
+      name: 'QUANTUM',
       use: {
         ...getBrowserSpecificOptions(browserName),
       },

@@ -1,0 +1,44 @@
+{
+  "demoRequestData": {
+    "Individual User": {
+      "firstName": "Jaykumar",
+      "lastName": "Yadav",
+      "companyName": "Zeus Learning",
+      "mobile": "9370720713",
+      "email": "jaykumar@zeuslearning.com",
+      "message": "I want the access of the product as an individual user."
+    },
+    "Enterprise Client": {
+      "firstName": "Anita",
+      "lastName": "Sharma",
+      "companyName": "Infosys Ltd",
+      "mobile": "9876543210",
+      "email": "anita.sharma@infosys.com",
+      "message": "We are looking for an enterprise-level demo for our team of 500+ users."
+    },
+    "Startup Team": {
+      "firstName": "Rahul",
+      "lastName": "Mehta",
+      "companyName": "TechStart Innovations",
+      "mobile": "9123456789",
+      "email": "rahul.mehta@techstart.io",
+      "message": "Our startup team would like to explore how Quantum Heaps can accelerate our workflow."
+    },
+    "Educational User": {
+      "firstName": "Priya",
+      "lastName": "Desai",
+      "companyName": "IIT Bombay",
+      "mobile": "9988776655",
+      "email": "priya.desai@iitb.ac.in",
+      "message": "We are an academic institution interested in using Quantum Heaps for research purposes."
+    },
+    "Corporate Account": {
+      "firstName": "Sameer",
+      "lastName": "Kulkarni",
+      "companyName": "Tata Consultancy Services",
+      "mobile": "9001122334",
+      "email": "sameer.kulkarni@tcs.com",
+      "message": "Requesting a custom demo for our corporate account with advanced integration requirements."
+    }
+  }
+}
