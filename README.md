@@ -1,113 +1,155 @@
-# Project structure
-#Need to add
-# Steps to run locally
+# QUANTUM — Playwright BDD Test Suite
 
-1. Install dependencies
+## Project Structure
 
-   ```
-   npm install
-   ```
+```
+QUANTUM/
+├── auth.ts                          # One-time session capture script
+├── auth.json                        # Saved login session (gitignored)
+├── playwright.config.ts             # Playwright configuration
+├── tsconfig.json                    # TypeScript configuration
+├── test-suites.json                 # Tag-to-suite mappings
+├── package.json
+│
+├── features/                        # Gherkin feature files
+│   └── shopping.feature
+│
+├── steps/                           # Step definitions
+│   ├── common/
+│   │   └── createBddCustom.ts
+│   └── shopping/
+│       └── step.ts
+│
+├── pages/                           # Page Object Models
+│   └── Shopping.page.ts
+│
+├── testData/                        # Test data
+│   └── testData.json
+│
+├── allure-results/                  # Raw allure output (post-run)
+└── allure-report/                   # Generated allure report (post-run)
+```
 
-2. Install browsers
+---
 
-   ```
-   npx playwright install
-   ```
+## Steps to Run Locally
 
-3. Run tests
+### 1. Install dependencies
+```bash
+npm install
+```
 
-   ```
-   npm test
-   ```
+### 2. Install browsers
+```bash
+npx playwright install
+```
 
-4. Run test with a UI executor
+### 3. Save login session (run once before tests)
+```bash
+npx playwright test auth.ts --headed --project=chromium
+```
+> Log in manually in the browser, enter OTP, then click **▶ Resume** in the Playwright inspector. This saves `auth.json` to the project root.
 
-   ```
-   npm run test -ui
-   ```
+### 4. Run tests
+```bash
+npm test
+```
 
-5. Run subset of tests using --tags option
+### 5. Run tests with UI executor
+```bash
+npm run test:ui
+```
 
-   ```
-   npx bddgen --tags "@regression"
-   npx playwright test
-   ```
-
-   Reference: [Tag expressions](https://cucumber.io/docs/cucumber/api/?lang=javascript#tag-expressions)
-
-6. Trace Viewer (Post test execution)
-   ```
-   npx playwright show-trace [trace file path]
-   ```
-7. Install allure-cli on your machine
-   ```
-   npm install -g allure-commandline
-   ```
-8. Generate Allure Report (Post test execution)
-   ```
-   npm run allure:generate
-   ```
-   Note: You may face an error if running scripts is disabled on your system. You can run the following in window's command prompt instead, just make sure you are at the root directory.
-   ```
-   allure generate ./allure-results --clean
-   ```
-9. Open Allure Report (Post test execution)
-
-   ```
-   npm run allure:open
-   ```
-
-10. Output:
-    ```
-    Running 2 tests using 1 worker
-    2 passed (2.3s)
-    ```
-
-npx bddgen --tags "@smoke"  
- npx playwright test
-
+### 6. Run a subset of tests using tags
+```bash
+npx bddgen --tags "@regression"
+npx playwright test
+```
+Or in one command:
+```bash
 TAGS=@smoke npm run test
+```
+With UI:
+```bash
 TAGS=@smoke npm run playwright:test -- --ui
+```
 
-11. Running Tests Using Test Suites with TEST_SUITE Env
+Reference: [Cucumber Tag Expressions](https://cucumber.io/docs/cucumber/api/?lang=javascript#tag-expressions)
 
-   We use TEST_SUITE=<NAME> to select which tagged scenarios to run. The mappings are defined in test-suites.json.
+---
 
-   Examples of test-suites.json:
+## Running Tests Using Test Suites
 
-   {
-   "ALL": "",
-   "REGRESSION": "@regression",
-   "SMOKE": "@smoke",
-   "CUSTOM": "@smoke and @activityThree"
-   }
+Use `TEST_SUITE=<NAME>` to select which tagged scenarios to run. Mappings are defined in `test-suites.json`.
 
-   Tag Expression Rules
+**Example `test-suites.json`:**
+```json
+{
+  "ALL": "",
+  "REGRESSION": "@regression",
+  "SMOKE": "@smoke",
+  "CUSTOM": "@smoke and @activityThree"
+}
+```
 
-   Run scenarios with both tags
+**Run a suite:**
+```bash
+TEST_SUITE=SMOKE npm test
+TEST_SUITE=REGRESSION npm test
+TEST_SUITE=CUSTOM npm test
+```
 
-   "CUSTOM": "@smoke and @activityThree"
+### Tag Expression Rules
 
+| Expression | Behaviour |
+|---|---|
+| `"@smoke and @activityThree"` | Runs scenarios that have **both** tags |
+| `"@smoke or @activityThree"` | Runs scenarios that have **either** tag |
+| `"@smoke and not @wip"` | Runs `@smoke` but **skips** anything tagged `@wip` |
+| `"(@activityOne or @activityTwo) and not @wip"` | Combines multiple expressions |
 
-   → Runs only scenarios that contain both @smoke and @activityThree.
+> All activity tags are: `@activityOne`, `@activityTwo`, `@activityThree`, `@activityFour`, `@activityFive`, `@activitySix`
 
-   Run scenarios with either tag
+---
 
-   "CUSTOM": "@smoke or @activityThree"
+## Reporting
 
+### Trace Viewer (post test execution)
+```bash
+npx playwright show-trace [trace file path]
+```
 
-   → Runs scenarios that have either @smoke or @activityThree.
+### Install Allure CLI
+```bash
+npm install -g allure-commandline
+```
 
-   Exclude a tag
+### Generate Allure Report (post test execution)
+```bash
+npm run allure:generate
+```
+> **Note:** If you get a script execution error on Windows, run this from the root directory in Command Prompt instead:
+> ```
+> allure generate ./allure-results --clean
+> ```
 
-   "CUSTOM": "@smoke and not @wip"
+### Open Allure Report (post test execution)
+```bash
+npm run allure:open
+```
 
+---
 
-   → Runs @smoke scenarios but skips those tagged with @wip.
+## Expected Output
+```
+Running 3 tests using 1 worker
+3 passed (12.4s)
+```
 
-   Combine multiple expressions
+---
 
-   "CUSTOM": "(@activityOne or @activityTwo) and not @wip"
+## Notes
 
-
-   👉 All activity tags are named as @activityOne, @activityTwo, @activityThree, @activityFour, @activityFive, @activitySix.
+- `auth.json` contains your login session — **add it to `.gitignore`** and never commit it
+- Re-run `auth.ts` whenever your session expires or OTP invalidates
+- `storageState: 'auth.json'` is set in `playwright.config.ts` so all tests inherit the session automatically
