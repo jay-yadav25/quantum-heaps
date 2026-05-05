@@ -17,6 +17,7 @@ function getBrowserSpecificOptions(browserName: string) {
     case "CHROME":
     case "chromium":
       return {
+        channel: "chrome",
         ...devices["Desktop Chrome"],
       };
     case "EDGE":
@@ -80,7 +81,7 @@ export default defineConfig({
   /* Run tests(scenarios) in files(features) as well in parallel, 
    * By default only features run parallelly, Scenarios in a single feature run in order 
    */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left @only in the source code. */
   forbidOnly: isCI,
   retries: 0,

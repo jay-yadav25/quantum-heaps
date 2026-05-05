@@ -1,12 +1,11 @@
 {
-  "baseUrl": "https://zilo.one/",
-
+  
   "categories": {
     "women": {
       "navLabel": "WOMEN",
       "shop": "SBC_02",
       "product": "Tops - Women's Navy Casual",
-      "size": "L"
+      "size": "S"
     },
     "men": {
       "navLabel": "MEN",
@@ -19,7 +18,7 @@
       "shop": "shhadi kids",
       "subCategory": "SUTA-WOMEN",
       "product": "Sarees - Women's Purple Casual",
-      "size": "Onesize"
+      "size": "6Y"
     }
   },
 
@@ -29,11 +28,5 @@
 
   "payment": {
     "method": "Pay on Delivery"
-  },
-
-  "timeouts": {
-    "navigation": 10000,
-    "element": 5000,
-    "confirmation": 10000
   }
 }
