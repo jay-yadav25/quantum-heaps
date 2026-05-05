@@ -1,0 +1,39 @@
+{
+  "baseUrl": "https://zilo.one/",
+
+  "categories": {
+    "women": {
+      "navLabel": "WOMEN",
+      "shop": "SBC_02",
+      "product": "Tops - Women's Navy Casual",
+      "size": "L"
+    },
+    "men": {
+      "navLabel": "MEN",
+      "shop": "SBC_02 (1)",
+      "product": "Tshirt - Men's Black Casual",
+      "size": "L"
+    },
+    "kids": {
+      "navLabel": "KIDS",
+      "shop": "shhadi kids",
+      "subCategory": "SUTA-WOMEN",
+      "product": "Sarees - Women's Purple Casual",
+      "size": "Onesize"
+    }
+  },
+
+  "deliveryAddress": {
+    "buttonLabel": "Home Ajaya, 9370729713 294,"
+  },
+
+  "payment": {
+    "method": "Pay on Delivery"
+  },
+
+  "timeouts": {
+    "navigation": 10000,
+    "element": 5000,
+    "confirmation": 10000
+  }
+}
